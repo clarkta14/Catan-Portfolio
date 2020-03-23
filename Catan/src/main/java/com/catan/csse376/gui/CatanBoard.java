@@ -275,7 +275,9 @@ public class CatanBoard extends JPanel{
         g2.fill(circle);
     
         try {
-            BufferedImage img = ImageIO.read(new File("src\\main\\java\\images\\robber.png"));
+        	String filename = "src" + File.separator + "main" + File.separator + "java" + File.separator + "images"
+					+ File.separator + "robber.png";
+			BufferedImage img = ImageIO.read(new File(filename));
             if(img != null){
                 g2.drawImage(img, (int)p.getX() - 35, (int)p.getY() - 35, 75, 75, null);
             }
