@@ -7,13 +7,11 @@ Below can be found the list of game rules that the game will need to support to 
 
 **Game Rules:**
 
-
-
 *   Settlements
-        *       Settlements are placed on intersections connecting to roads on the board. Each player owns 5 settlements (meaning there must not be 6 or more of their settlements on the map) and each settlement is worth 1 Victory Point towards the player's score. The player's first two settlements (along with one road each) are free, but any additional settlement costs 1 brick + 1 lumber + 1 grain + 1 wool. No two settlements can be within two spaces of each other and no single settlement can stand alone on the board without connecting to a road.
+       *   Settlements are placed on intersections connecting to roads on the board. Each player owns 5 settlements (meaning there must not be 6 or more of their settlements on the map) and each settlement is worth 1 Victory Point towards the player's score. The player's first two settlements (along with one road each) are free, but any additional settlement costs 1 brick + 1 lumber + 1 grain + 1 wool. No two settlements can be within two spaces of each other and no single settlement can stand alone on the board without connecting to a road.
 
 *   Cities
-        *       A settlement can be replaced by a city, which can increase the player's Victory Point score by 1 (meaning each city on the map is worth 2 Victory Points). Each player owns 4 cities, meaning they cannot have 5 or more of their cities on the map. Every time a player replaces a settlement with a city, they must pay 2 grain + 3 ore.
+       *   A settlement can be replaced by a city, which can increase the player's Victory Point score by 1 (meaning each city on the map is worth 2 Victory Points). Each player owns 4 cities, meaning they cannot have 5 or more of their cities on the map. Every time a player replaces a settlement with a city, they must pay 2 grain + 3 ore.
 
 *   Longest Road
     *   Player Maximum of 15 roads
