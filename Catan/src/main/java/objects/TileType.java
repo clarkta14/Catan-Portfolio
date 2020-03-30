@@ -5,10 +5,10 @@ package objects;
 * @author Indresh
 */
 public enum TileType {
-   pasture,
-   hill,
-   mountain,
-   field,
-   forest,
+   wool,
+   wood,
+   bricks,
+   wheat,
+   ore,
    desert;
 }

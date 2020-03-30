@@ -64,13 +64,13 @@ public class CatanBoard extends JPanel{
         // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
-            types.add(TileType.pasture);
-            types.add(TileType.field);
-            types.add(TileType.forest);
+            types.add(TileType.wheat);
+            types.add(TileType.wool);
+            types.add(TileType.wood);
         }
         for(int i = 0; i < 3; i++) {
-            types.add(TileType.hill);
-            types.add(TileType.mountain);
+            types.add(TileType.ore);
+            types.add(TileType.bricks);
         }
         
         // Tile Numbers
@@ -190,19 +190,19 @@ public class CatanBoard extends JPanel{
             case desert:
                 g2.setColor(new Color(0xFF, 0xFF, 0xA9));
                 break;
-            case hill:
+            case bricks:
                 g2.setColor(new Color(0xAD, 0x33, 0x33));
                 break;
-            case pasture:
+            case wool:
                 g2.setColor(Color.GREEN);
                 break;
-            case forest:
+            case wood:
                 g2.setColor(new Color(0x99, 0x66, 0x33));
                 break;
-            case field:
+            case wheat:
                 g2.setColor(Color.YELLOW);
                 break;
-            case mountain:
+            case ore:
                 g2.setColor(Color.LIGHT_GRAY);
                 break;
             default:
