@@ -1,6 +1,9 @@
 package objects;
 
+import java.awt.Point;
 import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -9,9 +12,11 @@ import java.awt.Polygon;
 public class Tile {
     private TileType type;
     private int number;
-    private Position pos;
-    private Polygon hex;
+    private Point pos;
+    private ArrayList<Point> corners;
     private Boolean isRobber;
+    private Polygon hexagon;
+    private HashMap<Integer, Settlement> hexCornerToSettlement;
     
     /**
      * Constructor, with given params for its fields
@@ -20,29 +25,30 @@ public class Tile {
      * @param n the number of the Tile
      * @param typ the type of the Tile
     */
-    public Tile(Position p, int n, TileType typ) {
+    public Tile(Point p, int n, TileType typ) {
         this.isRobber = false;    
         this.pos = p;
         this.number = n;
         this.type = typ;
+        this.hexCornerToSettlement = new HashMap<>();
     }
     
     /*
     * Hold the polygon this tile belongs to. 
     * For retrieving coordinates of polygon corners to draw settlements
     */
-    public void setHex(Polygon poly){
-        this.hex = poly;
+    public void setHexCorners(ArrayList<Point> poly){
+        this.corners = poly;
     }
     
-     public Polygon getHex(){
-         return this.hex;
+     public ArrayList<Point> getHexCorners(){
+         return this.corners;
      }
     
     /*
     * Hold the coordinates to the center of the tile for calculations.
     */
-    public Position getPosition(){
+    public Point getPosition(){
         return this.pos;
     }
     
@@ -66,6 +72,22 @@ public class Tile {
     
     public Boolean isRobber(){
         return this.isRobber;
+    }
+    
+    public void setHexagon(Polygon poly) {
+    	this.hexagon = poly;
+    }
+    
+    public Polygon getHexagon(){
+    	return this.hexagon;
+    }
+    
+    public void addSettlement(int corner, Settlement s) {
+    	this.hexCornerToSettlement.put(corner, s);
+    }
+    
+    public HashMap<Integer, Settlement> getSettlements() {
+    	return this.hexCornerToSettlement;
     }
 }
 

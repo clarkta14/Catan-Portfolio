@@ -3,27 +3,25 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
-
 import org.junit.Test;
 
 public class SettlementTest {
 
 	@Test
 	public void settlementConstructor() {
-		Settlement s = new Settlement(1,1, new Player(Color.BLUE));
-		assertEquals(s.getLocationOnBoard().getX(), 1);
-		assertEquals(s.getLocationOnBoard().getY(), 1);
+		Player plyr = new Player(Color.BLUE);
+		Settlement s = new Settlement(plyr);
+		assertEquals(plyr, s.getOwner());
 	}
 	
 	@Test
-	public void settlementLocation() {
-		Settlement s = new Settlement(1,1, new Player(Color.BLUE));
-		assertEquals(s.getLocationOnBoard().getX(), 1);
-		assertEquals(s.getLocationOnBoard().getY(), 1);
-		
-		Settlement s2 = new Settlement(2,2, new Player(Color.BLUE));
-		assertEquals(s2.getLocationOnBoard().getX(), 2);
-		assertEquals(s2.getLocationOnBoard().getY(), 2);
+	public void multipleSettlements() {
+		Player plyr1 = new Player(Color.BLUE);
+		Settlement s = new Settlement(plyr1);
+		assertEquals(plyr1, s.getOwner());
+		Player plyr2 = new Player(Color.RED);
+		s = new Settlement(plyr2);
+		assertEquals(plyr2, s.getOwner());
 	}
 
 }

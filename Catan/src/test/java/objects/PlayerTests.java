@@ -21,26 +21,4 @@ public class PlayerTests {
 		Player player2 = new Player(Color.blue);
 		assertEquals(Color.blue, player2.getColor());
 	}
-	
-	@Test
-	public void addSettlement() {
-		Player player1 = new Player(Color.orange);
-		Position loc = new Position(1,1);
-		player1.addSettlement(1,1);
-		assertEquals(loc.getX(), player1.getSettlements().get(0).getLocationOnBoard().getX());
-		assertEquals(loc.getY(), player1.getSettlements().get(0).getLocationOnBoard().getY());
-	}
-	
-	@Test
-	public void addMultipleSettlements() {
-		Player player1 = new Player(Color.orange);
-		Position loc = new Position(1,1);
-		player1.addSettlement(1,1);
-		assertEquals(loc.getX(), player1.getSettlements().get(0).getLocationOnBoard().getX());
-		assertEquals(loc.getY(), player1.getSettlements().get(0).getLocationOnBoard().getY());
-		Position loc2 = new Position(2,2);
-		player1.addSettlement(2,2);
-		assertEquals(loc2.getX(), player1.getSettlements().get(1).getLocationOnBoard().getX());
-		assertEquals(loc2.getY(), player1.getSettlements().get(1).getLocationOnBoard().getY());
-	}
 }

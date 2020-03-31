@@ -18,14 +18,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
 import objects.Player;
-import objects.Position;
 import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
@@ -36,9 +33,6 @@ import objects.TileType;
  */
 public class CatanBoard extends JPanel{
     private final Tile[][] tiles;
-    //private Road[][][] roads;
-    private Settlement[][][] settlements;
-    //private City[][][] cities;
     private int boardHeight;
     private int heightMargin = 100;
     private int widthMargin;
@@ -47,10 +41,9 @@ public class CatanBoard extends JPanel{
     private ArrayList<Player> players;
     
     public CatanBoard(ArrayList<Player> players){
-        
+    	this.players = players;
         this.tiles = new Tile[7][7];
         intialBoardSetup();
-        this.players = players;
         
         setBackground(new Color(164,200,218));
         //Handle Resizing Window
@@ -68,9 +61,7 @@ public class CatanBoard extends JPanel{
 
     private void intialBoardSetup() {        
         // Coordinates
-        ArrayList<Position> positions = new ArrayList<>();
-        createTileLocations(positions);
-        
+        ArrayList<Point> positions = createTileLocations();
         ArrayList<Integer> wheatLocs = new ArrayList<Integer>(Arrays.asList(2, 3, 6, 8));
         ArrayList<Integer> wheatNums = new ArrayList<Integer>(Arrays.asList(9, 6, 12, 4));
         initilizeTiles(wheatLocs, wheatNums, TileType.wheat, positions);
@@ -89,27 +80,79 @@ public class CatanBoard extends JPanel{
         
         ArrayList<Integer> brickLocs = new ArrayList<Integer>(Arrays.asList(0, 10, 17));
         ArrayList<Integer> brickNums = new ArrayList<Integer>(Arrays.asList(5, 6, 10));
-        initilizeTiles(brickLocs, brickNums, TileType.bricks, positions);
+        initilizeTiles(brickLocs, brickNums, TileType.brick, positions);
         
         Tile desertTile = new Tile(positions.get(9), 7, TileType.desert);
         desertTile.setRobber();
-        this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
+        this.tiles[(int) positions.get(9).getX()][(int) positions.get(9).getY()] = desertTile;
+        
+        assignPolygonsToTiles();
         
         // Initial Player Settlement setup
+        
         for(Player player : this.players) {
         	if(player.getColor().equals(Color.BLUE)) {
-	        	
-        	}else if(player.getColor().equals(Color.BLUE)) {
-	        	
-        	}else if(player.getColor().equals(Color.BLUE)) {
-	        	
-        	}else if(player.getColor().equals(Color.BLUE)) {
-	        	
+        		this.tiles[1][1].addSettlement(3, new Settlement(player));
+        		this.tiles[1][2].addSettlement(1, new Settlement(player));
+        		this.tiles[2][2].addSettlement(5, new Settlement(player));
+        		this.tiles[3][1].addSettlement(3, new Settlement(player));
+        		this.tiles[3][2].addSettlement(1, new Settlement(player));
+        		this.tiles[4][2].addSettlement(5, new Settlement(player));
+        	}else if(player.getColor().equals(Color.RED)) {
+        		this.tiles[1][2].addSettlement(3, new Settlement(player));
+        		this.tiles[1][3].addSettlement(1, new Settlement(player));
+        		this.tiles[2][3].addSettlement(5, new Settlement(player));
+        		this.tiles[3][4].addSettlement(3, new Settlement(player));
+        		this.tiles[3][5].addSettlement(1, new Settlement(player));
+        		this.tiles[4][5].addSettlement(5, new Settlement(player));
+        	}else if(player.getColor().equals(Color.WHITE)) {
+        		this.tiles[2][3].addSettlement(3, new Settlement(player));
+        		this.tiles[2][4].addSettlement(1, new Settlement(player));
+        		this.tiles[3][4].addSettlement(5, new Settlement(player));
+        		this.tiles[4][2].addSettlement(3, new Settlement(player));
+        		this.tiles[4][3].addSettlement(1, new Settlement(player));
+        		this.tiles[5][3].addSettlement(5, new Settlement(player));
+        	}else if(player.getColor().equals(Color.ORANGE)) {
+        		this.tiles[2][1].addSettlement(3, new Settlement(player));
+        		this.tiles[2][2].addSettlement(1, new Settlement(player));
+        		this.tiles[3][2].addSettlement(5, new Settlement(player));
+        		this.tiles[5][5].addSettlement(3, new Settlement(player));
+        		this.tiles[5][4].addSettlement(1, new Settlement(player));
+        		this.tiles[4][4].addSettlement(5, new Settlement(player));
         	}
         }
     }
+    
+    private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Point> positions) {
+    	if (positionNums.size() != numbers.size()) {
+    		return;
+    	}
+    	for (int i = 0; i < positionNums.size(); i++) {
+    		Point p = positions.get(positionNums.get(i));
+    		this.tiles[(int) p.getX()][(int) p.getY()] = new Tile(p, numbers.get(i), type);
+    	}
+    }
+    
+    private void assignPolygonsToTiles() {
+        for (int x = 1; x <= 3; x++) {
+        	makeHex(x, 1, findCenter((int) tiles[x][1].getPosition().getX(), (int) tiles[x][1].getPosition().getY()));
+        }
+        for (int x = 1; x <= 4; x++) {
+        	makeHex(x, 2, findCenter((int) tiles[x][2].getPosition().getX(), (int) tiles[x][2].getPosition().getY()));
+        }
+        for (int x = 1; x <= 5; x++) {
+        	makeHex(x, 3, findCenter((int) tiles[x][3].getPosition().getX(), (int) tiles[x][3].getPosition().getY()));
+        }
+        for (int x = 2; x <= 5; x++) {
+        	makeHex(x, 4, findCenter((int) tiles[x][4].getPosition().getX(), (int) tiles[x][4].getPosition().getY()));
+        }
+        for (int x = 3; x <= 5; x++) {
+        	makeHex(x, 5, findCenter((int) tiles[x][5].getPosition().getX(), (int) tiles[x][5].getPosition().getY()));
+        }
+    }
 
-	private void createTileLocations(ArrayList<Position> positions) {
+	private ArrayList<Point> createTileLocations() {
+		ArrayList<Point> positions = new ArrayList<>();
 		for(int x = 1; x < 6; x++){
             int ylow = -1;
             int yhigh = -1;
@@ -136,20 +179,13 @@ public class CatanBoard extends JPanel{
                     break;
             }
             for(int y = ylow; y < yhigh; y++){
-                positions.add(new Position(x,y));
+                positions.add(new Point(x,y));
             }
         }
+		return positions;
 	}
     
-    private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Position> positions) {
-    	if (positionNums.size() != numbers.size()) {
-    		return;
-    	}
-    	for (int i = 0; i < positionNums.size(); i++) {
-    		Position p = positions.get(positionNums.get(i));
-    		this.tiles[p.getX()][p.getY()] = new Tile(p, numbers.get(i), type);
-    	}
-    }
+    
     
     @Override
     public void paintComponent(Graphics g){
@@ -160,43 +196,56 @@ public class CatanBoard extends JPanel{
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setFont(new Font("TimesRoman", Font.BOLD, 20));
 		super.paintComponent(g2);
-	    drawHexTilesWithNumbers(g2);
+	    drawHexTiles(g2);
 	    drawPorts(g2);
     }
 
-    private void drawHexTilesWithNumbers(Graphics2D g2) {
+	private void drawHexTiles(Graphics2D g2) {
         for (int x = 1; x <= 3; x++) {
-            drawHexTile(tiles[x][1],g2);
+            drawHexTile(x,1,g2);
             drawNumber(tiles[x][1],g2);
             drawRobber(tiles[x][1],g2);
-	}
+            drawSettlements(tiles[x][1], g2);
+        }
         for (int x = 1; x <= 4; x++) {
-            drawHexTile(tiles[x][2],g2);
+            drawHexTile(x,2,g2);
             drawNumber(tiles[x][2],g2);
             drawRobber(tiles[x][2],g2);
+            drawSettlements(tiles[x][2], g2);
         }
         for (int x = 1; x <= 5; x++) {
-            drawHexTile(tiles[x][3],g2);
+            drawHexTile(x,3,g2);
             drawNumber(tiles[x][3],g2);
             drawRobber(tiles[x][3],g2);
+            drawSettlements(tiles[x][3], g2);
         }
         for (int x = 2; x <= 5; x++) {
-            drawHexTile(tiles[x][4],g2);
+            drawHexTile(x,4,g2);
             drawNumber(tiles[x][4],g2);
             drawRobber(tiles[x][4],g2);
+            drawSettlements(tiles[x][4], g2);
         }
         for (int x = 3; x <= 5; x++) {
-            drawHexTile(tiles[x][5],g2);
+            drawHexTile(x,5,g2);
             drawNumber(tiles[x][5],g2);
             drawRobber(tiles[x][5],g2);
+            drawSettlements(tiles[x][5], g2);
         }
     }
+	
+	private void drawSettlements(Tile tile, Graphics2D g2) {
+		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
+		for(int corner : settlementLoc.keySet()) {
+			Point p = tile.getHexCorners().get(corner);
+			Shape circle = new Ellipse2D.Double((int)p.getX() - 12, (int)p.getY() -12, 24, 24);
+			g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
+			g2.fill(circle);
+		}
+	}
     
-    public void drawHexTile(Tile tile, Graphics2D g2) {
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
-        Polygon poly = makeHex(findCenter(x,y));
-        TileType type = tile.getType();
+    public void drawHexTile(int tileX, int tileY, Graphics2D g2) {
+        TileType type = this.tiles[tileX][tileY].getType();
+        assignPolygonsToTiles();
         
         if(null == type) {
             g2.setColor(Color.WHITE);
@@ -204,7 +253,7 @@ public class CatanBoard extends JPanel{
             case desert:
                 g2.setColor(new Color(0xFF, 0xFF, 0xA9));
                 break;
-            case bricks:
+            case brick:
                 g2.setColor(new Color(0xAD, 0x33, 0x33));
                 break;
             case wool:
@@ -224,17 +273,17 @@ public class CatanBoard extends JPanel{
                 break;
         }
 
-        g2.fillPolygon(poly);
+        g2.fillPolygon(this.tiles[tileX][tileY].getHexagon());
         g2.setColor(Color.BLACK);
-        g2.drawPolygon(poly);
+        g2.drawPolygon(this.tiles[tileX][tileY].getHexagon());
     }
     
     public void drawNumber(Tile tile, Graphics2D g2) {
         if (tile.getNumber() == 0 || tile.getNumber() == 7) {
                 return;
         }
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
+        int x = (int) tile.getPosition().getX();
+        int y = (int) tile.getPosition().getY();
         Point p = findCenter(x,y);
 
         g2.setColor(Color.WHITE);
@@ -248,36 +297,49 @@ public class CatanBoard extends JPanel{
     }
     
     public Point findCenter(int x, int y){
-        int xCenter = widthMargin + (int) (3 * hexagonSide * sqrt3div2)
-                        + (int) ((x - 1) * 2 * hexagonSide * sqrt3div2)
-                        - (int) ((y - 1) * hexagonSide * sqrt3div2);
-        int yCenter = boardHeight - (heightMargin + hexagonSide
-                        + (int) ((y - 1) * hexagonSide * 1.5));
+        double xCenter = widthMargin +  (3 * hexagonSide * sqrt3div2)
+                        +  ((x - 1) * 2 * hexagonSide * sqrt3div2)
+                        -  ((y - 1) * hexagonSide * sqrt3div2);
+        double yCenter = boardHeight - (heightMargin + hexagonSide
+                        +  ((y - 1) * hexagonSide * 1.5));
 
-        return new Point(xCenter,yCenter);
+        return doublePoint(xCenter, yCenter);
     }
     
-    public Polygon makeHex(Point center) {
+    public Point doublePoint(double x, double y) {
+    	Point p = new Point();
+        p.setLocation(x, y);
+        return p;
+    }
+    
+    public void makeHex(int tileX, int tileY, Point center) {
         int xCenter = (int) center.getX();
         int yCenter = (int) center.getY();
-
+        ArrayList<Point> tileCorners = new ArrayList<>();
+       
         Polygon output = new Polygon();
         output.addPoint(xCenter + 1, yCenter + hexagonSide + 1);
+        tileCorners.add(doublePoint(center.getX() + 1, center.getY() + hexagonSide + 1));      
         output.addPoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter + (int) (.5 * hexagonSide) + 1);
+        tileCorners.add(doublePoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter + (int) (.5 * hexagonSide) + 1));
         output.addPoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter - (int) (.5 * hexagonSide) - 1);
+        tileCorners.add(doublePoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter - (int) (.5 * hexagonSide) - 1));
         output.addPoint(xCenter + 1, yCenter - hexagonSide - 1);
+        tileCorners.add(doublePoint(xCenter + 1, yCenter - hexagonSide - 1));
         output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter - (int) (.5 * hexagonSide) - 1);
+        tileCorners.add(doublePoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter - (int) (.5 * hexagonSide) - 1));
         output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1);
-
-        return output;
+        tileCorners.add(doublePoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1));
+        this.tiles[tileX][tileY].setHexCorners(tileCorners); 
+        this.tiles[tileX][tileY].setHexagon(output);     
     }
 
     private void drawRobber(Tile tile, Graphics2D g2) {
         if(!tile.isRobber()){
             return;
         }
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
+        int x = (int) tile.getPosition().getX();
+        int y = (int) tile.getPosition().getY();
         Point p = findCenter(x,y);
         
         g2.setColor(Color.PINK);
