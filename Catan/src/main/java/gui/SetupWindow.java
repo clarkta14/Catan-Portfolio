@@ -68,9 +68,14 @@ public class SetupWindow {
 //		SpringLayout layout = new SpringLayout();
 //		instructionsPanel.setLayout(layout);
 		
-		JButton instuctionsButton = new JButton("Instructions");
-		JButton startButton = new JButton("Start");
+		this.addInstructionsButton(instructionsPanel);
+		this.addStartButton(instructionsPanel, frame);
 		
+		frame.add(instructionsPanel);
+	}
+
+	private void addInstructionsButton(JPanel instructionsPanel) {
+		JButton instuctionsButton = new JButton("Instructions");
 		
 		instuctionsButton.addActionListener(new ActionListener() { 
 			@Override  
@@ -78,6 +83,12 @@ public class SetupWindow {
 				System.out.println("Pull up another window that has the instructions. Not implemented.");
 			}
 		});
+		
+		instructionsPanel.add(instuctionsButton);
+	}
+	
+	private void addStartButton(JPanel instructionsPanel, JFrame frame) {
+		JButton startButton = new JButton("Start");
 		
 		startButton.addActionListener(new ActionListener() { 
 			@Override  
@@ -87,11 +98,6 @@ public class SetupWindow {
 			}
 		});
 		
-		instructionsPanel.add(instuctionsButton);
 		instructionsPanel.add(startButton);
-		
-		frame.add(instructionsPanel);
 	}
-	
-	
 }
