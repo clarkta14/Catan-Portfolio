@@ -24,6 +24,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import objects.Player;
 import objects.Position;
 import objects.Tile;
 import objects.TileType;
@@ -41,13 +42,14 @@ public class CatanBoard extends JPanel{
     private int heightMargin = 100;
     private int widthMargin;
     private final double sqrt3div2 = 0.86602540378;
-    
     private int hexagonSide;
+    private ArrayList<Player> players;
     
-    public CatanBoard(){
+    public CatanBoard(ArrayList<Player> players){
         
         this.tiles = new Tile[7][7];
         intialBoardSetup();
+        this.players = players;
         
         setBackground(new Color(164,200,218));
         //Handle Resizing Window

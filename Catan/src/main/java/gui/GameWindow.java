@@ -3,9 +3,12 @@ package gui;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 
 import lib.GraphPaperLayout;
+import objects.Player;
 
 public class GameWindow {
     
@@ -13,8 +16,8 @@ public class GameWindow {
     //private SideBar sideBar; // To hold buttons for game options
     //private GameState gameState; // Hold all player information
     
-    public GameWindow(){
-        this.catanBoard = new CatanBoard();
+    public GameWindow(ArrayList<Player> players){
+        this.catanBoard = new CatanBoard(players);
         showGUI();
     }
 
