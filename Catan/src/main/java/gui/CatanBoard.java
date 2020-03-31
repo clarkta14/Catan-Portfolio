@@ -17,7 +17,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -60,34 +63,7 @@ public class CatanBoard extends JPanel{
         });
     }
 
-    private void shuffleTiles() {
-        // Tile Types
-        ArrayList<TileType> types = new ArrayList<>();
-        for(int i = 0; i < 4; i++) {
-            types.add(TileType.pasture);
-            types.add(TileType.field);
-            types.add(TileType.forest);
-        }
-        for(int i = 0; i < 3; i++) {
-            types.add(TileType.hill);
-            types.add(TileType.mountain);
-        }
-        
-        // Tile Numbers
-        ArrayList<Integer> numbers = new ArrayList<>();
-        for(int i = 0; i < 2; i++){
-            numbers.add(3);
-            numbers.add(4);
-            numbers.add(5);
-            numbers.add(6);
-            numbers.add(8);
-            numbers.add(9);
-            numbers.add(10);
-            numbers.add(11);
-        }
-        numbers.add(2);
-        numbers.add(12);
-        
+    private void shuffleTiles() {        
         // Coordinates
         ArrayList<Position> positions = new ArrayList<>();
         for(int x = 1; x < 6; x++){
@@ -120,21 +96,39 @@ public class CatanBoard extends JPanel{
             }
         }
         
-        // Shuffle List
-        for(int i = 0; i < 3; i++){
-            Collections.shuffle(types);
-            Collections.shuffle(numbers);
-            Collections.shuffle(positions);
-        }
+        ArrayList<Integer> wheatLocs = new ArrayList<Integer>(Arrays.asList(2, 3, 6, 8));
+        ArrayList<Integer> wheatNums = new ArrayList<Integer>(Arrays.asList(9, 6, 12, 4));
+        initilizeTiles(wheatLocs, wheatNums, TileType.wheat, positions);
         
-        for(int i = 0; i < 18; i++){
-            this.tiles[positions.get(i).getX()][positions.get(i).getY()] = new Tile(positions.get(i), numbers.get(i), types.get(i));
-        }
+        ArrayList<Integer> woolLocs = new ArrayList<Integer>(Arrays.asList(7, 12, 14, 15));
+        ArrayList<Integer> woolNums = new ArrayList<Integer>(Arrays.asList(11, 5, 4, 2));
+        initilizeTiles(woolLocs, woolNums, TileType.wool, positions);
         
-        // Placing the desert tile with robber on the board
-        Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
+        ArrayList<Integer> woodLocs = new ArrayList<Integer>(Arrays.asList(1, 5, 13, 18));
+        ArrayList<Integer> woodNums = new ArrayList<Integer>(Arrays.asList(8, 11, 3, 9));
+        initilizeTiles(woodLocs, woodNums, TileType.wood, positions);
+        
+        ArrayList<Integer> oreLocs = new ArrayList<Integer>(Arrays.asList(4, 11, 16));
+        ArrayList<Integer> oreNums = new ArrayList<Integer>(Arrays.asList(3, 10, 8));
+        initilizeTiles(oreLocs, oreNums, TileType.ore, positions);
+        
+        ArrayList<Integer> brickLocs = new ArrayList<Integer>(Arrays.asList(0, 10, 17));
+        ArrayList<Integer> brickNums = new ArrayList<Integer>(Arrays.asList(5, 6, 10));
+        initilizeTiles(brickLocs, brickNums, TileType.bricks, positions);
+        
+        Tile desertTile = new Tile(positions.get(9), 7, TileType.desert);
         desertTile.setRobber();
-        this.tiles[positions.get(18).getX()][positions.get(18).getY()] = desertTile;
+        this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
+    }
+    
+    private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Position> positions) {
+    	if (positionNums.size() != numbers.size()) {
+    		return;
+    	}
+    	for (int i = 0; i < positionNums.size(); i++) {
+    		Position p = positions.get(positionNums.get(i));
+    		this.tiles[p.getX()][p.getY()] = new Tile(p, numbers.get(i), type);
+    	}
     }
     
     @Override
@@ -190,19 +184,19 @@ public class CatanBoard extends JPanel{
             case desert:
                 g2.setColor(new Color(0xFF, 0xFF, 0xA9));
                 break;
-            case hill:
+            case bricks:
                 g2.setColor(new Color(0xAD, 0x33, 0x33));
                 break;
-            case pasture:
+            case wool:
                 g2.setColor(Color.GREEN);
                 break;
-            case forest:
+            case wood:
                 g2.setColor(new Color(0x99, 0x66, 0x33));
                 break;
-            case field:
+            case wheat:
                 g2.setColor(Color.YELLOW);
                 break;
-            case mountain:
+            case ore:
                 g2.setColor(Color.LIGHT_GRAY);
                 break;
             default:
@@ -300,16 +294,15 @@ public class CatanBoard extends JPanel{
     
     public ArrayList<String> getPortnames(){
         ArrayList<String> ports = new ArrayList<>();
+        ports.add("Wheat 2:1");
+        ports.add("Ore 2:1");
         ports.add("? 3:1");
-        ports.add("Grain 2:1");
         ports.add("Wool 2:1");
         ports.add("? 3:1");
-        ports.add("Brick 2:1");
         ports.add("? 3:1");
-        ports.add("Ore 2:1");
+        ports.add("Bricks 2:1");
         ports.add("Lumber 2:1");
         ports.add("? 3:1");
-        Collections.shuffle(ports);
         return ports;
     }
 
