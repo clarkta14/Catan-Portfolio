@@ -17,7 +17,7 @@ public class Player {
 	}
 	
 	public void addSettlement(int x, int y) {
-		this.settlements.add(new Settlement(x, y));
+		this.settlements.add(new Settlement(x, y, this));
 	}
 
 	public ArrayList<Settlement> getSettlements() {

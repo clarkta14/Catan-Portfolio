@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 
 import objects.Player;
 import objects.Position;
+import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
 
@@ -36,7 +37,7 @@ import objects.TileType;
 public class CatanBoard extends JPanel{
     private final Tile[][] tiles;
     //private Road[][][] roads;
-    //private Settlement[][][] settlements;
+    private Settlement[][][] settlements;
     //private City[][][] cities;
     private int boardHeight;
     private int heightMargin = 100;
