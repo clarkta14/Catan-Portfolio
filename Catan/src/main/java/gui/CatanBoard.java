@@ -66,7 +66,37 @@ public class CatanBoard extends JPanel{
     private void intialBoardSetup() {        
         // Coordinates
         ArrayList<Position> positions = new ArrayList<>();
-        for(int x = 1; x < 6; x++){
+        createTileLocations(positions);
+        
+        ArrayList<Integer> wheatLocs = new ArrayList<Integer>(Arrays.asList(2, 3, 6, 8));
+        ArrayList<Integer> wheatNums = new ArrayList<Integer>(Arrays.asList(9, 6, 12, 4));
+        initilizeTiles(wheatLocs, wheatNums, TileType.wheat, positions);
+        
+        ArrayList<Integer> woolLocs = new ArrayList<Integer>(Arrays.asList(7, 12, 14, 15));
+        ArrayList<Integer> woolNums = new ArrayList<Integer>(Arrays.asList(11, 5, 4, 2));
+        initilizeTiles(woolLocs, woolNums, TileType.wool, positions);
+        
+        ArrayList<Integer> woodLocs = new ArrayList<Integer>(Arrays.asList(1, 5, 13, 18));
+        ArrayList<Integer> woodNums = new ArrayList<Integer>(Arrays.asList(8, 11, 3, 9));
+        initilizeTiles(woodLocs, woodNums, TileType.wood, positions);
+        
+        ArrayList<Integer> oreLocs = new ArrayList<Integer>(Arrays.asList(4, 11, 16));
+        ArrayList<Integer> oreNums = new ArrayList<Integer>(Arrays.asList(3, 10, 8));
+        initilizeTiles(oreLocs, oreNums, TileType.ore, positions);
+        
+        ArrayList<Integer> brickLocs = new ArrayList<Integer>(Arrays.asList(0, 10, 17));
+        ArrayList<Integer> brickNums = new ArrayList<Integer>(Arrays.asList(5, 6, 10));
+        initilizeTiles(brickLocs, brickNums, TileType.bricks, positions);
+        
+        Tile desertTile = new Tile(positions.get(9), 7, TileType.desert);
+        desertTile.setRobber();
+        this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
+        
+        
+    }
+
+	private void createTileLocations(ArrayList<Position> positions) {
+		for(int x = 1; x < 6; x++){
             int ylow = -1;
             int yhigh = -1;
             switch (x) {
@@ -95,31 +125,7 @@ public class CatanBoard extends JPanel{
                 positions.add(new Position(x,y));
             }
         }
-        
-        ArrayList<Integer> wheatLocs = new ArrayList<Integer>(Arrays.asList(2, 3, 6, 8));
-        ArrayList<Integer> wheatNums = new ArrayList<Integer>(Arrays.asList(9, 6, 12, 4));
-        initilizeTiles(wheatLocs, wheatNums, TileType.wheat, positions);
-        
-        ArrayList<Integer> woolLocs = new ArrayList<Integer>(Arrays.asList(7, 12, 14, 15));
-        ArrayList<Integer> woolNums = new ArrayList<Integer>(Arrays.asList(11, 5, 4, 2));
-        initilizeTiles(woolLocs, woolNums, TileType.wool, positions);
-        
-        ArrayList<Integer> woodLocs = new ArrayList<Integer>(Arrays.asList(1, 5, 13, 18));
-        ArrayList<Integer> woodNums = new ArrayList<Integer>(Arrays.asList(8, 11, 3, 9));
-        initilizeTiles(woodLocs, woodNums, TileType.wood, positions);
-        
-        ArrayList<Integer> oreLocs = new ArrayList<Integer>(Arrays.asList(4, 11, 16));
-        ArrayList<Integer> oreNums = new ArrayList<Integer>(Arrays.asList(3, 10, 8));
-        initilizeTiles(oreLocs, oreNums, TileType.ore, positions);
-        
-        ArrayList<Integer> brickLocs = new ArrayList<Integer>(Arrays.asList(0, 10, 17));
-        ArrayList<Integer> brickNums = new ArrayList<Integer>(Arrays.asList(5, 6, 10));
-        initilizeTiles(brickLocs, brickNums, TileType.bricks, positions);
-        
-        Tile desertTile = new Tile(positions.get(9), 7, TileType.desert);
-        desertTile.setRobber();
-        this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
-    }
+	}
     
     private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Position> positions) {
     	if (positionNums.size() != numbers.size()) {
@@ -134,14 +140,14 @@ public class CatanBoard extends JPanel{
     @Override
     public void paintComponent(Graphics g){
         boardHeight = getHeight();
-	hexagonSide = (boardHeight - 2 * heightMargin) / 8;
-	widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
-        Graphics2D g2 = (Graphics2D)g;
-	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	g.setFont(new Font("TimesRoman", Font.BOLD, 20));
-	super.paintComponent(g2);
-        drawHexTilesWithNumbers(g2);
-        drawPorts(g2);
+		hexagonSide = (boardHeight - 2 * heightMargin) / 8;
+		widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
+	        Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		super.paintComponent(g2);
+	    drawHexTilesWithNumbers(g2);
+	    drawPorts(g2);
     }
 
     private void drawHexTilesWithNumbers(Graphics2D g2) {
