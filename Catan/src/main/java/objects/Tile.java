@@ -35,6 +35,10 @@ public class Tile {
         this.hex = poly;
     }
     
+     public Polygon getHex(){
+         return this.hex;
+     }
+    
     /*
     * Hold the coordinates to the center of the tile for calculations.
     */
