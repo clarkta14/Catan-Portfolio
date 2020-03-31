@@ -47,7 +47,7 @@ public class CatanBoard extends JPanel{
     public CatanBoard(){
         
         this.tiles = new Tile[7][7];
-        shuffleTiles();
+        intialBoardSetup();
         
         setBackground(new Color(164,200,218));
         //Handle Resizing Window
@@ -63,7 +63,7 @@ public class CatanBoard extends JPanel{
         });
     }
 
-    private void shuffleTiles() {        
+    private void intialBoardSetup() {        
         // Coordinates
         ArrayList<Position> positions = new ArrayList<>();
         for(int x = 1; x < 6; x++){
