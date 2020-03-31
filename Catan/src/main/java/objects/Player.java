@@ -1,7 +1,6 @@
 package objects;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 
 public class Player {
@@ -17,8 +16,8 @@ public class Player {
 		return this.color;
 	}
 	
-	public void addSettlement(Point loc) {
-		this.settlements.add(new Settlement(loc));
+	public void addSettlement(int x, int y) {
+		this.settlements.add(new Settlement(x, y));
 	}
 
 	public ArrayList<Settlement> getSettlements() {

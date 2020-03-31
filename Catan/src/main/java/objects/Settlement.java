@@ -1,15 +1,7 @@
 package objects;
 
-import java.awt.Point;
-
-public class Settlement {
-	private Point location;
-	
-	public Settlement(Point p) {
-		this.location = p;
-	}
-	
-	public Point getLocationOnBoard() {
-		return this.location;
+public class Settlement extends BoardStructure{
+	public Settlement(int x, int y) {
+		setLocation(new StructurePosition(x,y,0));
 	}
 }

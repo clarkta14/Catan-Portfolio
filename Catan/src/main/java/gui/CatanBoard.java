@@ -94,7 +94,18 @@ public class CatanBoard extends JPanel{
         desertTile.setRobber();
         this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
         
-        
+        // Initial Player Settlement setup
+        for(Player player : this.players) {
+        	if(player.getColor().equals(Color.BLUE)) {
+	        	
+        	}else if(player.getColor().equals(Color.BLUE)) {
+	        	
+        	}else if(player.getColor().equals(Color.BLUE)) {
+	        	
+        	}else if(player.getColor().equals(Color.BLUE)) {
+	        	
+        	}
+        }
     }
 
 	private void createTileLocations(ArrayList<Position> positions) {
