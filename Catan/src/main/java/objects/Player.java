@@ -3,14 +3,14 @@ package objects;
 import java.awt.Color;
 
 public class Player {
+	Color color;
 
 	public Player(Color color) {
-		// TODO Auto-generated constructor stub
+		this.color = color;
 	}
 
 	public Object getColor() {
-		// TODO Auto-generated method stub
-		return Color.orange;
+		return this.color;
 	}
 
 }
