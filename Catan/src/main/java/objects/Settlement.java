@@ -1,13 +1,9 @@
 package objects;
 
-public class Settlement{
-	private Player owner;
-	
+public class Settlement extends GameStructures{
+
 	public Settlement(Player owner) {
-		this.owner = owner;
+		super(owner);
 	}
 	
-	public Player getOwner() {
-		return this.owner;
-	}
 }

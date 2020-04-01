@@ -116,9 +116,9 @@ public class CatanBoard extends JPanel{
         		this.tiles[2][1].addSettlement(3, new Settlement(player));
         		this.tiles[2][2].addSettlement(1, new Settlement(player));
         		this.tiles[3][2].addSettlement(5, new Settlement(player));
-        		this.tiles[5][5].addSettlement(3, new Settlement(player));
-        		this.tiles[5][4].addSettlement(1, new Settlement(player));
-        		this.tiles[4][4].addSettlement(5, new Settlement(player));
+        		this.tiles[5][5].addSettlement(0, new Settlement(player));
+        		this.tiles[5][4].addSettlement(4, new Settlement(player));
+        		this.tiles[4][4].addSettlement(2, new Settlement(player));
         	}
         }
     }
