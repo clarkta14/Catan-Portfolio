@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ComponentEvent;
@@ -23,6 +24,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import objects.Player;
+import objects.Road;
 import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
@@ -88,39 +90,66 @@ public class CatanBoard extends JPanel{
         
         assignPolygonsToTiles();
         
-        // Initial Player Settlement setup
+        // Initial Player Settlement and Road setup
         
         for(Player player : this.players) {
         	if(player.getColor().equals(Color.BLUE)) {
+        		// Settlement
         		this.tiles[1][1].addSettlement(3, new Settlement(player));
         		this.tiles[1][2].addSettlement(1, new Settlement(player));
         		this.tiles[2][2].addSettlement(5, new Settlement(player));
         		this.tiles[3][1].addSettlement(3, new Settlement(player));
         		this.tiles[3][2].addSettlement(1, new Settlement(player));
         		this.tiles[4][2].addSettlement(5, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 1, 1, 2, 2, 3, 2, 0, 5);
+        		createRoadObject(player, 2, 3, 2, 4, 2, 2, 1, 5, 4);
+				
         	}else if(player.getColor().equals(Color.RED)) {
+        		// Settlement
         		this.tiles[1][2].addSettlement(3, new Settlement(player));
         		this.tiles[1][3].addSettlement(1, new Settlement(player));
         		this.tiles[2][3].addSettlement(5, new Settlement(player));
         		this.tiles[3][4].addSettlement(3, new Settlement(player));
         		this.tiles[3][5].addSettlement(1, new Settlement(player));
         		this.tiles[4][5].addSettlement(5, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 3, 4, 4, 5, 3, 2, 0, 5);
+        		createRoadObject(player, 0, 1, 2, 2, 3, 3, 2, 0, 5);
+        		
         	}else if(player.getColor().equals(Color.WHITE)) {
+        		// Settlement
         		this.tiles[2][3].addSettlement(3, new Settlement(player));
         		this.tiles[2][4].addSettlement(1, new Settlement(player));
         		this.tiles[3][4].addSettlement(5, new Settlement(player));
         		this.tiles[4][2].addSettlement(3, new Settlement(player));
         		this.tiles[4][3].addSettlement(1, new Settlement(player));
         		this.tiles[5][3].addSettlement(5, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 1, 2, 3, 2, 4, 4, 3, 1, 0);
+        		createRoadObject(player, 2, 4, 3, 5, 3, 2, 1, 5, 4);
+        		
         	}else if(player.getColor().equals(Color.ORANGE)) {
+        		// Settlement
         		this.tiles[2][1].addSettlement(3, new Settlement(player));
         		this.tiles[2][2].addSettlement(1, new Settlement(player));
         		this.tiles[3][2].addSettlement(5, new Settlement(player));
         		this.tiles[5][5].addSettlement(0, new Settlement(player));
         		this.tiles[5][4].addSettlement(4, new Settlement(player));
         		this.tiles[4][4].addSettlement(2, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 2, 1, 3, 2, 3, 2, 0, 5);
+        		createRoadObject(player, 0, 4, 4, 5, 5, 3, 2, 0, 5);
+        	
         	}
         }
+    }
+    
+    private void createRoadObject(Player p, int angle, int tileX, int tileY, int tile2X, int tile2Y, int corner1, int corner2, int corner3, int corner4) {
+    	Road r = new Road(p);
+		r.setAngle(angle);
+		this.tiles[tileX][tileY].addRoad(corner1, corner2, r);
+		this.tiles[tile2X][tile2Y].addRoad(corner3, corner4, r);
     }
     
     private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Point> positions) {
@@ -206,33 +235,74 @@ public class CatanBoard extends JPanel{
             drawNumber(tiles[x][1],g2);
             drawRobber(tiles[x][1],g2);
             drawSettlements(tiles[x][1], g2);
+            drawRoads(tiles[x][1], g2);
         }
         for (int x = 1; x <= 4; x++) {
             drawHexTile(x,2,g2);
             drawNumber(tiles[x][2],g2);
             drawRobber(tiles[x][2],g2);
             drawSettlements(tiles[x][2], g2);
+            drawRoads(tiles[x][2], g2);
         }
         for (int x = 1; x <= 5; x++) {
             drawHexTile(x,3,g2);
             drawNumber(tiles[x][3],g2);
             drawRobber(tiles[x][3],g2);
             drawSettlements(tiles[x][3], g2);
+            drawRoads(tiles[x][3], g2);
         }
         for (int x = 2; x <= 5; x++) {
             drawHexTile(x,4,g2);
             drawNumber(tiles[x][4],g2);
             drawRobber(tiles[x][4],g2);
             drawSettlements(tiles[x][4], g2);
+            drawRoads(tiles[x][4], g2);
         }
         for (int x = 3; x <= 5; x++) {
             drawHexTile(x,5,g2);
             drawNumber(tiles[x][5],g2);
             drawRobber(tiles[x][5],g2);
             drawSettlements(tiles[x][5], g2);
+            drawRoads(tiles[x][5], g2);
         }
     }
 	
+	private void drawRoads(Tile tile, Graphics2D g2) {
+		HashMap<ArrayList<Integer>, Road> roadLoc = tile.getRoads();
+		for(ArrayList<Integer> corners : roadLoc.keySet()) {
+			Graphics2D g2c = (Graphics2D) g2.create();
+			
+			Point corner1 = tile.getHexCorners().get(corners.get(0));
+			Point corner2 = tile.getHexCorners().get(corners.get(1));
+			AffineTransform transformer = new AffineTransform();
+			Road r = roadLoc.get(corners);
+			int orientation = r.getAngle();
+			int height = hexagonSide / 10;
+			int x = (int)(corner1.getX() + corner2.getX())/2;
+			int y = (int)(corner1.getY() + corner2.getY())/2;
+			Rectangle rect = new Rectangle(x, y, (int) (0.7 * hexagonSide), height);
+			if (orientation == 0){
+				transformer.rotate(Math.toRadians(30), x, y);
+				transformer.translate(-(int)(0.34 * hexagonSide), 0);
+				
+			}
+			else if (orientation == 1) {
+				transformer.rotate(Math.toRadians(150), x, y);
+				transformer.translate(-(int)(0.35 * hexagonSide), -2);
+			}
+			else if (orientation == 2) {
+				transformer.rotate(Math.toRadians(90), x, y);
+				transformer.translate(-(int)(0.4 * hexagonSide), -2);
+			}
+			Color color = (Color) r.getOwner().getColor();
+			g2c.setColor(color);
+			g2c.transform(transformer);
+			g2c.fill(rect);
+			g2c.setColor(Color.BLACK);
+			g2c.draw(rect);
+		}
+	}
+
 	private void drawSettlements(Tile tile, Graphics2D g2) {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for(int corner : settlementLoc.keySet()) {
@@ -240,6 +310,8 @@ public class CatanBoard extends JPanel{
 			Shape circle = new Ellipse2D.Double((int)p.getX() - 12, (int)p.getY() -12, 24, 24);
 			g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
 			g2.fill(circle);
+			g2.setColor(Color.BLACK);
+			g2.draw(circle);
 		}
 	}
     

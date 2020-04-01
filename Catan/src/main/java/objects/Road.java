@@ -5,6 +5,11 @@ public class Road extends GameStructures{
 
 	public Road(Player owner) {
 		super(owner);
+		this.angle = 0;
+	}
+	
+	public void setAngle(int a) {
+		this.angle = a;
 	}
 	
 	public int getAngle() {

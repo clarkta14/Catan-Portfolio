@@ -17,6 +17,7 @@ public class Tile {
     private Boolean isRobber;
     private Polygon hexagon;
     private HashMap<Integer, Settlement> hexCornerToSettlement;
+    private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
     
     /**
      * Constructor, with given params for its fields
@@ -31,6 +32,7 @@ public class Tile {
         this.number = n;
         this.type = typ;
         this.hexCornerToSettlement = new HashMap<>();
+        this.hexEdgeToRoad = new HashMap<>();
     }
     
     /*
@@ -88,6 +90,17 @@ public class Tile {
     
     public HashMap<Integer, Settlement> getSettlements() {
     	return this.hexCornerToSettlement;
+    }
+    
+    public void addRoad(int corner1, int corner2, Road r) {
+    	ArrayList<Integer> edge = new ArrayList<>();
+    	edge.add(corner1);
+    	edge.add(corner2);
+    	this.hexEdgeToRoad.put(edge, r);
+    }
+    
+    public HashMap<ArrayList<Integer>, Road> getRoads() {
+    	return this.hexEdgeToRoad;
     }
 }
 
