@@ -3,6 +3,8 @@ package Catan;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import gui.BoardWindow;
+import gui.CatanBoard;
 import gui.GameWindow;
 import objects.Player;
 
@@ -25,6 +27,8 @@ public class Main {
 	   p = new Player(Color.ORANGE);
 	   plyrs.add(p);
 	   
-       GameWindow catan = new GameWindow(plyrs);
+	   BoardWindow bw = new BoardWindow();
+       GameWindow catan = new GameWindow(bw);
+       CatanBoard board = new CatanBoard(plyrs, bw);
    }
 }
