@@ -5,10 +5,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class SetupPromptTests {
-
+	
 	@Test
-	public void constructSetupWindow() {
+	public void getNumPlayersNotInitialized() {
 		SetupPrompt setupWindow = new SetupPrompt();
+		try {
+			setupWindow.getNumPlayers();
+			fail("Did not throw IAE Exception");
+		} catch(IllegalArgumentException e) {
+			// pass
+		}
 	}
 	
 	@Test
@@ -58,7 +64,7 @@ public class SetupPromptTests {
 	
 	private void testPlayerNumNormal(String input) {
 		SetupPrompt catanSetup = new SetupPrompt();
-		int players = catanSetup.getPlayerNum(input);
-		assertEquals(Integer.parseInt(input), players);
+		catanSetup.getPlayerNum(input);
+		assertEquals(Integer.parseInt(input), catanSetup.getNumPlayers());
 	}
 }
