@@ -1,7 +1,7 @@
 package Catan;
 
 import gui.GameWindow;
-import gui.SetupWindow;
+import gui.SetupPrompt;
 
 /**
 *
@@ -10,7 +10,8 @@ import gui.SetupWindow;
 public class Main {
    @SuppressWarnings("unused")
 public static void main(String args[]){
-	   SetupWindow catansetup = new SetupWindow();
-//       GameWindow catan = new GameWindow();
+	   SetupPrompt catansetup = new SetupPrompt();
+	   catansetup.scanPlayerNum();
+//     GameWindow catan = new GameWindow();
    }
 }
