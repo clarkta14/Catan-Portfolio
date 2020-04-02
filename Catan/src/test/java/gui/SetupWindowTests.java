@@ -14,16 +14,16 @@ public class SetupWindowTests {
 	@Test
 	public void testThreePlayers() {
 		SetupPrompt catanSetup = new SetupPrompt();
-		String three = "3";
-		int players = catanSetup.getPlayerNum(three);
+		String input = "3";
+		int players = catanSetup.getPlayerNum(input);
 		assertEquals(3, players);
 	}
 	
 	@Test
 	public void testFourPlayers() {
 		SetupPrompt catanSetup = new SetupPrompt();
-		String four = "4";
-		int players = catanSetup.getPlayerNum(four);
+		String input = "4";
+		int players = catanSetup.getPlayerNum(input);
 		assertEquals(4, players);
 	}
 	
@@ -31,8 +31,8 @@ public class SetupWindowTests {
 	public void testLessThanThreePlayers() {
 		try {
 			SetupPrompt catanSetup = new SetupPrompt();
-			String two = "2";
-			int players = catanSetup.getPlayerNum(two);
+			String input = "2";
+			catanSetup.getPlayerNum(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
 			// pass
@@ -43,8 +43,32 @@ public class SetupWindowTests {
 	public void testGreaterThanFourPlayers() {
 		try {
 			SetupPrompt catanSetup = new SetupPrompt();
-			String five = "5";
-			int players = catanSetup.getPlayerNum(five);
+			String input = "5";
+			catanSetup.getPlayerNum(input);
+			fail("Did not throw IAE Exception");
+		} catch(IllegalArgumentException e) {
+			// pass
+		}
+	}
+	
+	@Test
+	public void testMaxIntPlayers() {
+		try {
+			SetupPrompt catanSetup = new SetupPrompt();
+			String input = String.valueOf(Integer.MAX_VALUE);
+			catanSetup.getPlayerNum(input);
+			fail("Did not throw IAE Exception");
+		} catch(IllegalArgumentException e) {
+			// pass
+		}
+	}
+	
+	@Test
+	public void testMinIntPlayers() {
+		try {
+			SetupPrompt catanSetup = new SetupPrompt();
+			String input = String.valueOf(Integer.MIN_VALUE);
+			catanSetup.getPlayerNum(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
 			// pass
@@ -55,8 +79,8 @@ public class SetupWindowTests {
 	public void testNonNumericalForPlayerNum() {
 		try {
 			SetupPrompt catanSetup = new SetupPrompt();
-			String nonNum = "henlo wurld";
-			int players = catanSetup.getPlayerNum(nonNum);
+			String input = "henlo wurld";
+			catanSetup.getPlayerNum(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
 			// pass
