@@ -1,30 +1,10 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
 import objects.Player;
 import objects.Road;
 import objects.Settlement;
@@ -40,11 +20,26 @@ public class CatanBoard {
     private ArrayList<Player> players;
     private GUIObjectConstructor guiCreator;
     
-    public CatanBoard(ArrayList<Player> players, GUIObjectConstructor gui){
-    	this.players = players;
+    public CatanBoard(int numberOfPlayers, GUIObjectConstructor gui){
+    	this.players = createPlayers(numberOfPlayers);
         this.tiles = new ArrayList<Tile>();
         this.guiCreator = gui;
         intialBoardSetup();
+    }
+    
+    public ArrayList<Player> createPlayers(int num) {
+ 	   ArrayList<Player> plyrs = new ArrayList<>();
+ 	   Player p = new Player(Color.BLUE);
+ 	   plyrs.add(p);
+ 	   if(num != 3) {
+ 		  p = new Player(Color.RED);
+ 	 	  plyrs.add(p);
+	   }
+ 	   p = new Player(Color.WHITE);
+ 	   plyrs.add(p);
+ 	   p = new Player(Color.ORANGE);
+ 	   plyrs.add(p);
+ 	   return plyrs;
     }
 
     private void intialBoardSetup() {        

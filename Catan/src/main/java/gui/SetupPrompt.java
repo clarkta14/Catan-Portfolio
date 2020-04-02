@@ -13,7 +13,6 @@ public class SetupPrompt {
 		input.close();
 	}
 
-
 	public void getPlayerNum(String numPlayersString) {
 		if(numPlayersString.equals("3")) {
 			this.numPlayers = 3;
