@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import objects.Road;
 import objects.Settlement;
-import objects.Tile;
 import objects.TileType;
 
 public class BoardWindow extends JPanel {
@@ -35,7 +34,7 @@ public class BoardWindow extends JPanel {
 	private int widthMargin;
 	private final double sqrt3div2 = 0.86602540378;
 	private int hexagonSide;
-	private Tile[][] tiles;
+	private GUITile[][] tiles;
 	
 	public BoardWindow() {
 		setBackground(new Color(164,200,218));
@@ -52,7 +51,7 @@ public class BoardWindow extends JPanel {
         });
     }
 	
-	public void updateBoard(Tile[][] tiles) {
+	public void updateBoard(GUITile[][] tiles) {
 		this.tiles = tiles;
 		assignPolygonsToTiles();
 	}
@@ -126,7 +125,7 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	private void drawRoads(Tile tile, Graphics2D g2) {
+	private void drawRoads(GUITile tile, Graphics2D g2) {
 		HashMap<ArrayList<Integer>, Road> roadLoc = tile.getRoads();
 		for (ArrayList<Integer> corners : roadLoc.keySet()) {
 			Graphics2D g2c = (Graphics2D) g2.create();
@@ -160,7 +159,7 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	private void drawSettlements(Tile tile, Graphics2D g2) {
+	private void drawSettlements(GUITile tile, Graphics2D g2) {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for (int corner : settlementLoc.keySet()) {
 			Point p = tile.getHexCorners().get(corner);
@@ -208,7 +207,7 @@ public class BoardWindow extends JPanel {
 		g2.drawPolygon(this.tiles[tileX][tileY].getHexagon());
 	}
 
-	public void drawNumber(Tile tile, Graphics2D g2) {
+	public void drawNumber(GUITile tile, Graphics2D g2) {
 		if (tile.getNumber() == 0 || tile.getNumber() == 7) {
 			return;
 		}
@@ -266,7 +265,7 @@ public class BoardWindow extends JPanel {
 		this.tiles[tileX][tileY].setHexagon(output);
 	}
 
-	private void drawRobber(Tile tile, Graphics2D g2) {
+	private void drawRobber(GUITile tile, Graphics2D g2) {
 		if (!tile.isRobber()) {
 			return;
 		}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import gui.BoardWindow;
 import gui.CatanBoard;
+import gui.GUIObjectConstructor;
 import gui.GameWindow;
 import objects.Player;
 
@@ -29,6 +30,7 @@ public class Main {
 	   
 	   BoardWindow bw = new BoardWindow();
        GameWindow catan = new GameWindow(bw);
-       CatanBoard board = new CatanBoard(plyrs, bw);
+       GUIObjectConstructor objConstructor = new GUIObjectConstructor(bw);
+       CatanBoard board = new CatanBoard(plyrs, objConstructor);
    }
 }
