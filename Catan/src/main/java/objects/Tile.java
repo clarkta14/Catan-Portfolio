@@ -1,7 +1,5 @@
 package objects;
 
-import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,13 +7,11 @@ import java.util.HashMap;
  *
  * @author Indresh
  */
-public class Tile {
+public class Tile implements ITile{
     private TileType type;
     private int number;
-    private Point pos;
-    private ArrayList<Point> corners;
+    private int boardPos;
     private Boolean isRobber;
-    private Polygon hexagon;
     private HashMap<Integer, Settlement> hexCornerToSettlement;
     private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
     
@@ -26,9 +22,9 @@ public class Tile {
      * @param n the number of the Tile
      * @param typ the type of the Tile
     */
-    public Tile(Point p, int n, TileType typ) {
+    public Tile(int position, int n, TileType typ) {
         this.isRobber = false;    
-        this.pos = p;
+        this.boardPos = position;
         this.number = n;
         this.type = typ;
         this.hexCornerToSettlement = new HashMap<>();
@@ -36,29 +32,14 @@ public class Tile {
     }
     
     /*
-    * Hold the polygon this tile belongs to. 
-    * For retrieving coordinates of polygon corners to draw settlements
-    */
-    public void setHexCorners(ArrayList<Point> poly){
-        this.corners = poly;
-    }
-    
-     public ArrayList<Point> getHexCorners(){
-         return this.corners;
-     }
-    
-    /*
-    * Hold the coordinates to the center of the tile for calculations.
-    */
-    public Point getPosition(){
-        return this.pos;
-    }
-    
-    /*
     * Retrieve the tile type
     */
     public TileType getType(){
         return this.type;
+    }
+    
+    public int getBoardPosition() {
+    	return this.boardPos;
     }
     
     /*
@@ -74,14 +55,6 @@ public class Tile {
     
     public Boolean isRobber(){
         return this.isRobber;
-    }
-    
-    public void setHexagon(Polygon poly) {
-    	this.hexagon = poly;
-    }
-    
-    public Polygon getHexagon(){
-    	return this.hexagon;
     }
     
     public void addSettlement(int corner, Settlement s) {
