@@ -3,8 +3,8 @@ package objects;
 import java.awt.Color;
 
 public class Player {
-	Color color;
-
+	private Color color;
+		
 	public Player(Color color) {
 		this.color = color;
 	}
@@ -12,5 +12,4 @@ public class Player {
 	public Object getColor() {
 		return this.color;
 	}
-
 }

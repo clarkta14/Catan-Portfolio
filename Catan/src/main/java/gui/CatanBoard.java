@@ -1,30 +1,13 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
-import objects.Position;
+import objects.Player;
+import objects.Road;
+import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
 
@@ -32,379 +15,140 @@ import objects.TileType;
  *
  * @author Indresh
  */
-public class CatanBoard extends JPanel{
-    private final Tile[][] tiles;
-    //private Road[][][] roads;
-    //private Settlement[][][] settlements;
-    //private City[][][] cities;
-    private int boardHeight;
-    private int heightMargin = 100;
-    private int widthMargin;
-    private final double sqrt3div2 = 0.86602540378;
+public class CatanBoard {
+    private ArrayList<Tile> tiles;
+    private ArrayList<Player> players;
+    private GUIObjectConstructor guiCreator;
     
-    private int hexagonSide;
+    public CatanBoard(int numberOfPlayers, GUIObjectConstructor gui){
+    	this.players = createPlayers(numberOfPlayers);
+        this.tiles = new ArrayList<Tile>();
+        this.guiCreator = gui;
+        intialBoardSetup();
+    }
     
-    public CatanBoard(){
-        
-        this.tiles = new Tile[7][7];
-        shuffleTiles();
-        
-        setBackground(new Color(164,200,218));
-        //Handle Resizing Window
-        this.addComponentListener(new ComponentListener() {
-            public void componentResized(ComponentEvent e) {
-    		boardHeight = getHeight();
-    		hexagonSide = (boardHeight - 2 * heightMargin) / 8;
-    		widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
-            }
-            public void componentHidden(ComponentEvent e) {}
-            public void componentMoved(ComponentEvent e) {}
-            public void componentShown(ComponentEvent e) {}
-        });
+    public ArrayList<Player> createPlayers(int num) {
+ 	   ArrayList<Player> plyrs = new ArrayList<>();
+ 	   Player p = new Player(Color.BLUE);
+ 	   plyrs.add(p);
+ 	   if(num != 3) {
+ 		  p = new Player(Color.RED);
+ 	 	  plyrs.add(p);
+	   }
+ 	   p = new Player(Color.WHITE);
+ 	   plyrs.add(p);
+ 	   p = new Player(Color.ORANGE);
+ 	   plyrs.add(p);
+ 	   return plyrs;
     }
 
-    private void shuffleTiles() {        
+    private void intialBoardSetup() {        
         // Coordinates
-        ArrayList<Position> positions = new ArrayList<>();
-        for(int x = 1; x < 6; x++){
-            int ylow = -1;
-            int yhigh = -1;
-            switch (x) {
-                case 1:
-                    ylow = 1;
-                    yhigh = 4;
-                    break;
-                case 2:
-                    ylow = 1;
-                    yhigh = 5;
-                    break;
-                case 3:
-                    ylow = 1;
-                    yhigh = 6;
-                    break;
-                case 4:
-                    ylow = 2;
-                    yhigh = 6;
-                    break;
-                case 5:
-                    ylow = 3;
-                    yhigh = 6;
-                    break;
-            }
-            for(int y = ylow; y < yhigh; y++){
-                positions.add(new Position(x,y));
-            }
-        }
-        
         ArrayList<Integer> wheatLocs = new ArrayList<Integer>(Arrays.asList(2, 3, 6, 8));
         ArrayList<Integer> wheatNums = new ArrayList<Integer>(Arrays.asList(9, 6, 12, 4));
-        initilizeTiles(wheatLocs, wheatNums, TileType.wheat, positions);
+        initilizeTiles(wheatLocs, wheatNums, TileType.wheat);
         
         ArrayList<Integer> woolLocs = new ArrayList<Integer>(Arrays.asList(7, 12, 14, 15));
         ArrayList<Integer> woolNums = new ArrayList<Integer>(Arrays.asList(11, 5, 4, 2));
-        initilizeTiles(woolLocs, woolNums, TileType.wool, positions);
+        initilizeTiles(woolLocs, woolNums, TileType.wool);
         
         ArrayList<Integer> woodLocs = new ArrayList<Integer>(Arrays.asList(1, 5, 13, 18));
         ArrayList<Integer> woodNums = new ArrayList<Integer>(Arrays.asList(8, 11, 3, 9));
-        initilizeTiles(woodLocs, woodNums, TileType.wood, positions);
+        initilizeTiles(woodLocs, woodNums, TileType.wood);
         
         ArrayList<Integer> oreLocs = new ArrayList<Integer>(Arrays.asList(4, 11, 16));
         ArrayList<Integer> oreNums = new ArrayList<Integer>(Arrays.asList(3, 10, 8));
-        initilizeTiles(oreLocs, oreNums, TileType.ore, positions);
+        initilizeTiles(oreLocs, oreNums, TileType.ore);
         
         ArrayList<Integer> brickLocs = new ArrayList<Integer>(Arrays.asList(0, 10, 17));
         ArrayList<Integer> brickNums = new ArrayList<Integer>(Arrays.asList(5, 6, 10));
-        initilizeTiles(brickLocs, brickNums, TileType.bricks, positions);
+        initilizeTiles(brickLocs, brickNums, TileType.brick);
         
-        Tile desertTile = new Tile(positions.get(9), 7, TileType.desert);
+        Tile desertTile = new Tile(9, 7, TileType.desert);
         desertTile.setRobber();
-        this.tiles[positions.get(9).getX()][positions.get(9).getY()] = desertTile;
+        this.tiles.add(desertTile);
+        
+        this.tiles.sort(new SortTilesByNum());
+        // Initial Player Settlement and Road setup
+        
+        for(Player player : this.players) {
+        	if(player.getColor().equals(Color.BLUE)) {
+        		// Settlement
+        		this.tiles.get(0).addSettlement(3, new Settlement(player));
+        		this.tiles.get(1).addSettlement(1, new Settlement(player));
+        		this.tiles.get(4).addSettlement(5, new Settlement(player));
+        		this.tiles.get(7).addSettlement(3, new Settlement(player));
+        		this.tiles.get(8).addSettlement(1, new Settlement(player));
+        		this.tiles.get(12).addSettlement(5, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 0, 4, 3, 2, 0, 5);
+        		createRoadObject(player, 2, 8, 12, 2, 1, 5, 4);
+				
+        	}else if(player.getColor().equals(Color.RED)) {
+        		// Settlement
+        		this.tiles.get(2).addSettlement(1, new Settlement(player));
+        		this.tiles.get(5).addSettlement(5, new Settlement(player));
+        		this.tiles.get(1).addSettlement(3, new Settlement(player));
+        		this.tiles.get(11).addSettlement(1, new Settlement(player));
+        		this.tiles.get(15).addSettlement(5, new Settlement(player));
+        		this.tiles.get(10).addSettlement(3, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 1, 5, 3, 2, 0, 5);
+        		createRoadObject(player, 0, 10, 15, 3, 2, 0, 5);
+        		
+        	}else if(player.getColor().equals(Color.WHITE)) {
+        		// Settlement
+        		this.tiles.get(6).addSettlement(1, new Settlement(player));
+        		this.tiles.get(10).addSettlement(5, new Settlement(player));
+        		this.tiles.get(5).addSettlement(3, new Settlement(player));
+        		this.tiles.get(13).addSettlement(1, new Settlement(player));
+        		this.tiles.get(16).addSettlement(5, new Settlement(player));
+        		this.tiles.get(12).addSettlement(3, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 1, 5, 6, 4, 3, 1, 0);
+        		createRoadObject(player, 2, 13, 16, 1, 2, 4, 5);
+        		
+        	}else if(player.getColor().equals(Color.ORANGE)) {
+        		// Settlement
+        		this.tiles.get(4).addSettlement(1, new Settlement(player));
+        		this.tiles.get(8).addSettlement(5, new Settlement(player));
+        		this.tiles.get(3).addSettlement(3, new Settlement(player));
+        		this.tiles.get(18).addSettlement(0, new Settlement(player));
+        		this.tiles.get(14).addSettlement(2, new Settlement(player));
+        		this.tiles.get(17).addSettlement(4, new Settlement(player));
+        		//Road
+        		createRoadObject(player, 0, 3, 8, 3, 2, 0, 5);
+        		createRoadObject(player, 0, 14, 18, 3, 2, 0, 5);
+        	
+        	}
+        }
+        guiCreator.createGUITiles(this.tiles);
     }
     
-    private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type, ArrayList<Position> positions) {
+    private void createRoadObject(Player p, int angle, int tile1, int tile2, int corner1, int corner2, int corner3, int corner4) {
+    	Road r = new Road(p);
+		r.setAngle(angle);
+		this.tiles.get(tile1).addRoad(corner1, corner2, r);
+		this.tiles.get(tile2).addRoad(corner3, corner4, r);
+    }
+    
+    private void initilizeTiles(List<Integer> positionNums, List<Integer> numbers, TileType type) {
     	if (positionNums.size() != numbers.size()) {
     		return;
     	}
     	for (int i = 0; i < positionNums.size(); i++) {
-    		Position p = positions.get(positionNums.get(i));
-    		this.tiles[p.getX()][p.getY()] = new Tile(p, numbers.get(i), type);
+    		int p = positionNums.get(i);
+    		this.tiles.add(new Tile(p, numbers.get(i), type));
     	}
     }
     
-    @Override
-    public void paintComponent(Graphics g){
-        boardHeight = getHeight();
-	hexagonSide = (boardHeight - 2 * heightMargin) / 8;
-	widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
-        Graphics2D g2 = (Graphics2D)g;
-	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	g.setFont(new Font("TimesRoman", Font.BOLD, 20));
-	super.paintComponent(g2);
-        drawHexTilesWithNumbers(g2);
-        drawPorts(g2);
+    class SortTilesByNum implements Comparator<Tile> {
+
+		@Override
+		public int compare(Tile arg0, Tile arg1) {
+			return arg0.getBoardPosition() - arg1.getBoardPosition();
+		}
+    	
     }
-
-    private void drawHexTilesWithNumbers(Graphics2D g2) {
-        for (int x = 1; x <= 3; x++) {
-            drawHexTile(tiles[x][1],g2);
-            drawNumber(tiles[x][1],g2);
-            drawRobber(tiles[x][1],g2);
-	}
-        for (int x = 1; x <= 4; x++) {
-            drawHexTile(tiles[x][2],g2);
-            drawNumber(tiles[x][2],g2);
-            drawRobber(tiles[x][2],g2);
-        }
-        for (int x = 1; x <= 5; x++) {
-            drawHexTile(tiles[x][3],g2);
-            drawNumber(tiles[x][3],g2);
-            drawRobber(tiles[x][3],g2);
-        }
-        for (int x = 2; x <= 5; x++) {
-            drawHexTile(tiles[x][4],g2);
-            drawNumber(tiles[x][4],g2);
-            drawRobber(tiles[x][4],g2);
-        }
-        for (int x = 3; x <= 5; x++) {
-            drawHexTile(tiles[x][5],g2);
-            drawNumber(tiles[x][5],g2);
-            drawRobber(tiles[x][5],g2);
-        }
-    }
-    
-    public void drawHexTile(Tile tile, Graphics2D g2) {
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
-        Polygon poly = makeHex(findCenter(x,y));
-        TileType type = tile.getType();
-        
-        if(null == type) {
-            g2.setColor(Color.WHITE);
-        }else switch (type) {
-            case desert:
-                g2.setColor(new Color(0xFF, 0xFF, 0xA9));
-                break;
-            case bricks:
-                g2.setColor(new Color(0xAD, 0x33, 0x33));
-                break;
-            case wool:
-                g2.setColor(Color.GREEN);
-                break;
-            case wood:
-                g2.setColor(new Color(0x99, 0x66, 0x33));
-                break;
-            case wheat:
-                g2.setColor(Color.YELLOW);
-                break;
-            case ore:
-                g2.setColor(Color.LIGHT_GRAY);
-                break;
-            default:
-                g2.setColor(Color.WHITE);
-                break;
-        }
-
-        g2.fillPolygon(poly);
-        g2.setColor(Color.BLACK);
-        g2.drawPolygon(poly);
-    }
-    
-    public void drawNumber(Tile tile, Graphics2D g2) {
-        if (tile.getNumber() == 0 || tile.getNumber() == 7) {
-                return;
-        }
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
-        Point p = findCenter(x,y);
-
-        g2.setColor(Color.WHITE);
-        Shape circle = new Ellipse2D.Double((int)p.getX() - 25, (int)p.getY() - 25, 50, 50);
-        g2.fill(circle);
-        
-        g2.setColor(Color.BLACK);
-        if (tile.getNumber() == 6 || tile.getNumber() == 8)
-                g2.setColor(Color.RED);
-        g2.drawString("" + tile.getNumber(), (int)p.getX() - 5, (int)p.getY() + 5);
-    }
-    
-    public Point findCenter(int x, int y){
-        int xCenter = widthMargin + (int) (3 * hexagonSide * sqrt3div2)
-                        + (int) ((x - 1) * 2 * hexagonSide * sqrt3div2)
-                        - (int) ((y - 1) * hexagonSide * sqrt3div2);
-        int yCenter = boardHeight - (heightMargin + hexagonSide
-                        + (int) ((y - 1) * hexagonSide * 1.5));
-
-        return new Point(xCenter,yCenter);
-    }
-    
-    public Polygon makeHex(Point center) {
-        int xCenter = (int) center.getX();
-        int yCenter = (int) center.getY();
-
-        Polygon output = new Polygon();
-        output.addPoint(xCenter + 1, yCenter + hexagonSide + 1);
-        output.addPoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter + (int) (.5 * hexagonSide) + 1);
-        output.addPoint(xCenter + (int) (hexagonSide * sqrt3div2) + 1, yCenter - (int) (.5 * hexagonSide) - 1);
-        output.addPoint(xCenter + 1, yCenter - hexagonSide - 1);
-        output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter - (int) (.5 * hexagonSide) - 1);
-        output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1);
-
-        return output;
-    }
-
-    private void drawRobber(Tile tile, Graphics2D g2) {
-        if(!tile.isRobber()){
-            return;
-        }
-        int x = tile.getPosition().getX();
-        int y = tile.getPosition().getY();
-        Point p = findCenter(x,y);
-        
-        g2.setColor(Color.PINK);
-        Shape circle = new Ellipse2D.Double((int)p.getX() - 35, (int)p.getY() - 35, 75, 75);
-        g2.fill(circle);
-    
-        try {
-        	String filename = "images" + File.separator + "robber.png";
-			BufferedImage img = ImageIO.read(new File(filename));
-            if(img != null){
-                g2.drawImage(img, (int)p.getX() - 35, (int)p.getY() - 35, 75, 75, null);
-            }
-        } catch (IOException e) {
-            System.out.println("Could not find image for the Robber.");
-        }
-        
-    }
-
-    private void drawPorts(Graphics2D g2) {
-        ArrayList<String> ports = getPortnames();
-        ArrayList<ArrayList<AffineTransform>> transforms = getTransformationsForPorts();
-        
-        for(int i = 0; i < ports.size(); i++){
-            drawPort((Graphics2D) g2.create(),transforms.get(0).get(i),transforms.get(1).get(i),ports.get(i));
-        }
-    }
-    
-    public void drawPort(Graphics2D g2, AffineTransform transformer, AffineTransform rotate, String portDesc){
-        g2.setColor(Color.BLACK);
-        g2.transform(transformer);
-        g2.transform(rotate);
-        g2.drawString(portDesc,0, 0);
-    }
-    
-    public ArrayList<String> getPortnames(){
-        ArrayList<String> ports = new ArrayList<>();
-        ports.add("Wheat 2:1");
-        ports.add("Ore 2:1");
-        ports.add("? 3:1");
-        ports.add("Wool 2:1");
-        ports.add("? 3:1");
-        ports.add("? 3:1");
-        ports.add("Bricks 2:1");
-        ports.add("Lumber 2:1");
-        ports.add("? 3:1");
-        return ports;
-    }
-
-    public ArrayList<ArrayList<AffineTransform>> getTransformationsForPorts(){
-        ArrayList<AffineTransform> transformations = new ArrayList<>();
-        ArrayList<AffineTransform> rotations = new ArrayList<>();
-
-        AffineTransform transformer = new AffineTransform();
-        AffineTransform rotate = new AffineTransform();
-        
-        transformer.translate(widthMargin + (int)(hexagonSide * 4.2), heightMargin - (int)(hexagonSide * 0.25));
-        rotate.rotate(Math.toRadians(30));
-        transformations.add(transformer);
-        rotations.add(rotate);
-        
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide * 7), heightMargin + (int)(hexagonSide * 1.4));
-        rotate.rotate(Math.toRadians(30));
-        transformations.add(transformer);
-        rotations.add(rotate);
-        
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide * 8.8), heightMargin + (int)(hexagonSide * 3.35));
-        rotate.rotate(Math.toRadians(90));
-        transformations.add(transformer);
-        rotations.add(rotate);
-       
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide * 7.1), heightMargin + (int)(hexagonSide * 6.85));
-        rotate.rotate(Math.toRadians(-30));
-        transformations.add(transformer);
-        rotations.add(rotate);
-
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide * 4.2), heightMargin + (int)(hexagonSide * 8.5));
-        rotate.rotate(Math.toRadians(-30));
-        transformations.add(transformer);
-        rotations.add(rotate);
-
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide * 1.1), heightMargin + (int)(hexagonSide * 7.6));
-        rotate.rotate(Math.toRadians(30));
-        transformations.add(transformer);
-        rotations.add(rotate);
- 
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide* 0.7), heightMargin + (int)(hexagonSide * 6.5));
-        rotate.rotate(Math.toRadians(270));
-        transformations.add(transformer);
-        rotations.add(rotate);
-
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide* 0.7), heightMargin + (int)(hexagonSide * 3.2));
-        rotate.rotate(Math.toRadians(270));
-        transformations.add(transformer);
-        rotations.add(rotate);
-
-        transformer = new AffineTransform();
-        rotate = new AffineTransform();
-        transformer.translate(widthMargin + (int)(hexagonSide* 1.6), heightMargin + (int)(hexagonSide * 0.4));
-        rotate.rotate(Math.toRadians(-30));
-        transformations.add(transformer);
-        rotations.add(rotate);
-        
-        ArrayList<ArrayList<AffineTransform>> tfm = new ArrayList<>();
-        tfm.add(transformations);
-        tfm.add(rotations);
-        return tfm;
-    }
-    
-    public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
-
-        int original_width = imgSize.width;
-        int original_height = imgSize.height;
-        int bound_width = boundary.width;
-        int bound_height = boundary.height;
-        int new_width = original_width;
-        int new_height = original_height;
-
-        // first check if we need to scale width
-        if (original_width > bound_width) {
-            //scale width to fit
-            new_width = bound_width;
-            //scale height to maintain aspect ratio
-            new_height = (new_width * original_height) / original_width;
-        }
-
-        // then check if we need to scale even with the new height
-        if (new_height > bound_height) {
-            //scale height to fit instead
-            new_height = bound_height;
-            //scale width to maintain aspect ratio
-            new_width = (new_height * original_width) / original_height;
-        }
-
-        return new Dimension(new_width, new_height);
-    }
+   
 }

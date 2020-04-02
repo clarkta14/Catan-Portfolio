@@ -7,7 +7,7 @@ package objects;
 public enum TileType {
    wool,
    wood,
-   bricks,
+   brick,
    wheat,
    ore,
    desert;

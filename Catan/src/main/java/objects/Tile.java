@@ -1,17 +1,19 @@
 package objects;
 
-import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author Indresh
  */
-public class Tile {
+public class Tile implements ITile{
     private TileType type;
     private int number;
-    private Position pos;
-    private Polygon hex;
+    private int boardPos;
     private Boolean isRobber;
+    private HashMap<Integer, Settlement> hexCornerToSettlement;
+    private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
     
     /**
      * Constructor, with given params for its fields
@@ -20,26 +22,13 @@ public class Tile {
      * @param n the number of the Tile
      * @param typ the type of the Tile
     */
-    public Tile(Position p, int n, TileType typ) {
+    public Tile(int position, int n, TileType typ) {
         this.isRobber = false;    
-        this.pos = p;
+        this.boardPos = position;
         this.number = n;
         this.type = typ;
-    }
-    
-    /*
-    * Hold the polygon this tile belongs to. 
-    * For retrieving coordinates of polygon corners to draw settlements
-    */
-    public void setHex(Polygon poly){
-        this.hex = poly;
-    }
-    
-    /*
-    * Hold the coordinates to the center of the tile for calculations.
-    */
-    public Position getPosition(){
-        return this.pos;
+        this.hexCornerToSettlement = new HashMap<>();
+        this.hexEdgeToRoad = new HashMap<>();
     }
     
     /*
@@ -47,6 +36,10 @@ public class Tile {
     */
     public TileType getType(){
         return this.type;
+    }
+    
+    public int getBoardPosition() {
+    	return this.boardPos;
     }
     
     /*
@@ -62,6 +55,25 @@ public class Tile {
     
     public Boolean isRobber(){
         return this.isRobber;
+    }
+    
+    public void addSettlement(int corner, Settlement s) {
+    	this.hexCornerToSettlement.put(corner, s);
+    }
+    
+    public HashMap<Integer, Settlement> getSettlements() {
+    	return this.hexCornerToSettlement;
+    }
+    
+    public void addRoad(int corner1, int corner2, Road r) {
+    	ArrayList<Integer> edge = new ArrayList<>();
+    	edge.add(corner1);
+    	edge.add(corner2);
+    	this.hexEdgeToRoad.put(edge, r);
+    }
+    
+    public HashMap<ArrayList<Integer>, Road> getRoads() {
+    	return this.hexEdgeToRoad;
     }
 }
 

@@ -3,7 +3,6 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
-
 import org.junit.Test;
 
 public class PlayerTests {
@@ -14,8 +13,6 @@ public class PlayerTests {
 		assertEquals(Color.orange, player.getColor());
 	}
 	
-	
-	
 	@Test
 	public void construct2PlayerDifferentColors() {
 		Player player1 = new Player(Color.orange);
@@ -24,7 +21,4 @@ public class PlayerTests {
 		Player player2 = new Player(Color.blue);
 		assertEquals(Color.blue, player2.getColor());
 	}
-	
-	
-
 }
