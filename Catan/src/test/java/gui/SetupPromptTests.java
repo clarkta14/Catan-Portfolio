@@ -13,61 +13,42 @@ public class SetupPromptTests {
 	
 	@Test
 	public void testThreePlayers() {
-		SetupPrompt catanSetup = new SetupPrompt();
-		String input = "3";
-		int players = catanSetup.getPlayerNum(input);
-		assertEquals(3, players);
+		testPlayerNumNormal("3");
 	}
 	
 	@Test
 	public void testFourPlayers() {
-		SetupPrompt catanSetup = new SetupPrompt();
-		String input = "4";
-		int players = catanSetup.getPlayerNum(input);
-		assertEquals(4, players);
+		testPlayerNumNormal("4");
 	}
 	
 	@Test
 	public void testLessThanThreePlayers() {
-		try {
-			SetupPrompt catanSetup = new SetupPrompt();
-			String input = "2";
-			catanSetup.getPlayerNum(input);
-			fail("Did not throw IAE Exception");
-		} catch(IllegalArgumentException e) {
-			// pass
-		}
+		testPlayerNumError(String.valueOf("2"));
 	}
 	
 	@Test
 	public void testGreaterThanFourPlayers() {
-		try {
-			SetupPrompt catanSetup = new SetupPrompt();
-			String input = "5";
-			catanSetup.getPlayerNum(input);
-			fail("Did not throw IAE Exception");
-		} catch(IllegalArgumentException e) {
-			// pass
-		}
+		testPlayerNumError(String.valueOf("5"));
 	}
 	
 	@Test
 	public void testMaxIntPlayers() {
-		try {
-			SetupPrompt catanSetup = new SetupPrompt();
-			String input = String.valueOf(Integer.MAX_VALUE);
-			catanSetup.getPlayerNum(input);
-			fail("Did not throw IAE Exception");
-		} catch(IllegalArgumentException e) {
-			// pass
-		}
+		testPlayerNumError(String.valueOf(Integer.MAX_VALUE));
 	}
 	
 	@Test
 	public void testMinIntPlayers() {
+		testPlayerNumError(String.valueOf(Integer.MIN_VALUE));
+	}
+	
+	@Test
+	public void testNonNumericalForPlayerNum() {
+		testPlayerNumError("henlo wurld");
+	}
+	
+	private void testPlayerNumError(String input) {
 		try {
 			SetupPrompt catanSetup = new SetupPrompt();
-			String input = String.valueOf(Integer.MIN_VALUE);
 			catanSetup.getPlayerNum(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
@@ -75,15 +56,9 @@ public class SetupPromptTests {
 		}
 	}
 	
-	@Test
-	public void testNonNumericalForPlayerNum() {
-		try {
-			SetupPrompt catanSetup = new SetupPrompt();
-			String input = "henlo wurld";
-			catanSetup.getPlayerNum(input);
-			fail("Did not throw IAE Exception");
-		} catch(IllegalArgumentException e) {
-			// pass
-		}
+	private void testPlayerNumNormal(String input) {
+		SetupPrompt catanSetup = new SetupPrompt();
+		int players = catanSetup.getPlayerNum(input);
+		assertEquals(Integer.parseInt(input), players);
 	}
 }
