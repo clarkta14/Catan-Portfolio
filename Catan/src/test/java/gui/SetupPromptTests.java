@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class SetupWindowTests {
+public class SetupPromptTests {
 
 	@Test
 	public void constructSetupWindow() {
