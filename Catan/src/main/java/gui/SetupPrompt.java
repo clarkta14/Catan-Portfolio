@@ -9,11 +9,11 @@ public class SetupPrompt {
 	public void scanPlayerNum() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("How many players in this game?");
-		getPlayerNum(input.nextLine());
+		setNumPlayers(input.nextLine());
 		input.close();
 	}
 
-	public void getPlayerNum(String numPlayersString) {
+	public void setNumPlayers(String numPlayersString) {
 		if(numPlayersString.equals("3")) {
 			this.numPlayers = 3;
 		} else if(numPlayersString.equals("4")) {

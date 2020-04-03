@@ -55,7 +55,7 @@ public class SetupPromptTests {
 	private void testPlayerNumError(String input) {
 		try {
 			SetupPrompt catanSetup = new SetupPrompt();
-			catanSetup.getPlayerNum(input);
+			catanSetup.setNumPlayers(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
 			// pass
@@ -64,7 +64,7 @@ public class SetupPromptTests {
 	
 	private void testPlayerNumNormal(String input) {
 		SetupPrompt catanSetup = new SetupPrompt();
-		catanSetup.getPlayerNum(input);
+		catanSetup.setNumPlayers(input);
 		assertEquals(Integer.parseInt(input), catanSetup.getNumPlayers());
 	}
 }
