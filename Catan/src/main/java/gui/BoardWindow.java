@@ -61,7 +61,7 @@ public class BoardWindow extends JPanel {
 	
 	public void updateBoard(GUITile[][] tiles) {
 		this.tiles = tiles;
-		assignPolygonsToTiles();
+		repaint();
 	}
 
 	private void assignPolygonsToTiles() {
@@ -93,12 +93,6 @@ public class BoardWindow extends JPanel {
 		super.paintComponent(g2);
 		drawHexTiles(g2);
 		drawPorts(g2);
-		
-		/*
-		Point p = MouseInfo.getPointerInfo().getLocation();
-		SwingUtilities.convertPointFromScreen(p,this);
-		System.out.println(p);
-		*/
 	}
 
 	private void drawHexTiles(Graphics2D g2) {
