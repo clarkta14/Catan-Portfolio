@@ -1,13 +1,9 @@
-package gui;
+package objects;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
-import objects.Player;
-import objects.Settlement;
-import objects.Tile;
-import objects.TileType;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;

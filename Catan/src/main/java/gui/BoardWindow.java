@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import objects.CatanBoard;
 import objects.Road;
 import objects.Settlement;
 import objects.Tile;
