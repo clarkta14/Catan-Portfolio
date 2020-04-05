@@ -1,17 +1,18 @@
 package objects;
 
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- *
- * @author Indresh
- */
-public class Tile implements ITile{
+public class Tile {
     private TileType type;
     private int number;
-    private int boardPos;
+    private int posInArray;
+    private Point pos;
+    private ArrayList<Point> corners;
     private Boolean isRobber;
+    private Polygon hexagon;
     private HashMap<Integer, Settlement> hexCornerToSettlement;
     private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
     
@@ -22,9 +23,10 @@ public class Tile implements ITile{
      * @param n the number of the Tile
      * @param typ the type of the Tile
     */
-    public Tile(int position, int n, TileType typ) {
-        this.isRobber = false;    
-        this.boardPos = position;
+    public Tile(Point p, int posInArray, int n, TileType typ) {
+        this.isRobber = false;
+        this.pos = p;
+        this.posInArray = posInArray;
         this.number = n;
         this.type = typ;
         this.hexCornerToSettlement = new HashMap<>();
@@ -32,14 +34,33 @@ public class Tile implements ITile{
     }
     
     /*
+    * Hold the polygon this tile belongs to. 
+    * For retrieving coordinates of polygon corners to draw settlements
+    */
+    public void setHexCorners(ArrayList<Point> poly){
+        this.corners = poly;
+    }
+    
+     public ArrayList<Point> getHexCorners(){
+         return this.corners;
+     }
+    
+    /*
+    * Hold the coordinates to the center of the tile for calculations.
+    */
+    public int getPositionInArray(){
+        return this.posInArray;
+    }
+    
+    public Point getLocation(){
+        return this.pos;
+    }
+    
+    /*
     * Retrieve the tile type
     */
     public TileType getType(){
         return this.type;
-    }
-    
-    public int getBoardPosition() {
-    	return this.boardPos;
     }
     
     /*
@@ -55,6 +76,14 @@ public class Tile implements ITile{
     
     public Boolean isRobber(){
         return this.isRobber;
+    }
+    
+    public void setHexagon(Polygon poly) {
+    	this.hexagon = poly;
+    }
+    
+    public Polygon getHexagon(){
+    	return this.hexagon;
     }
     
     public void addSettlement(int corner, Settlement s) {
@@ -76,4 +105,3 @@ public class Tile implements ITile{
     	return this.hexEdgeToRoad;
     }
 }
-

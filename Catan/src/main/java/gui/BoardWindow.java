@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -23,13 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import objects.Road;
 import objects.Settlement;
+import objects.Tile;
 import objects.TileType;
 
 public class BoardWindow extends JPanel {
@@ -39,10 +36,11 @@ public class BoardWindow extends JPanel {
 	private int widthMargin;
 	private final double sqrt3div2 = 0.86602540378;
 	private int hexagonSide;
-	private GUITile[][] tiles;
+	private CatanBoard catanBoard;
 	private int settlementSize = 12;
 	
-	public BoardWindow() {
+	public BoardWindow(int numOfPlayers) {
+		this.catanBoard = new CatanBoard(numOfPlayers);
 		setBackground(new Color(164,200,218));
         //Handle Resizing Window
         this.addComponentListener(new ComponentListener() {
@@ -58,27 +56,10 @@ public class BoardWindow extends JPanel {
         MouseListener m = new BoardMouseListener();
 		addMouseListener(m);
     }
-	
-	public void updateBoard(GUITile[][] tiles) {
-		this.tiles = tiles;
-		repaint();
-	}
 
 	private void assignPolygonsToTiles() {
-		for (int x = 1; x <= 3; x++) {
-			makeHex(x, 1, findCenter((int) tiles[x][1].getPosition().getX(), (int) tiles[x][1].getPosition().getY()));
-		}
-		for (int x = 1; x <= 4; x++) {
-			makeHex(x, 2, findCenter((int) tiles[x][2].getPosition().getX(), (int) tiles[x][2].getPosition().getY()));
-		}
-		for (int x = 1; x <= 5; x++) {
-			makeHex(x, 3, findCenter((int) tiles[x][3].getPosition().getX(), (int) tiles[x][3].getPosition().getY()));
-		}
-		for (int x = 2; x <= 5; x++) {
-			makeHex(x, 4, findCenter((int) tiles[x][4].getPosition().getX(), (int) tiles[x][4].getPosition().getY()));
-		}
-		for (int x = 3; x <= 5; x++) {
-			makeHex(x, 5, findCenter((int) tiles[x][5].getPosition().getX(), (int) tiles[x][5].getPosition().getY()));
+		for (int x = 0; x <= 18; x++) {
+			makeHex(x, findCenter((int)this.catanBoard.getTiles().get(x).getLocation().getX(), (int)this.catanBoard.getTiles().get(x).getLocation().getY()));
 		}
 	}
 
@@ -96,44 +77,16 @@ public class BoardWindow extends JPanel {
 	}
 
 	private void drawHexTiles(Graphics2D g2) {
-		for (int x = 1; x <= 3; x++) {
-			drawHexTile(x, 1, g2);
-			drawNumber(tiles[x][1], g2);
-			drawRobber(tiles[x][1], g2);
-			drawSettlements(tiles[x][1], g2);
-			drawRoads(tiles[x][1], g2);
-		}
-		for (int x = 1; x <= 4; x++) {
-			drawHexTile(x, 2, g2);
-			drawNumber(tiles[x][2], g2);
-			drawRobber(tiles[x][2], g2);
-			drawSettlements(tiles[x][2], g2);
-			drawRoads(tiles[x][2], g2);
-		}
-		for (int x = 1; x <= 5; x++) {
-			drawHexTile(x, 3, g2);
-			drawNumber(tiles[x][3], g2);
-			drawRobber(tiles[x][3], g2);
-			drawSettlements(tiles[x][3], g2);
-			drawRoads(tiles[x][3], g2);
-		}
-		for (int x = 2; x <= 5; x++) {
-			drawHexTile(x, 4, g2);
-			drawNumber(tiles[x][4], g2);
-			drawRobber(tiles[x][4], g2);
-			drawSettlements(tiles[x][4], g2);
-			drawRoads(tiles[x][4], g2);
-		}
-		for (int x = 3; x <= 5; x++) {
-			drawHexTile(x, 5, g2);
-			drawNumber(tiles[x][5], g2);
-			drawRobber(tiles[x][5], g2);
-			drawSettlements(tiles[x][5], g2);
-			drawRoads(tiles[x][5], g2);
+		for (int x = 0; x <= 18; x++) {
+			drawHexTile(this.catanBoard.getTiles().get(x), g2);
+			drawNumber(this.catanBoard.getTiles().get(x), g2);
+			drawRobber(this.catanBoard.getTiles().get(x), g2);
+			drawSettlements(this.catanBoard.getTiles().get(x), g2);
+			drawRoads(this.catanBoard.getTiles().get(x), g2);
 		}
 	}
 
-	private void drawRoads(GUITile tile, Graphics2D g2) {
+	private void drawRoads(Tile tile, Graphics2D g2) {	
 		HashMap<ArrayList<Integer>, Road> roadLoc = tile.getRoads();
 		for (ArrayList<Integer> corners : roadLoc.keySet()) {
 			Graphics2D g2c = (Graphics2D) g2.create();
@@ -167,7 +120,7 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	private void drawSettlements(GUITile tile, Graphics2D g2) {
+	private void drawSettlements(Tile tile, Graphics2D g2) {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for (int corner : settlementLoc.keySet()) {
 			Point p = tile.getHexCorners().get(corner);
@@ -179,8 +132,8 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	public void drawHexTile(int tileX, int tileY, Graphics2D g2) {
-		TileType type = this.tiles[tileX][tileY].getType();
+	public void drawHexTile(Tile tile, Graphics2D g2) {
+		TileType type = tile.getType();
 		assignPolygonsToTiles();
 
 		if (null == type) {
@@ -210,17 +163,17 @@ public class BoardWindow extends JPanel {
 				break;
 			}
 
-		g2.fillPolygon(this.tiles[tileX][tileY].getHexagon());
+		g2.fillPolygon(tile.getHexagon());
 		g2.setColor(Color.BLACK);
-		g2.drawPolygon(this.tiles[tileX][tileY].getHexagon());
+		g2.drawPolygon(tile.getHexagon());
 	}
 
-	public void drawNumber(GUITile tile, Graphics2D g2) {
+	public void drawNumber(Tile tile, Graphics2D g2) {
 		if (tile.getNumber() == 0 || tile.getNumber() == 7) {
 			return;
 		}
-		int x = (int) tile.getPosition().getX();
-		int y = (int) tile.getPosition().getY();
+		int x = (int) tile.getLocation().getX();
+		int y = (int) tile.getLocation().getY();
 		Point p = findCenter(x, y);
 
 		g2.setColor(Color.WHITE);
@@ -234,6 +187,7 @@ public class BoardWindow extends JPanel {
 	}
 
 	public Point findCenter(int x, int y) {
+		
 		double xCenter = widthMargin + (3 * hexagonSide * sqrt3div2) + ((x - 1) * 2 * hexagonSide * sqrt3div2)
 				- ((y - 1) * hexagonSide * sqrt3div2);
 		double yCenter = boardHeight - (heightMargin + hexagonSide + ((y - 1) * hexagonSide * 1.5));
@@ -247,7 +201,7 @@ public class BoardWindow extends JPanel {
 		return p;
 	}
 
-	public void makeHex(int tileX, int tileY, Point center) {
+	public void makeHex(int tilePosInArray, Point center) {
 		int xCenter = (int) center.getX();
 		int yCenter = (int) center.getY();
 		ArrayList<Point> tileCorners = new ArrayList<>();
@@ -269,16 +223,16 @@ public class BoardWindow extends JPanel {
 		output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1);
 		tileCorners.add(
 				doublePoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1));
-		this.tiles[tileX][tileY].setHexCorners(tileCorners);
-		this.tiles[tileX][tileY].setHexagon(output);
+		this.catanBoard.getTiles().get(tilePosInArray).setHexCorners(tileCorners);
+		this.catanBoard.getTiles().get(tilePosInArray).setHexagon(output);
 	}
 
-	private void drawRobber(GUITile tile, Graphics2D g2) {
+	private void drawRobber(Tile tile, Graphics2D g2) {
 		if (!tile.isRobber()) {
 			return;
 		}
-		int x = (int) tile.getPosition().getX();
-		int y = (int) tile.getPosition().getY();
+		int x = (int) tile.getLocation().getX();
+		int y = (int) tile.getLocation().getY();
 		Point p = findCenter(x, y);
 
 		g2.setColor(Color.PINK);

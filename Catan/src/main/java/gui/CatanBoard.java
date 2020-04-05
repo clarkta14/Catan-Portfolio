@@ -3,12 +3,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import objects.Player;
-import objects.Road;
 import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
@@ -16,12 +12,10 @@ import objects.TileType;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private ArrayList<Player> players;
-    private GUIObjectConstructor guiCreator;
     
-    public CatanBoard(int numberOfPlayers, GUIObjectConstructor gui){
+    public CatanBoard(int numberOfPlayers){
     	this.players = createPlayers(numberOfPlayers);
         this.tiles = new ArrayList<Tile>();
-        this.guiCreator = gui;
         shuffleTiles();
     }
     
@@ -108,15 +102,13 @@ public class CatanBoard {
         }
         
         for(int i = 0; i < 18; i++){
-            this.tiles.add(new Tile(i, numbers.get(i), types.get(i)));
+            this.tiles.add(new Tile(positions.get(i), i, numbers.get(i), types.get(i)));
         }
         
         // Placing the desert tile with robber on the board
-        Tile desertTile = new Tile(18, 7, TileType.desert);
+        Tile desertTile = new Tile(positions.get(18), 18, 7, TileType.desert);
         desertTile.setRobber();
         this.tiles.add(desertTile);
-        
-        guiCreator.createGUITiles(this.tiles);
     }
     
     public void addSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners, Player plyr) {
@@ -127,4 +119,8 @@ public class CatanBoard {
     		}
     	}
     }
+
+	public ArrayList<Tile> getTiles() {
+		return this.tiles;
+	}
 }
