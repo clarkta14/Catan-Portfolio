@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -12,6 +13,9 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -22,6 +26,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import objects.Road;
 import objects.Settlement;
@@ -49,6 +54,8 @@ public class BoardWindow extends JPanel {
             public void componentMoved(ComponentEvent e) {}
             public void componentShown(ComponentEvent e) {}
         });
+        MouseListener m = new BoardMouseListener();
+		addMouseListener(m);
     }
 	
 	public void updateBoard(GUITile[][] tiles) {
@@ -85,6 +92,12 @@ public class BoardWindow extends JPanel {
 		super.paintComponent(g2);
 		drawHexTiles(g2);
 		drawPorts(g2);
+		
+		/*
+		Point p = MouseInfo.getPointerInfo().getLocation();
+		SwingUtilities.convertPointFromScreen(p,this);
+		System.out.println(p);
+		*/
 	}
 
 	private void drawHexTiles(Graphics2D g2) {
@@ -419,5 +432,14 @@ public class BoardWindow extends JPanel {
 		}
 
 		return new Dimension(new_width, new_height);
+	}
+	
+	class BoardMouseListener extends MouseAdapter{
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("Mouse Clicked");
+			Point p = new Point(e.getX(), e.getY());
+			System.out.println(p);
+			repaint();
+		}
 	}
 }

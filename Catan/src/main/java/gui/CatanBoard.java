@@ -11,10 +11,6 @@ import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
 
-/**
- *
- * @author Indresh
- */
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private ArrayList<Player> players;
