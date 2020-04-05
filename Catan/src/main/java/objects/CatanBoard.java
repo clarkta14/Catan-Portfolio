@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
-    private ArrayList<Player> players;
+    ArrayList<Player> players;
     
     public CatanBoard(int numberOfPlayers){
     	this.players = createPlayers(numberOfPlayers);
@@ -15,7 +15,7 @@ public class CatanBoard {
         shuffleTiles();
     }
     
-    public ArrayList<Player> createPlayers(int num) {
+    private ArrayList<Player> createPlayers(int num) {
  	   ArrayList<Player> plyrs = new ArrayList<>();
  	   Player p = new Player(Color.BLUE);
  	   plyrs.add(p);
@@ -116,4 +116,5 @@ public class CatanBoard {
 	public ArrayList<Tile> getTiles() {
 		return this.tiles;
 	}
+
 }
