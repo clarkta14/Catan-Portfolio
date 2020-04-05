@@ -12,7 +12,12 @@ public class CatanBoardTest {
 	public void testConstruct4Player() {
 		CatanBoard cb = new CatanBoard(4);
 		assertEquals(cb.players.size(), 4);
-		
+	}
+	
+	@Test
+	public void testConstruct3Player() {
+		CatanBoard cb = new CatanBoard(3);
+		assertEquals(cb.players.size(), 3);
 	}
 
 }
