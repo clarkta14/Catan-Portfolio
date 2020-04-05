@@ -29,6 +29,7 @@ import objects.Settlement;
 import objects.Tile;
 import objects.TileType;
 
+@SuppressWarnings("serial")
 public class BoardWindow extends JPanel {
 
 	private int boardHeight;
@@ -738,7 +739,6 @@ public class BoardWindow extends JPanel {
 			}
 		}
 		if(!tile.isEmpty()) {
-			System.out.println("Tile: " + tile + " Corner: " + corner);
 			ArrayList<ArrayList<Integer>> toReturn = new ArrayList<>();
 			toReturn.add(tile);
 			toReturn.add(corner);
@@ -759,6 +759,8 @@ public class BoardWindow extends JPanel {
 				if(settlementLoc != null) {
 					ArrayList<Integer> tiles = settlementLoc.get(0);
 					ArrayList<Integer> corners = settlementLoc.get(1);
+					
+					catanBoard.addSettlement(tiles, corners, 1);
 				}
 				
 			}

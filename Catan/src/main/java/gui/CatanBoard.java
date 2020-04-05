@@ -98,7 +98,6 @@ public class CatanBoard {
         for(int i = 0; i < 3; i++){
             Collections.shuffle(types);
             Collections.shuffle(numbers);
-            Collections.shuffle(positions);
         }
         
         for(int i = 0; i < 18; i++){
@@ -111,12 +110,10 @@ public class CatanBoard {
         this.tiles.add(desertTile);
     }
     
-    public void addSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners, Player plyr) {
-    	Settlement newlyAddedSettlement = new Settlement(plyr);
-    	for(int tile : tiles) {
-    		for(int corner : corners) {
-    			this.tiles.get(tile).addSettlement(corner, newlyAddedSettlement);
-    		}
+    public void addSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners, int plyr) {
+    	Settlement newlyAddedSettlement = new Settlement(this.players.get(plyr));
+    	for(int i = 0; i < tiles.size(); i++) {
+			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
     }
 

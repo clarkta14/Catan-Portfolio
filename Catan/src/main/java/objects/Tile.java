@@ -87,7 +87,9 @@ public class Tile {
     }
     
     public void addSettlement(int corner, Settlement s) {
-    	this.hexCornerToSettlement.put(corner, s);
+    	if(!this.hexCornerToSettlement.containsKey(corner)) {
+    		this.hexCornerToSettlement.put(corner, s);
+    	}
     }
     
     public HashMap<Integer, Settlement> getSettlements() {
@@ -98,7 +100,13 @@ public class Tile {
     	ArrayList<Integer> edge = new ArrayList<>();
     	edge.add(corner1);
     	edge.add(corner2);
-    	this.hexEdgeToRoad.put(edge, r);
+    	ArrayList<Integer> edge2 = new ArrayList<>();
+    	edge.add(corner2);
+    	edge.add(corner1);
+    	if(!this.hexEdgeToRoad.containsKey(edge)) {
+    		this.hexEdgeToRoad.put(edge, r);
+    		this.hexEdgeToRoad.put(edge2, r);
+    	}
     }
     
     public HashMap<ArrayList<Integer>, Road> getRoads() {
