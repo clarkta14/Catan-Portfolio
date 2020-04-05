@@ -25,7 +25,7 @@ public class Main {
 		BoardWindow bw = new BoardWindow();
 		GameWindow catan = new GameWindow(bw);
 		GUIObjectConstructor objConstructor = new GUIObjectConstructor(bw);
-		CatanBoard board = new CatanBoard(3, objConstructor);
+		CatanBoard board = new CatanBoard(catanSetup.getNumPlayers(), objConstructor);
 	}
 
 }
