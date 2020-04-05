@@ -40,6 +40,7 @@ public class BoardWindow extends JPanel {
 	private final double sqrt3div2 = 0.86602540378;
 	private int hexagonSide;
 	private GUITile[][] tiles;
+	private int settlementSize = 12;
 	
 	public BoardWindow() {
 		setBackground(new Color(164,200,218));
@@ -176,7 +177,7 @@ public class BoardWindow extends JPanel {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for (int corner : settlementLoc.keySet()) {
 			Point p = tile.getHexCorners().get(corner);
-			Shape circle = new Ellipse2D.Double((int) p.getX() - 12, (int) p.getY() - 12, 24, 24);
+			Shape circle = new Ellipse2D.Double((int) p.getX() - this.settlementSize, (int) p.getY() - this.settlementSize, this.settlementSize * 2, this.settlementSize * 2);
 			g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
 			g2.fill(circle);
 			g2.setColor(Color.BLACK);
@@ -434,11 +435,385 @@ public class BoardWindow extends JPanel {
 		return new Dimension(new_width, new_height);
 	}
 	
+	public ArrayList<ArrayList<Integer>> getStructureLocation(Point p) {
+		double x = p.getX();
+		double y = p.getY();
+		ArrayList<Integer> tile = new ArrayList<>();
+		ArrayList<Integer> corner = new ArrayList<>();
+		// Column search to see if the point clicked belongs to a location that could possibly hold a settlement
+		if (checkIfWithinColumn(x, 0)) {
+			if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize ) {
+				tile.add(2);
+				corner.add(4);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize ) {
+				tile.add(2);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 1)) {
+			if (heightMargin + 2 * hexagonSide - this.settlementSize < y && y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide - this.settlementSize < y && y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(5);
+				tile.add(2);
+				corner.add(3);
+			}
+			else if (heightMargin + 5 * hexagonSide - this.settlementSize < y && y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(4);
+				tile.add(2);
+				corner.add(0);
+			}
+			else if (heightMargin + 6 * hexagonSide - this.settlementSize < y && y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 2)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y && y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(5);
+				tile.add(6);
+				corner.add(3);
+			}
+			else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(6);
+				corner.add(0);
+				tile.add(2);
+				corner.add(2);
+				tile.add(5);
+				corner.add(4);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(2);
+				corner.add(1);
+				tile.add(5);
+				corner.add(5);
+				tile.add(1);
+				corner.add(3);
+			}
+			else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(1);
+				corner.add(0);
+				tile.add(0);
+				corner.add(3);
+			}
+			else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(0);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 3)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(11);
+				corner.add(3);
+			}
+			else if (heightMargin + 2 * hexagonSide - this.settlementSize < y && y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(11);
+				corner.add(0);
+				tile.add(6);
+				corner.add(2);
+				tile.add(10);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide - this.settlementSize < y && y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(1);
+				tile.add(10);
+				corner.add(5);
+				tile.add(5);
+				corner.add(3);
+			}
+			else if (heightMargin + 5 * hexagonSide - this.settlementSize < y && y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(5);
+				corner.add(0);
+				tile.add(1);
+				corner.add(2);
+				tile.add(4);
+				corner.add(4);
+			}
+			else if (heightMargin + 6 * hexagonSide - this.settlementSize < y && y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(1);
+				tile.add(4);
+				corner.add(5);
+				tile.add(0);
+				corner.add(3);
+			}
+			else if (heightMargin + 8 * hexagonSide - this.settlementSize < y && y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(0);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 4)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y && y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(2);
+				tile.add(15);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(1);
+				tile.add(15);
+				corner.add(5);
+				tile.add(10);
+				corner.add(3);
+			}
+			else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(10);
+				corner.add(0);
+				tile.add(5);
+				corner.add(2);
+				tile.add(9);
+				corner.add(4);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(5);
+				corner.add(1);
+				tile.add(9);
+				corner.add(5);
+				tile.add(4);
+				corner.add(3);
+			}
+			else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(4);
+				corner.add(0);
+				tile.add(0);
+				corner.add(2);
+				tile.add(3);
+				corner.add(4);
+			}
+			else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(0);
+				corner.add(1);
+				tile.add(3);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 5)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(15);
+				corner.add(3);
+			}
+			else if (heightMargin + 2 * hexagonSide - this.settlementSize < y && y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(15);
+				corner.add(0);
+				tile.add(10);
+				corner.add(2);
+				tile.add(14);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide - this.settlementSize < y && y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(10);
+				corner.add(1);
+				tile.add(14);
+				corner.add(5);
+				tile.add(9);
+				corner.add(3);
+			}
+			else if (heightMargin + 5 * hexagonSide - this.settlementSize < y && y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(9);
+				corner.add(0);
+				tile.add(4);
+				corner.add(2);
+				tile.add(8);
+				corner.add(4);
+			}
+			else if (heightMargin + 6 * hexagonSide - this.settlementSize < y && y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(4);
+				corner.add(1);
+				tile.add(8);
+				corner.add(5);
+				tile.add(3);
+				corner.add(3);
+			}
+			else if (heightMargin + 8 * hexagonSide - this.settlementSize < y && y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(3);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 6)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y && y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(15);
+				corner.add(2);
+				tile.add(18);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(15);
+				corner.add(1);
+				tile.add(18);
+				corner.add(5);
+				tile.add(14);
+				corner.add(3);
+			}
+			else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(14);
+				corner.add(0);
+				tile.add(9);
+				corner.add(2);
+				tile.add(13);
+				corner.add(4);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(9);
+				corner.add(1);
+				tile.add(13);
+				corner.add(5);
+				tile.add(8);
+				corner.add(3);
+			}
+			else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(8);
+				corner.add(0);
+				tile.add(3);
+				corner.add(2);
+				tile.add(7);
+				corner.add(4);
+			}
+			else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(3);
+				corner.add(1);
+				tile.add(7);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 7)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(18);
+				corner.add(3);
+			}
+			else if (heightMargin + 2 * hexagonSide - this.settlementSize < y && y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(18);
+				corner.add(0);
+				tile.add(14);
+				corner.add(2);
+				tile.add(17);
+				corner.add(4);
+			}
+			else if (heightMargin + 3 * hexagonSide - this.settlementSize < y && y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(14);
+				corner.add(1);
+				tile.add(17);
+				corner.add(5);
+				tile.add(13);
+				corner.add(3);
+			}
+			else if (heightMargin + 5 * hexagonSide - this.settlementSize < y && y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(13);
+				corner.add(0);
+				tile.add(8);
+				corner.add(2);
+				tile.add(12);
+				corner.add(4);
+			}
+			else if (heightMargin + 6 * hexagonSide - this.settlementSize < y && y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(8);
+				corner.add(1);
+				tile.add(12);
+				corner.add(5);
+				tile.add(7);
+				corner.add(3);
+			}
+			else if (heightMargin + 8 * hexagonSide - this.settlementSize < y && y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(7);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 8)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y && y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(18);
+				corner.add(2);
+			}
+			else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(18);
+				corner.add(1);
+				tile.add(17);
+				corner.add(3);
+			}
+			else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(17);
+				corner.add(0);
+				tile.add(13);
+				corner.add(2);
+				tile.add(16);
+				corner.add(4);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(13);
+				corner.add(1);
+				tile.add(16);
+				corner.add(5);
+				tile.add(12);
+				corner.add(3);
+			}
+			else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(12);
+				corner.add(0);
+				tile.add(7);
+				corner.add(2);
+			}
+			else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(7);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 9)) {
+			if (heightMargin + 2 * hexagonSide - this.settlementSize < y && y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(17);
+				corner.add(2);
+			}
+			else if (heightMargin + 3 * hexagonSide - this.settlementSize < y && y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(17);
+				corner.add(1);
+				tile.add(16);
+				corner.add(3);
+			}
+			else if (heightMargin + 5 * hexagonSide - this.settlementSize < y && y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(16);
+				corner.add(3);
+				tile.add(12);
+				corner.add(0);
+			}
+			else if (heightMargin + 6 * hexagonSide - this.settlementSize < y && y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(12);
+				corner.add(1);
+			}
+		} else if (checkIfWithinColumn(x, 10)) {
+			if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(16);
+				corner.add(2);
+			}
+			else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y && y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(16);
+				corner.add(1);
+			}
+		}
+		if(!tile.isEmpty()) {
+			System.out.println("Tile: " + tile + " Corner: " + corner);
+			ArrayList<ArrayList<Integer>> toReturn = new ArrayList<>();
+			toReturn.add(tile);
+			toReturn.add(corner);
+			return toReturn;
+		}
+		return null;
+	}
+	
+	public boolean checkIfWithinColumn(double x, int col) {
+		return widthMargin + col * sqrt3div2 * hexagonSide - this.settlementSize < x && x < widthMargin + col * sqrt3div2 * hexagonSide + this.settlementSize;
+	}
+	
 	class BoardMouseListener extends MouseAdapter{
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("Mouse Clicked");
 			Point p = new Point(e.getX(), e.getY());
-			System.out.println(p);
+			if(p != null) {
+				ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
+				if(settlementLoc != null) {
+					ArrayList<Integer> tiles = settlementLoc.get(0);
+					ArrayList<Integer> corners = settlementLoc.get(1);
+				}
+				
+			}
 			repaint();
 		}
 	}
