@@ -117,4 +117,12 @@ public class CatanBoard {
 		return this.tiles;
 	}
 
+	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, int player) {
+		Settlement newlyAddedSettlement = new Settlement(this.players.get(player));
+    	for(int i = 0; i < tiles.size(); i++) {
+			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+    	}
+		
+	}
+
 }

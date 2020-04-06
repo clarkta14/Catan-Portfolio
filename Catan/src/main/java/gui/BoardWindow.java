@@ -762,7 +762,7 @@ public class BoardWindow extends JPanel {
 					ArrayList<Integer> tiles = settlementLoc.get(0);
 					ArrayList<Integer> corners = settlementLoc.get(1);
 					
-					catanBoard.addSettlement(tiles, corners, 1);
+					catanBoard.locationClicked(tiles, corners, 1);
 				}
 				
 			}
