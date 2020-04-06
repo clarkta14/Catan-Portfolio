@@ -92,6 +92,53 @@ public class CatanBoardTest {
 		checkPlayerTile(cb, p2tile, p2corner, player2);
 		checkPlayerTile(cb, p3tile, p3corner, player3);
 	}
+	
+	@Test
+	public void testBoardInitSetup4Player() {
+		CatanBoard cb = new CatanBoard(4);
+		int p1tile = 1; int p1corner = 1;
+		int p2tile = 5; int p2corner = 5;
+		int p3tile = 15; int p3corner = 3;
+		int p4tile = 7; int p4corner = 3;
+		
+		int p1tile2 = 3; int p1corner2 = 1;
+		int p2tile2 = 10; int p2corner2 = 5;
+		int p3tile2 = 18; int p3corner2 = 3;
+		int p4tile2 = 13; int p4corner2 = 4;
+		
+		
+		// Everyone places first settlements
+		addPlayerClickNums(player1, p1tile, p1corner);
+		addPlayerClickNums(player2, p2tile, p2corner);
+		addPlayerClickNums(player3, p3tile, p3corner);
+		addPlayerClickNums(player4, p4tile, p4corner);
+		
+		registerPlayerClick(cb, player1);
+		registerPlayerClick(cb, player2);
+		registerPlayerClick(cb, player3);
+		registerPlayerClick(cb, player4);
+		
+		checkPlayerTile(cb, p1tile, p1corner, player1);
+		checkPlayerTile(cb, p2tile, p2corner, player2);
+		checkPlayerTile(cb, p3tile, p3corner, player3);
+		checkPlayerTile(cb, p4tile, p4corner, player4);
+		
+		// Second Round of settlements
+		addPlayerClickNums(player1, p1tile2, p1corner2);
+		addPlayerClickNums(player2, p2tile2, p2corner2);
+		addPlayerClickNums(player3, p3tile2, p3corner2);
+		addPlayerClickNums(player4, p4tile2, p4corner2);
+		
+		registerPlayerClick(cb, player4);
+		registerPlayerClick(cb, player3);
+		registerPlayerClick(cb, player2);
+		registerPlayerClick(cb, player1);
+		
+		checkPlayerTile(cb, p1tile, p1corner, player1);
+		checkPlayerTile(cb, p2tile, p2corner, player2);
+		checkPlayerTile(cb, p3tile, p3corner, player3);
+		checkPlayerTile(cb, p4tile, p4corner, player4);
+	}
 
 	private void checkPlayerTile(CatanBoard cb, int tileNum, int cornerNum, int playerNum) {
 		ArrayList<Tile> tiles = cb.getTiles();

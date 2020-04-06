@@ -138,9 +138,9 @@ public class CatanBoard {
 	}
 	
 	private void incrementPlayerInit() {
-		if (this.turnCount > 2) {
+		if (this.turnCount > this.numPlayers - 1) {
 			this.currentPlayer--;
-		} else if (this.turnCount < 2) {
+		} else if (this.turnCount < this.numPlayers - 1) {
 			this.currentPlayer++;
 		}
 	};
