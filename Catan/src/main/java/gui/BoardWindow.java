@@ -56,8 +56,9 @@ public class BoardWindow extends JPanel {
             public void componentMoved(ComponentEvent e) {}
             public void componentShown(ComponentEvent e) {}
         });
-        MouseListener m = new BoardMouseListener();
+        BoardMouseListener m = new BoardMouseListener();
 		addMouseListener(m);
+		addMouseMotionListener(m);
     }
 
 	private void assignPolygonsToTiles() {
@@ -753,7 +754,9 @@ public class BoardWindow extends JPanel {
 		return widthMargin + col * sqrt3div2 * hexagonSide - this.settlementSize < x && x < widthMargin + col * sqrt3div2 * hexagonSide + this.settlementSize;
 	}
 	
-	class BoardMouseListener extends MouseAdapter{
+	class BoardMouseListener extends MouseAdapter {
+		private Point lastClicked;
+		
 		public void mouseClicked(MouseEvent e) {
 			Point p = new Point(e.getX(), e.getY());
 			System.out.println(p.toString());
@@ -766,6 +769,33 @@ public class BoardWindow extends JPanel {
 					catanBoard.locationClicked(tiles, corners);
 				}
 				
+			}
+			repaint();
+		}
+		
+		public void mousePressed(MouseEvent e) {
+			Point p = new Point(e.getX(), e.getY());
+			lastClicked = p;
+			
+		}
+		
+		public void mouseReleased(MouseEvent e) {
+			Point p = new Point(e.getX(), e.getY());
+			if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
+				ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
+				ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
+				if(loc1 != null && loc2 != null) {
+					ArrayList<Integer> tiles = loc1.get(0);
+					ArrayList<Integer> corners = loc1.get(1);
+					
+					tiles.add(-1);
+					corners.add(-1);
+					
+					tiles.addAll(loc2.get(0));
+					corners.addAll(loc2.get(1));
+					
+					catanBoard.locationClicked(tiles, corners);
+				}
 			}
 			repaint();
 		}

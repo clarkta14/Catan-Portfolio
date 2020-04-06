@@ -101,8 +101,8 @@ public class Tile {
     	edge.add(corner1);
     	edge.add(corner2);
     	ArrayList<Integer> edge2 = new ArrayList<>();
-    	edge.add(corner2);
-    	edge.add(corner1);
+    	edge2.add(corner2);
+    	edge2.add(corner1);
     	if(!this.hexEdgeToRoad.containsKey(edge)) {
     		this.hexEdgeToRoad.put(edge, r);
     		this.hexEdgeToRoad.put(edge2, r);

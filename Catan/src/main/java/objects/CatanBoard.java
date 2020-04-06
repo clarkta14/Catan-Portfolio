@@ -125,14 +125,68 @@ public class CatanBoard {
 	}
 
 	private void handleInitialSetup(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		if (tiles.contains(-1)) {
+			placeRoad(tiles, corners);
+			incrementPlayerInit();
+	    	this.turnCount++;
+		} else {
+			placeSettlement(tiles, corners);
+		}
+	}
+	
+	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
     	for(int i = 0; i < tiles.size(); i++) {
 			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
-    	incrementPlayerInit();
-    	this.turnCount++;
 	}
-	
+
+	private void placeRoad(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		ArrayList<Integer> tiles2 = new ArrayList<Integer>();
+		ArrayList<Integer> corners2 = new ArrayList<Integer>();
+		splitCornerTileLists(tiles, corners, tiles2, corners2);
+		
+		ArrayList<Integer> edges = getEdgesFromCorners(tiles, corners, tiles2, corners2);
+		
+		Road newRoad = new Road(getCurrentPlayer());
+		addRoadToTiles(newRoad, tiles, tiles2, edges);
+	}
+
+	private void addRoadToTiles(Road newRoad, ArrayList<Integer> tiles, ArrayList<Integer> tiles2,
+			ArrayList<Integer> edges) {
+		int count = 0;
+		for (int i = 0; i < tiles.size(); i++) {
+			if (tiles.get(i) == tiles2.get(i)) {
+				this.tiles.get(tiles.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
+				this.tiles.get(tiles2.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
+				count++;
+			}
+		}
+	}
+
+	private ArrayList<Integer> getEdgesFromCorners(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
+		ArrayList<Integer> edges = new ArrayList<Integer>();
+		for (int i = 0; i < tiles.size(); i++) {
+			if (tiles.get(i) == tiles2.get(i)) {
+				edges.add(corners.get(i));
+				edges.add(corners2.get(i));
+			}
+		}
+		return edges;
+	}
+
+	private void splitCornerTileLists(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
+		for (int i = 0; i < tiles.size(); i ++) {
+			if (tiles.get(i) == -1) {
+				tiles2.addAll(tiles.subList(i+1, tiles.size()));
+				tiles.subList(i, tiles.size()).clear();
+				
+				corners2.addAll(corners.subList(i+1, corners.size()));
+				corners.subList(i, corners.size()).clear();
+			}
+		}
+	}
+
 	private Player getCurrentPlayer() {
 		return this.players.get(this.currentPlayer);
 	}

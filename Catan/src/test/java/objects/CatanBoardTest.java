@@ -56,6 +56,33 @@ public class CatanBoardTest {
 	}
 	
 	@Test
+	public void testBoardInitSetupSettlementRoad() {
+		CatanBoard cb = new CatanBoard(3);
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
+
+		// Place Settlement
+		addPlayerClickNums(player1, p1tile, p1corner);
+		registerPlayerClick(cb, player1);
+		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
+		
+		// Place Road
+		addPlayerDragNums(player1, p1roadTile, p1road1, p1roadTile, p1road2);
+		registerPlayerClick(cb, player1);
+		checkPlayerTileForRoad(cb, player1, p1roadTile, p1road1, p1road2);
+	}
+	
+	private void checkPlayerTileForRoad(CatanBoard cb, int playerNum, int tileNum, int roadCorner1, int roadCorner2) {
+		ArrayList<Tile> tiles = cb.getTiles();
+		Tile tile = tiles.get(tileNum);
+		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
+		ArrayList<Integer> edge = new ArrayList<Integer>();
+		edge.add(roadCorner1); edge.add(roadCorner2);
+		Road r = roads.get(edge);
+		assertEquals(r.getOwner(), cb.players.get(playerNum));
+	}
+
+	@Test
 	public void testBoardInitSetup3Player() {
 		CatanBoard cb = new CatanBoard(3);
 		int p1tile = 1; int p1corner = 1;
@@ -75,9 +102,9 @@ public class CatanBoardTest {
 		registerPlayerClick(cb, player2);
 		registerPlayerClick(cb, player3);
 		
-		checkPlayerTile(cb, p1tile, p1corner, player1);
-		checkPlayerTile(cb, p2tile, p2corner, player2);
-		checkPlayerTile(cb, p3tile, p3corner, player3);
+		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
+		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
+		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
 		
 		// Second Round of settlements
 		addPlayerClickNums(player1, p1tile2, p1corner2);
@@ -88,9 +115,9 @@ public class CatanBoardTest {
 		registerPlayerClick(cb, player2);
 		registerPlayerClick(cb, player1);
 		
-		checkPlayerTile(cb, p1tile, p1corner, player1);
-		checkPlayerTile(cb, p2tile, p2corner, player2);
-		checkPlayerTile(cb, p3tile, p3corner, player3);
+		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
+		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
+		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
 	}
 	
 	@Test
@@ -118,10 +145,10 @@ public class CatanBoardTest {
 		registerPlayerClick(cb, player3);
 		registerPlayerClick(cb, player4);
 		
-		checkPlayerTile(cb, p1tile, p1corner, player1);
-		checkPlayerTile(cb, p2tile, p2corner, player2);
-		checkPlayerTile(cb, p3tile, p3corner, player3);
-		checkPlayerTile(cb, p4tile, p4corner, player4);
+		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
+		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
+		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
+		checkPlayerTileForSettlement(cb, p4tile, p4corner, player4);
 		
 		// Second Round of settlements
 		addPlayerClickNums(player1, p1tile2, p1corner2);
@@ -134,13 +161,13 @@ public class CatanBoardTest {
 		registerPlayerClick(cb, player2);
 		registerPlayerClick(cb, player1);
 		
-		checkPlayerTile(cb, p1tile, p1corner, player1);
-		checkPlayerTile(cb, p2tile, p2corner, player2);
-		checkPlayerTile(cb, p3tile, p3corner, player3);
-		checkPlayerTile(cb, p4tile, p4corner, player4);
+		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
+		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
+		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
+		checkPlayerTileForSettlement(cb, p4tile, p4corner, player4);
 	}
 
-	private void checkPlayerTile(CatanBoard cb, int tileNum, int cornerNum, int playerNum) {
+	private void checkPlayerTileForSettlement(CatanBoard cb, int tileNum, int cornerNum, int playerNum) {
 		ArrayList<Tile> tiles = cb.getTiles();
 		Tile tile = tiles.get(tileNum);
 		HashMap<Integer, Settlement> settlements = tile.getSettlements();
@@ -149,30 +176,79 @@ public class CatanBoardTest {
 	}
 	
 	private void registerPlayerClick(CatanBoard cb, int player) {
-		if (player == 1) {
+		if (player == 0) {
 			cb.locationClicked(tileNums1, corners1);
-		} else if (player == 2) {
+		} else if (player == 1) {
 			cb.locationClicked(tileNums2, corners2);
-		} else if (player == 3) {
+		} else if (player == 2) {
 			cb.locationClicked(tileNums3, corners3);
 		} else {
 			cb.locationClicked(tileNums4, corners4);
 		}
+		clearClicks(player);
+	}
+	
+	private void clearClicks(int player) {
+		if (player == 0) {
+			tileNums1.clear();
+			corners1.clear();
+		} else if (player == 1) {
+			tileNums2.clear();
+			corners2.clear();
+		} else if (player == 2) {
+			tileNums3.clear();
+			corners3.clear();
+		} else {
+			tileNums4.clear();
+			corners4.clear();
+		}
 	}
 
 	private void addPlayerClickNums(int player, int tileNum, int cornerNum) {
-		if (player == 1) {
+		if (player == 0) {
 			tileNums1.add(tileNum);
 			corners1.add(cornerNum);
-		} else if (player == 2) {
+		} else if (player == 1) {
 			tileNums2.add(tileNum);
 			corners2.add(cornerNum);
-		} else if (player == 3) {
+		} else if (player == 2) {
 			tileNums3.add(tileNum);
 			corners3.add(cornerNum);
 		} else {
 			tileNums4.add(tileNum);
 			corners4.add(cornerNum);
+		}
+	}
+	
+	private void addPlayerDragNums(int player, int tileNum1, int cornerNum1, int tileNum2, int cornerNum2) {
+		if (player == 0) {
+			tileNums1.add(tileNum1);
+			corners1.add(cornerNum1);
+			tileNums1.add(-1);
+			corners1.add(-1);
+			tileNums1.add(tileNum2);
+			corners1.add(cornerNum2);
+		} else if (player == 1) {
+			tileNums2.add(tileNum1);
+			corners2.add(cornerNum1);
+			tileNums2.add(-1);
+			corners2.add(-1);
+			tileNums2.add(tileNum2);
+			corners2.add(cornerNum2);
+		} else if (player == 2) {
+			tileNums3.add(tileNum1);
+			corners3.add(cornerNum1);
+			tileNums3.add(-1);
+			corners3.add(-1);
+			tileNums3.add(tileNum2);
+			corners3.add(cornerNum2);
+		} else {
+			tileNums4.add(tileNum1);
+			corners4.add(cornerNum1);
+			tileNums4.add(-1);
+			corners4.add(-1);
+			tileNums4.add(tileNum2);
+			corners4.add(cornerNum2);
 		}
 	}
 
