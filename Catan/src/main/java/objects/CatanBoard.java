@@ -19,6 +19,7 @@ public class CatanBoard {
         this.tiles = new ArrayList<Tile>();
         this.initialSetup = true;
         this.turnCount = 0;
+        this.currentPlayer = 0;
         shuffleTiles();
     }
     
@@ -120,12 +121,7 @@ public class CatanBoard {
 	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		if (this.initialSetup) {
 			handleInitialSetup(tiles, corners);
-		}
-//		Settlement newlyAddedSettlement = new Settlement(this.players.get());
-//    	for(int i = 0; i < tiles.size(); i++) {
-//			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
-//    	}
-		
+		}		
 	}
 
 	private void handleInitialSetup(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
@@ -134,6 +130,7 @@ public class CatanBoard {
 			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
     	incrementPlayerInit();
+    	this.turnCount++;
 	}
 	
 	private Player getCurrentPlayer() {
@@ -141,7 +138,11 @@ public class CatanBoard {
 	}
 	
 	private void incrementPlayerInit() {
-		this.currentPlayer++;
+		if (this.turnCount > 2) {
+			this.currentPlayer--;
+		} else if (this.turnCount < 2) {
+			this.currentPlayer++;
+		}
 	};
 	
 

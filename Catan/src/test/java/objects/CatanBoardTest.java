@@ -62,6 +62,11 @@ public class CatanBoardTest {
 		int p2tile = 5; int p2corner = 5;
 		int p3tile = 15; int p3corner = 3;
 		
+		int p1tile2 = 3; int p1corner2 = 1;
+		int p2tile2 = 10; int p2corner2 = 5;
+		int p3tile2 = 18; int p3corner2 = 3;
+		
+		// Everyone places first settlements
 		addPlayerClickNums(player1, p1tile, p1corner);
 		addPlayerClickNums(player2, p2tile, p2corner);
 		addPlayerClickNums(player3, p3tile, p3corner);
@@ -69,6 +74,19 @@ public class CatanBoardTest {
 		registerPlayerClick(cb, player1);
 		registerPlayerClick(cb, player2);
 		registerPlayerClick(cb, player3);
+		
+		checkPlayerTile(cb, p1tile, p1corner, player1);
+		checkPlayerTile(cb, p2tile, p2corner, player2);
+		checkPlayerTile(cb, p3tile, p3corner, player3);
+		
+		// Second Round of settlements
+		addPlayerClickNums(player1, p1tile2, p1corner2);
+		addPlayerClickNums(player2, p2tile2, p2corner2);
+		addPlayerClickNums(player3, p3tile2, p3corner2);
+		
+		registerPlayerClick(cb, player3);
+		registerPlayerClick(cb, player2);
+		registerPlayerClick(cb, player1);
 		
 		checkPlayerTile(cb, p1tile, p1corner, player1);
 		checkPlayerTile(cb, p2tile, p2corner, player2);
