@@ -106,13 +106,6 @@ public class CatanBoard {
         this.tiles.add(desertTile);
     }
     
-    public void addSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners, int plyr) {
-    	Settlement newlyAddedSettlement = new Settlement(this.players.get(plyr));
-    	for(int i = 0; i < tiles.size(); i++) {
-			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
-    	}
-    }
-
 	public ArrayList<Tile> getTiles() {
 		return this.tiles;
 	}
