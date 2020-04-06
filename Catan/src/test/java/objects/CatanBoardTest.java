@@ -70,7 +70,7 @@ public class CatanBoardTest {
 		addPlayerDragNums(player1, p1roadTile, p1road1, p1roadTile, p1road2);
 		registerPlayerClick(cb, player1);
 		Road r = checkPlayerTileForRoad(cb, player1, p1roadTile, p1road1, p1road2);
-		assertEquals(r.getAngle(), 0);
+		assertEquals(r.getAngle(), 2);
 	}
 	
 	private Road checkPlayerTileForRoad(CatanBoard cb, int playerNum, int tileNum, int roadCorner1, int roadCorner2) {
@@ -87,39 +87,37 @@ public class CatanBoardTest {
 	@Test
 	public void testBoardInitSetup3Player() {
 		CatanBoard cb = new CatanBoard(3);
-		int p1tile = 1; int p1corner = 1;
-		int p2tile = 5; int p2corner = 5;
-		int p3tile = 15; int p3corner = 3;
+		int p1tile = 1; int p1corner = 1; int p1road = 2;
+		int p2tile = 5; int p2corner = 5; int p2road = 0;
+		int p3tile = 15; int p3corner = 3; int p3road = 4;
 		
-		int p1tile2 = 3; int p1corner2 = 1;
-		int p2tile2 = 10; int p2corner2 = 5;
-		int p3tile2 = 18; int p3corner2 = 3;
+		int p1tile2 = 3; int p1corner2 = 1; int p1road2 = 2;
+		int p2tile2 = 10; int p2corner2 = 5; int p2road2 = 4;
+		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
 		
-		// Everyone places first settlements
-		addPlayerClickNums(player1, p1tile, p1corner);
-		addPlayerClickNums(player2, p2tile, p2corner);
-		addPlayerClickNums(player3, p3tile, p3corner);
+		// Everyone places first settlements and roads
+		makePlayerTurnInit(cb, p1tile, p1corner, p1road, player1, 2);
 		
-		registerPlayerClick(cb, player1);
-		registerPlayerClick(cb, player2);
-		registerPlayerClick(cb, player3);
-		
-		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
-		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
-		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
+		makePlayerTurnInit(cb, p2tile, p2corner, p2road, player2, 0);
+
+		makePlayerTurnInit(cb, p3tile, p3corner, p3road, player3, 1);
 		
 		// Second Round of settlements
-		addPlayerClickNums(player1, p1tile2, p1corner2);
-		addPlayerClickNums(player2, p2tile2, p2corner2);
-		addPlayerClickNums(player3, p3tile2, p3corner2);
+		makePlayerTurnInit(cb, p3tile2, p3corner2, p3road2, player3, 0);
+
+		makePlayerTurnInit(cb, p2tile2, p2corner2, p2road2, player2, 2);
 		
-		registerPlayerClick(cb, player3);
-		registerPlayerClick(cb, player2);
-		registerPlayerClick(cb, player1);
-		
-		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
-		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
-		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
+		makePlayerTurnInit(cb, p1tile2, p1corner2, p1road2, player1, 2);
+	}
+
+	private void makePlayerTurnInit(CatanBoard cb, int tile, int corner, int road, int playerNum, int rAngle) {
+		addPlayerClickNums(playerNum, tile, corner);
+		registerPlayerClick(cb, playerNum);
+		checkPlayerTileForSettlement(cb, tile, corner, playerNum);
+		addPlayerDragNums(playerNum, tile, corner, tile, road);
+		registerPlayerClick(cb, playerNum);
+		Road r = checkPlayerTileForRoad(cb, playerNum, tile, corner, road);
+		assertEquals(rAngle, r.getAngle());
 	}
 	
 	@Test

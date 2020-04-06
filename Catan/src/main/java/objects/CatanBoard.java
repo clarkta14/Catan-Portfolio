@@ -157,10 +157,26 @@ public class CatanBoard {
 		int count = 0;
 		for (int i = 0; i < tiles.size(); i++) {
 			if (tiles.get(i) == tiles2.get(i)) {
+				setRoadAngle(newRoad, edges.get(count*2), edges.get((count*2) + 1));
 				this.tiles.get(tiles.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
 				this.tiles.get(tiles2.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
 				count++;
 			}
+		}
+	}
+
+	private void setRoadAngle(Road newRoad, int p1, int p2) {
+		if (p1 > p2) {
+			int temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
+		if (p1 == 0 && p2 == 1 || p1 == 3 && p2 == 4) {
+			newRoad.setAngle(1);
+		} else if (p1 == 0 && p2 == 5 || p1 == 2 && p2 == 3) {
+			newRoad.setAngle(0);
+		} else if (p1 == 1 && p2 == 2 || p1 == 4 && p2 == 5) {
+			newRoad.setAngle(2);
 		}
 	}
 
