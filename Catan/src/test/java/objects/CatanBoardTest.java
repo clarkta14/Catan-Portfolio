@@ -43,16 +43,16 @@ public class CatanBoardTest {
 	@Test
 	public void testLocationClicked1() {
 		CatanBoard cb = new CatanBoard(4);
-		int playerNum = 2; int tileNum = 1; int cornerNum= 0;
-		addPlayerClickNums(playerNum, tileNum, cornerNum);
+		int tileNum = 1; int cornerNum= 0;
+		addPlayerClickNums(player1, tileNum, cornerNum);
 		
-		registerPlayerClick(cb, playerNum);
+		registerPlayerClick(cb, player1);
 		ArrayList<Tile> tiles = cb.getTiles();
 		Tile tile = tiles.get(tileNum);
 		HashMap<Integer, Settlement> settlements = tile.getSettlements();
 		
 		Settlement s = settlements.get(cornerNum);
-		assertEquals(s.getOwner(), cb.players.get(playerNum));
+		assertEquals(s.getOwner(), cb.players.get(player1));
 	}
 	
 	@Test
@@ -85,13 +85,13 @@ public class CatanBoardTest {
 	
 	private void registerPlayerClick(CatanBoard cb, int player) {
 		if (player == 1) {
-			cb.locationClicked(tileNums1, corners1, player);
+			cb.locationClicked(tileNums1, corners1);
 		} else if (player == 2) {
-			cb.locationClicked(tileNums2, corners2, player);
+			cb.locationClicked(tileNums2, corners2);
 		} else if (player == 3) {
-			cb.locationClicked(tileNums3, corners3, player);
+			cb.locationClicked(tileNums3, corners3);
 		} else {
-			cb.locationClicked(tileNums4, corners4, player);
+			cb.locationClicked(tileNums4, corners4);
 		}
 	}
 

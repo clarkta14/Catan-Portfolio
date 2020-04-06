@@ -8,10 +8,17 @@ import java.util.Collections;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     ArrayList<Player> players;
+    boolean initialSetup;
+    int currentPlayer;
+    int numPlayers;
+    int turnCount;
     
     public CatanBoard(int numberOfPlayers){
-    	this.players = createPlayers(numberOfPlayers);
+    	this.numPlayers = numberOfPlayers;
+    	this.players = createPlayers(numPlayers);
         this.tiles = new ArrayList<Tile>();
+        this.initialSetup = true;
+        this.turnCount = 0;
         shuffleTiles();
     }
     
@@ -110,12 +117,32 @@ public class CatanBoard {
 		return this.tiles;
 	}
 
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, int player) {
-		Settlement newlyAddedSettlement = new Settlement(this.players.get(player));
+	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		if (this.initialSetup) {
+			handleInitialSetup(tiles, corners);
+		}
+//		Settlement newlyAddedSettlement = new Settlement(this.players.get());
+//    	for(int i = 0; i < tiles.size(); i++) {
+//			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+//    	}
+		
+	}
+
+	private void handleInitialSetup(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
     	for(int i = 0; i < tiles.size(); i++) {
 			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
-		
+    	incrementPlayerInit();
 	}
+	
+	private Player getCurrentPlayer() {
+		return this.players.get(this.currentPlayer);
+	}
+	
+	private void incrementPlayerInit() {
+		this.currentPlayer++;
+	};
+	
 
 }

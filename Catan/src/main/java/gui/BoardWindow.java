@@ -756,13 +756,14 @@ public class BoardWindow extends JPanel {
 	class BoardMouseListener extends MouseAdapter{
 		public void mouseClicked(MouseEvent e) {
 			Point p = new Point(e.getX(), e.getY());
+			System.out.println(p.toString());
 			if(p != null) {
 				ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
 				if(settlementLoc != null) {
 					ArrayList<Integer> tiles = settlementLoc.get(0);
 					ArrayList<Integer> corners = settlementLoc.get(1);
 					
-					catanBoard.locationClicked(tiles, corners, 1);
+					catanBoard.locationClicked(tiles, corners);
 				}
 				
 			}
