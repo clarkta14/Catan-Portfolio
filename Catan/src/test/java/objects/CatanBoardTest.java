@@ -69,10 +69,11 @@ public class CatanBoardTest {
 		// Place Road
 		addPlayerDragNums(player1, p1roadTile, p1road1, p1roadTile, p1road2);
 		registerPlayerClick(cb, player1);
-		checkPlayerTileForRoad(cb, player1, p1roadTile, p1road1, p1road2);
+		Road r = checkPlayerTileForRoad(cb, player1, p1roadTile, p1road1, p1road2);
+		assertEquals(r.getAngle(), 0);
 	}
 	
-	private void checkPlayerTileForRoad(CatanBoard cb, int playerNum, int tileNum, int roadCorner1, int roadCorner2) {
+	private Road checkPlayerTileForRoad(CatanBoard cb, int playerNum, int tileNum, int roadCorner1, int roadCorner2) {
 		ArrayList<Tile> tiles = cb.getTiles();
 		Tile tile = tiles.get(tileNum);
 		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
@@ -80,6 +81,7 @@ public class CatanBoardTest {
 		edge.add(roadCorner1); edge.add(roadCorner2);
 		Road r = roads.get(edge);
 		assertEquals(r.getOwner(), cb.players.get(playerNum));
+		return r;
 	}
 
 	@Test
