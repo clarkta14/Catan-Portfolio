@@ -123,48 +123,33 @@ public class CatanBoardTest {
 	@Test
 	public void testBoardInitSetup4Player() {
 		CatanBoard cb = new CatanBoard(4);
-		int p1tile = 1; int p1corner = 1;
-		int p2tile = 5; int p2corner = 5;
-		int p3tile = 15; int p3corner = 3;
-		int p4tile = 7; int p4corner = 3;
+		int p1tile = 1; int p1corner = 1; int p1road = 2;
+		int p2tile = 5; int p2corner = 5; int p2road = 0;
+		int p3tile = 15; int p3corner = 3; int p3road = 4;
+		int p4tile = 13; int p4corner = 0; int p4road = 1;
 		
-		int p1tile2 = 3; int p1corner2 = 1;
-		int p2tile2 = 10; int p2corner2 = 5;
-		int p3tile2 = 18; int p3corner2 = 3;
-		int p4tile2 = 13; int p4corner2 = 4;
+		int p1tile2 = 3; int p1corner2 = 1; int p1road2 = 2;
+		int p2tile2 = 10; int p2corner2 = 5; int p2road2 = 4;
+		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
+		int p4tile2 = 11; int p4corner2 = 2; int p4road2 = 3;
 		
+		// Everyone places first settlements and roads
+		makePlayerTurnInit(cb, p1tile, p1corner, p1road, player1, 2);
 		
-		// Everyone places first settlements
-		addPlayerClickNums(player1, p1tile, p1corner);
-		addPlayerClickNums(player2, p2tile, p2corner);
-		addPlayerClickNums(player3, p3tile, p3corner);
-		addPlayerClickNums(player4, p4tile, p4corner);
+		makePlayerTurnInit(cb, p2tile, p2corner, p2road, player2, 0);
+
+		makePlayerTurnInit(cb, p3tile, p3corner, p3road, player3, 1);
 		
-		registerPlayerClick(cb, player1);
-		registerPlayerClick(cb, player2);
-		registerPlayerClick(cb, player3);
-		registerPlayerClick(cb, player4);
-		
-		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
-		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
-		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
-		checkPlayerTileForSettlement(cb, p4tile, p4corner, player4);
+		makePlayerTurnInit(cb, p4tile, p4corner, p4road, player4, 1);
 		
 		// Second Round of settlements
-		addPlayerClickNums(player1, p1tile2, p1corner2);
-		addPlayerClickNums(player2, p2tile2, p2corner2);
-		addPlayerClickNums(player3, p3tile2, p3corner2);
-		addPlayerClickNums(player4, p4tile2, p4corner2);
+		makePlayerTurnInit(cb, p4tile2, p4corner2, p4road2, player4, 0);
 		
-		registerPlayerClick(cb, player4);
-		registerPlayerClick(cb, player3);
-		registerPlayerClick(cb, player2);
-		registerPlayerClick(cb, player1);
+		makePlayerTurnInit(cb, p3tile2, p3corner2, p3road2, player3, 0);
+
+		makePlayerTurnInit(cb, p2tile2, p2corner2, p2road2, player2, 2);
 		
-		checkPlayerTileForSettlement(cb, p1tile, p1corner, player1);
-		checkPlayerTileForSettlement(cb, p2tile, p2corner, player2);
-		checkPlayerTileForSettlement(cb, p3tile, p3corner, player3);
-		checkPlayerTileForSettlement(cb, p4tile, p4corner, player4);
+		makePlayerTurnInit(cb, p1tile2, p1corner2, p1road2, player1, 2);
 	}
 
 	private void checkPlayerTileForSettlement(CatanBoard cb, int tileNum, int cornerNum, int playerNum) {

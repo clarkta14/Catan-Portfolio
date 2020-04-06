@@ -785,6 +785,7 @@ public class BoardWindow extends JPanel {
 				ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
 				ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
 				if(loc1 != null && loc2 != null) {
+					System.out.println("Road Placed!");
 					ArrayList<Integer> tiles = loc1.get(0);
 					ArrayList<Integer> corners = loc1.get(1);
 					
