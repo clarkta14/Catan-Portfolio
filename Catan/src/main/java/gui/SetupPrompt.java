@@ -39,22 +39,23 @@ public class SetupPrompt {
 		label.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JComboBox<String> dropDown = new JComboBox<String>(numberStrings);
-		dropDown.setBorder(BorderFactory.createEmptyBorder(5, 0, 30, 0));
-		dropDown.setMaximumSize(dropDown.getPreferredSize());
-		dropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JButton threePlayersButton = new JButton("3 Players");
+		threePlayersButton.addActionListener(e -> selectPlayersAction("3"));
+		threePlayersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JButton button = new JButton("Start the Game!");
-		button.addActionListener(e -> {
-			setNumPlayers(dropDown.getSelectedItem().toString());
-			this.frame.dispose();
-		});
-		button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JButton fourPlayersButton = new JButton("4 Players");
+		fourPlayersButton.addActionListener(e -> selectPlayersAction("4"));
+		fourPlayersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		panel.add(label);
-		panel.add(dropDown);
-		panel.add(button);
+		panel.add(threePlayersButton);
+		panel.add(fourPlayersButton);
 		this.frame.add(panel);
+	}
+	
+	public void selectPlayersAction(String numPlayersString) {
+		setNumPlayers(numPlayersString);
+		this.frame.dispose();
 	}
 
 	public void setNumPlayers(String numPlayersString) {
