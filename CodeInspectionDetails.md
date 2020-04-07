@@ -10,9 +10,7 @@
 
   2. Who will take the lead on moderating inspections?
 
-
-
-*   Tyson
+*   Tyson will make sure that everyone follows the code inspection processes correctly.
 
   3. How will you share the results of inspections?
 
