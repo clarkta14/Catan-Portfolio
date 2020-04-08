@@ -15,6 +15,7 @@ public class TileTest {
 		Tile tile = new Tile(location, number, TileType.wheat);
 		assertEquals(location, tile.getLocation());
 		assertEquals(number, tile.getNumber());
+		assertEquals(TileType.wheat, tile.getType());
 	}
 
 }
