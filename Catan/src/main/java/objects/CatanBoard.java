@@ -105,11 +105,11 @@ public class CatanBoard {
         }
         
         for(int i = 0; i < 18; i++){
-            this.tiles.add(new Tile(positions.get(i), i, numbers.get(i), types.get(i)));
+            this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
         }
         
         // Placing the desert tile with robber on the board
-        Tile desertTile = new Tile(positions.get(18), 18, 7, TileType.desert);
+        Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
         desertTile.setRobber();
         this.tiles.add(desertTile);
     }
@@ -134,10 +134,12 @@ public class CatanBoard {
 		}
 	}
 	
-	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+	private void placeSettlement(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners) {
 		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
-    	for(int i = 0; i < tiles.size(); i++) {
-			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+    	for(int i = 0; i < selectedTiles.size(); i++) {
+    		Tile selectedTile = this.tiles.get(selectedTiles.get(i));
+    		Integer selectedCornerNum = corners.get(i);
+    		selectedTile.addSettlement(selectedCornerNum, newlyAddedSettlement);
     	}
 	}
 

@@ -8,7 +8,6 @@ import java.util.HashMap;
 public class Tile {
     private TileType type;
     private int number;
-    private int posInArray;
     private Point pos;
     private ArrayList<Point> corners;
     private Boolean isRobber;
@@ -23,10 +22,9 @@ public class Tile {
      * @param n the number of the Tile
      * @param typ the type of the Tile
     */
-    public Tile(Point p, int posInArray, int n, TileType typ) {
+    public Tile(Point p, int n, TileType typ) {
         this.isRobber = false;
         this.pos = p;
-        this.posInArray = posInArray;
         this.number = n;
         this.type = typ;
         this.hexCornerToSettlement = new HashMap<>();
@@ -48,9 +46,6 @@ public class Tile {
     /*
     * Hold the coordinates to the center of the tile for calculations.
     */
-    public int getPositionInArray(){
-        return this.posInArray;
-    }
     
     public Point getLocation(){
         return this.pos;
