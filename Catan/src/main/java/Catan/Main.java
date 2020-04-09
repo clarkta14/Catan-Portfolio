@@ -22,10 +22,6 @@ public class Main {
 				break;
 			} catch (IllegalArgumentException e) { }
 		}
-		BoardWindow bw = new BoardWindow();
-		GameWindow catan = new GameWindow(bw);
-		GUIObjectConstructor objConstructor = new GUIObjectConstructor(bw);
-		CatanBoard board = new CatanBoard(catanSetup.getNumPlayers(), objConstructor);
+		GameWindow catan = new GameWindow(numberOfPlayers);
 	}
-
 }

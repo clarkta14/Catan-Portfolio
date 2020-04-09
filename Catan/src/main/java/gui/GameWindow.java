@@ -13,8 +13,8 @@ public class GameWindow {
     //private SideBar sideBar; // To hold buttons for game options
     //private GameState gameState; // Hold all player information
     
-    public GameWindow(BoardWindow bw){
-    	this.boardWindow = bw;
+    public GameWindow(int numOfPlayers){
+    	this.boardWindow = new BoardWindow(numOfPlayers);
         showGUI();
     }
 
