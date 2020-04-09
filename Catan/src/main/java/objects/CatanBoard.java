@@ -118,27 +118,27 @@ public class CatanBoard {
 		return this.tiles;
 	}
 
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+	public void locationClicked(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
 		if (this.initialSetup) {
-			handleInitialSetup(tiles, corners);
+			handleInitialSetup(tileNums, cornerNums);
 		}		
 	}
 
-	private void handleInitialSetup(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		if (tiles.contains(-1)) {
-			placeRoad(tiles, corners);
+	private void handleInitialSetup(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
+		if (tileNums.contains(-1)) {
+			placeRoad(tileNums, cornerNums);
 			incrementPlayerInit();
 	    	this.turnCount++;
 		} else {
-			placeSettlement(tiles, corners);
+			placeSettlement(tileNums, cornerNums);
 		}
 	}
 	
-	private void placeSettlement(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners) {
+	private void placeSettlement(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
 		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
-    	for(int i = 0; i < selectedTiles.size(); i++) {
-    		Tile selectedTile = this.tiles.get(selectedTiles.get(i));
-    		Integer selectedCornerNum = corners.get(i);
+    	for(int i = 0; i < tileNums.size(); i++) {
+    		Tile selectedTile = this.tiles.get(tileNums.get(i));
+    		Integer selectedCornerNum = cornerNums.get(i);
     		selectedTile.addSettlement(selectedCornerNum, newlyAddedSettlement);
     	}
 	}

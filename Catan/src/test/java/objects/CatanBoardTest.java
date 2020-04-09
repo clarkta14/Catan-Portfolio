@@ -17,16 +17,16 @@ public class CatanBoardTest {
 	
 	// Stores click locations for players in the tests
 	ArrayList<Integer> tileNums1 = new ArrayList<Integer>();
-	ArrayList<Integer> corners1 = new ArrayList<Integer>();
+	ArrayList<Integer> cornersNums1 = new ArrayList<Integer>();
 	
 	ArrayList<Integer> tileNums2 = new ArrayList<Integer>();
-	ArrayList<Integer> corners2 = new ArrayList<Integer>();
+	ArrayList<Integer> cornersNums2 = new ArrayList<Integer>();
 	
 	ArrayList<Integer> tileNums3 = new ArrayList<Integer>();
-	ArrayList<Integer> corners3 = new ArrayList<Integer>();
+	ArrayList<Integer> cornerNums3 = new ArrayList<Integer>();
 	
 	ArrayList<Integer> tileNums4 = new ArrayList<Integer>();
-	ArrayList<Integer> corners4 = new ArrayList<Integer>();
+	ArrayList<Integer> cornerNums4 = new ArrayList<Integer>();
 
 	@Test
 	public void testConstruct4Player() {
@@ -162,13 +162,13 @@ public class CatanBoardTest {
 	
 	private void registerPlayerClick(CatanBoard cb, int player) {
 		if (player == 0) {
-			cb.locationClicked(tileNums1, corners1);
+			cb.locationClicked(tileNums1, cornersNums1);
 		} else if (player == 1) {
-			cb.locationClicked(tileNums2, corners2);
+			cb.locationClicked(tileNums2, cornersNums2);
 		} else if (player == 2) {
-			cb.locationClicked(tileNums3, corners3);
+			cb.locationClicked(tileNums3, cornerNums3);
 		} else {
-			cb.locationClicked(tileNums4, corners4);
+			cb.locationClicked(tileNums4, cornerNums4);
 		}
 		clearClicks(player);
 	}
@@ -176,64 +176,64 @@ public class CatanBoardTest {
 	private void clearClicks(int player) {
 		if (player == 0) {
 			tileNums1.clear();
-			corners1.clear();
+			cornersNums1.clear();
 		} else if (player == 1) {
 			tileNums2.clear();
-			corners2.clear();
+			cornersNums2.clear();
 		} else if (player == 2) {
 			tileNums3.clear();
-			corners3.clear();
+			cornerNums3.clear();
 		} else {
 			tileNums4.clear();
-			corners4.clear();
+			cornerNums4.clear();
 		}
 	}
 
 	private void addPlayerClickNums(int player, int tileNum, int cornerNum) {
 		if (player == 0) {
 			tileNums1.add(tileNum);
-			corners1.add(cornerNum);
+			cornersNums1.add(cornerNum);
 		} else if (player == 1) {
 			tileNums2.add(tileNum);
-			corners2.add(cornerNum);
+			cornersNums2.add(cornerNum);
 		} else if (player == 2) {
 			tileNums3.add(tileNum);
-			corners3.add(cornerNum);
+			cornerNums3.add(cornerNum);
 		} else {
 			tileNums4.add(tileNum);
-			corners4.add(cornerNum);
+			cornerNums4.add(cornerNum);
 		}
 	}
 	
 	private void addPlayerDragNums(int player, int tileNum1, int cornerNum1, int tileNum2, int cornerNum2) {
 		if (player == 0) {
 			tileNums1.add(tileNum1);
-			corners1.add(cornerNum1);
+			cornersNums1.add(cornerNum1);
 			tileNums1.add(-1);
-			corners1.add(-1);
+			cornersNums1.add(-1);
 			tileNums1.add(tileNum2);
-			corners1.add(cornerNum2);
+			cornersNums1.add(cornerNum2);
 		} else if (player == 1) {
 			tileNums2.add(tileNum1);
-			corners2.add(cornerNum1);
+			cornersNums2.add(cornerNum1);
 			tileNums2.add(-1);
-			corners2.add(-1);
+			cornersNums2.add(-1);
 			tileNums2.add(tileNum2);
-			corners2.add(cornerNum2);
+			cornersNums2.add(cornerNum2);
 		} else if (player == 2) {
 			tileNums3.add(tileNum1);
-			corners3.add(cornerNum1);
+			cornerNums3.add(cornerNum1);
 			tileNums3.add(-1);
-			corners3.add(-1);
+			cornerNums3.add(-1);
 			tileNums3.add(tileNum2);
-			corners3.add(cornerNum2);
+			cornerNums3.add(cornerNum2);
 		} else {
 			tileNums4.add(tileNum1);
-			corners4.add(cornerNum1);
+			cornerNums4.add(cornerNum1);
 			tileNums4.add(-1);
-			corners4.add(-1);
+			cornerNums4.add(-1);
 			tileNums4.add(tileNum2);
-			corners4.add(cornerNum2);
+			cornerNums4.add(cornerNum2);
 		}
 	}
 

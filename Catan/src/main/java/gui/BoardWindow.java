@@ -14,7 +14,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -763,10 +762,10 @@ public class BoardWindow extends JPanel {
 			if(p != null) {
 				ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
 				if(settlementLoc != null) {
-					ArrayList<Integer> tiles = settlementLoc.get(0);
-					ArrayList<Integer> corners = settlementLoc.get(1);
+					ArrayList<Integer> tileNums = settlementLoc.get(0);
+					ArrayList<Integer> cornerNums = settlementLoc.get(1);
 					
-					catanBoard.locationClicked(tiles, corners);
+					catanBoard.locationClicked(tileNums, cornerNums);
 				}
 				
 			}
@@ -786,16 +785,16 @@ public class BoardWindow extends JPanel {
 				ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
 				if(loc1 != null && loc2 != null) {
 					System.out.println("Road Placed!");
-					ArrayList<Integer> tiles = loc1.get(0);
-					ArrayList<Integer> corners = loc1.get(1);
+					ArrayList<Integer> tileNums = loc1.get(0);
+					ArrayList<Integer> cornerNums = loc1.get(1);
 					
-					tiles.add(-1);
-					corners.add(-1);
+					tileNums.add(-1);
+					cornerNums.add(-1);
 					
-					tiles.addAll(loc2.get(0));
-					corners.addAll(loc2.get(1));
+					tileNums.addAll(loc2.get(0));
+					cornerNums.addAll(loc2.get(1));
 					
-					catanBoard.locationClicked(tiles, corners);
+					catanBoard.locationClicked(tileNums, cornerNums);
 				}
 			}
 			repaint();
