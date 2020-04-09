@@ -1,11 +1,27 @@
 package Catan;
 
+import gui.BoardWindow;
+import gui.CatanBoard;
+import gui.GUIObjectConstructor;
 import gui.GameWindow;
+import gui.SetupPrompt;
 
+/**
+ *
+ * @author Indresh
+ */
 public class Main {
 
 	@SuppressWarnings("unused")
 	public static void main(String args[]) {
-		GameWindow catan = new GameWindow(4);
+		SetupPrompt catanSetup = new SetupPrompt();
+		int numberOfPlayers;
+		while(true) {
+			try {
+				numberOfPlayers = catanSetup.getNumPlayers();
+				break;
+			} catch (IllegalArgumentException e) { }
+		}
+		GameWindow catan = new GameWindow(numberOfPlayers);
 	}
 }
