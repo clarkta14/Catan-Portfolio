@@ -1,8 +1,6 @@
 package Catan;
 
 import gui.BoardWindow;
-import gui.CatanBoard;
-import gui.GUIObjectConstructor;
 import gui.GameWindow;
 import gui.SetupPrompt;
 
