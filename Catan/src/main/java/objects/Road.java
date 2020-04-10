@@ -9,7 +9,7 @@ public class Road extends GameStructures{
 	}
 	
 	public void setAngle(int angle) {
-		if (angle == 4) {
+		if (angle > 3) {
 			throw new IllegalArgumentException("Angle must be 1, 2, or 3.");
 		}
 		this.angle = angle;

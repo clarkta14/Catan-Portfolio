@@ -26,8 +26,8 @@ public class RoadTests {
 	public void testAngle1() {
 		Player player1 = new Player(Color.BLUE);
 		Road player1Road = new Road(player1);
-		player1Road.setAngle(2);
-		assertEquals(2, player1Road.getAngle());
+		player1Road.setAngle(3);
+		assertEquals(3, player1Road.getAngle());
 	}
 	
 	@Test
@@ -44,6 +44,18 @@ public class RoadTests {
 		Road player1Road = new Road(player1);
 		try {
 			player1Road.setAngle(4);
+			fail("Test should throw exception");
+		} catch(IllegalArgumentException e) {
+			assertEquals("Angle must be 1, 2, or 3.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testAngleBad2() {
+		Player player1 = new Player(Color.BLUE);
+		Road player1Road = new Road(player1);
+		try {
+			player1Road.setAngle(5);
 			fail("Test should throw exception");
 		} catch(IllegalArgumentException e) {
 			assertEquals("Angle must be 1, 2, or 3.", e.getMessage());
