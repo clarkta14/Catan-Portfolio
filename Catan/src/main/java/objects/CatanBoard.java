@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
@@ -120,86 +121,41 @@ public class CatanBoard {
 
 	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		if (this.initialSetup) {
-			handleInitialSetup(tiles, corners);
+			placeSettlement(tiles, corners);
 		}		
 	}
-
-	private void handleInitialSetup(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		if (tiles.contains(-1)) {
-			placeRoad(tiles, corners);
+	
+	public void locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
+		if (this.initialSetup) {
+			placeRoad(tilesToCorners, tileToRoadOrientation);
 			incrementPlayerInit();
-	    	this.turnCount++;
-		} else {
-			placeSettlement(tiles, corners);
+			this.turnCount++;
 		}
 	}
 	
 	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
-    	for(int i = 0; i < tiles.size(); i++) {
+    	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
+	}
+
+	private void addSettlementToTiles(ArrayList<Integer> tiles, ArrayList<Integer> corners,
+			Settlement newlyAddedSettlement) {
+		for(int i = 0; i < tiles.size(); i++) {
 			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
 	}
 
-	private void placeRoad(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		ArrayList<Integer> tiles2 = new ArrayList<Integer>();
-		ArrayList<Integer> corners2 = new ArrayList<Integer>();
-		splitCornerTileLists(tiles, corners, tiles2, corners2);
-		
-		ArrayList<Integer> edges = getEdgesFromCorners(tiles, corners, tiles2, corners2);
-		
+	private void placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
 		Road newRoad = new Road(getCurrentPlayer());
-		addRoadToTiles(newRoad, tiles, tiles2, edges);
+		addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
 	}
 
-	private void addRoadToTiles(Road newRoad, ArrayList<Integer> tiles, ArrayList<Integer> tiles2,
-			ArrayList<Integer> edges) {
-		int count = 0;
-		for (int i = 0; i < tiles.size(); i++) {
-			if (tiles.get(i) == tiles2.get(i)) {
-				setRoadAngle(newRoad, edges.get(count*2), edges.get((count*2) + 1));
-				this.tiles.get(tiles.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
-				this.tiles.get(tiles2.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
-				count++;
-			}
-		}
-	}
-
-	private void setRoadAngle(Road newRoad, int p1, int p2) {
-		if (p1 > p2) {
-			int temp = p1;
-			p1 = p2;
-			p2 = temp;
-		}
-		if (p1 == 0 && p2 == 1 || p1 == 3 && p2 == 4) {
-			newRoad.setAngle(1);
-		} else if (p1 == 0 && p2 == 5 || p1 == 2 && p2 == 3) {
-			newRoad.setAngle(0);
-		} else if (p1 == 1 && p2 == 2 || p1 == 4 && p2 == 5) {
-			newRoad.setAngle(2);
-		}
-	}
-
-	private ArrayList<Integer> getEdgesFromCorners(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
-		ArrayList<Integer> edges = new ArrayList<Integer>();
-		for (int i = 0; i < tiles.size(); i++) {
-			if (tiles.get(i) == tiles2.get(i)) {
-				edges.add(corners.get(i));
-				edges.add(corners2.get(i));
-			}
-		}
-		return edges;
-	}
-
-	private void splitCornerTileLists(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
-		for (int i = 0; i < tiles.size(); i ++) {
-			if (tiles.get(i) == -1) {
-				tiles2.addAll(tiles.subList(i+1, tiles.size()));
-				tiles.subList(i, tiles.size()).clear();
-				
-				corners2.addAll(corners.subList(i+1, corners.size()));
-				corners.subList(i, corners.size()).clear();
-			}
+	private void addRoadToTiles(Road newRoad, HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
+		for (int tileNum : tilesToCorners.keySet()) {
+			ArrayList<Integer> corners = tilesToCorners.get(tileNum);
+			int angle = tileToRoadOrientation.get(tileNum);
+			newRoad.setAngle(angle);
+			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
 		}
 	}
 

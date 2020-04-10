@@ -849,8 +849,8 @@ public class BoardWindow extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			Point p = new Point(e.getX(), e.getY());
-			lastClicked = p;
+			Point prevClicked = new Point(e.getX(), e.getY());
+			lastClicked = prevClicked;
 
 		}
 
@@ -860,23 +860,10 @@ public class BoardWindow extends JPanel {
 				ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
 				ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
 				if (loc1 != null && loc2 != null) {
-
-					// Newly added : Need to use this now..
 					HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
 					HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
-					System.out.println("Road Locations" + tileToCorners);
-					System.out.println("Road Orientations " + tileToRoadOrientation);
-					
-					ArrayList<Integer> tiles = loc1.get(0);
-					ArrayList<Integer> corners = loc1.get(1);
 
-					tiles.add(-1);
-					corners.add(-1);
-
-					tiles.addAll(loc2.get(0));
-					corners.addAll(loc2.get(1));
-
-					catanBoard.locationClicked(tiles, corners);
+					catanBoard.locationClicked(tileToCorners, tileToRoadOrientation);
 				}
 			}
 			repaint();
