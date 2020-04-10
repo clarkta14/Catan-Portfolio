@@ -103,8 +103,10 @@ public class Tile {
     }
     
     public boolean checkValidRoadPlacement(int corner1, int corner2) {
-    	if (corner1 == 3) {
-    		return true;
+    	for (int cornerOfSettlement : hexCornerToSettlement.keySet()) {
+    		if (corner1 == cornerOfSettlement || corner2 == cornerOfSettlement) {
+    			return true;
+    		}
     	}
     	return false;
     }

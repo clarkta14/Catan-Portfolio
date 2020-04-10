@@ -27,5 +27,12 @@ public class TileTests {
 		
 		assertEquals(true, tile.checkValidRoadPlacement(3, 2));
 	}
+	
+	@Test
+	public void testCheckValidRoadPlacement3() {
+		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		
+		assertEquals(false, tile.checkValidRoadPlacement(3, 2));
+	}
 
 }
