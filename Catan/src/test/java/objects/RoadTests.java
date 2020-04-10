@@ -14,5 +14,12 @@ public class RoadTests {
 		Road player1Road = new Road(player1);
 		assertEquals(player1, player1Road.getOwner());
 	}
+	
+	@Test
+	public void testConstructor2() {
+		Player player2 = new Player(Color.RED);
+		Road player2Road = new Road(player2);
+		assertEquals(player2, player2Road.getOwner());
+	}
 
 }
