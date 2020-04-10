@@ -16,18 +16,11 @@ public class Tile {
     private HashMap<Integer, Settlement> hexCornerToSettlement;
     private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
     
-    /**
-     * Constructor, with given params for its fields
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param n the number of the Tile
-     * @param typ the type of the Tile
-    */
-    public Tile(Point p, int posInArray, int n, TileType typ) {
+    public Tile(Point p, int posInArray, int number, TileType typ) {
         this.isRobber = false;
         this.pos = p;
         this.posInArray = posInArray;
-        this.number = n;
+        this.number = number;
         this.type = typ;
         this.hexCornerToSettlement = new HashMap<>();
         this.hexEdgeToRoad = new HashMap<>();
@@ -107,6 +100,11 @@ public class Tile {
     		this.hexEdgeToRoad.put(edge, r);
     		this.hexEdgeToRoad.put(edge2, r);
     	}
+    }
+    
+    public boolean checkValidRoadPlacement(int corner1, int corner2) {
+    	
+    	return false;
     }
     
     public HashMap<ArrayList<Integer>, Road> getRoads() {
