@@ -112,6 +112,14 @@ public class Tile {
     			return true;
     		}
     	}
+    	for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
+    		for (int corner : edgeOfRoad) {
+    			if (corner == corner1 || corner == corner2) {
+    				return true;
+    			}
+    		}
+    	}
+    	
     	return false;
     }
     
