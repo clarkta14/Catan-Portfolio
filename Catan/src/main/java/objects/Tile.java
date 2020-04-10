@@ -103,7 +103,9 @@ public class Tile {
     }
     
     public boolean checkValidRoadPlacement(int corner1, int corner2) {
-    	
+    	if (corner1 == 3) {
+    		return true;
+    	}
     	return false;
     }
     
