@@ -103,14 +103,10 @@ public class Tile {
 	}
 
 	public boolean checkValidRoadPlacement(int corner1, int corner2, Road roadToCheck) {
-		for (int cornerOfSettlement : hexCornerToSettlement.keySet()) {
-			Settlement settlement = hexCornerToSettlement.get(cornerOfSettlement);
-			if (settlement.getOwner() != roadToCheck.getOwner()) {
-				continue;
-			}
-			if (corner1 == cornerOfSettlement || corner2 == cornerOfSettlement) {
-				return true;
-			}
+		ArrayList<Integer> newEdge = new ArrayList<Integer>();
+		newEdge.add(corner1); newEdge.add(corner2);
+		if (this.hexEdgeToRoad.containsKey(newEdge)) {
+			return false;
 		}
 		for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
 			Road road = hexEdgeToRoad.get(edgeOfRoad);
@@ -121,6 +117,15 @@ public class Tile {
 				if (corner == corner1 || corner == corner2) {
 					return true;
 				}
+			}
+		}
+		for (int cornerOfSettlement : hexCornerToSettlement.keySet()) {
+			Settlement settlement = hexCornerToSettlement.get(cornerOfSettlement);
+			if (settlement.getOwner() != roadToCheck.getOwner()) {
+				continue;
+			}
+			if (corner1 == cornerOfSettlement || corner2 == cornerOfSettlement) {
+				return true;
 			}
 		}
 
