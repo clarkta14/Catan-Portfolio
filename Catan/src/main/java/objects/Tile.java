@@ -102,8 +102,12 @@ public class Tile {
     	}
     }
     
-    public boolean checkValidRoadPlacement(int corner1, int corner2) {
+    public boolean checkValidRoadPlacement(int corner1, int corner2, Road roadToCheck) {
     	for (int cornerOfSettlement : hexCornerToSettlement.keySet()) {
+    		Settlement settlement = hexCornerToSettlement.get(cornerOfSettlement);
+    		if (settlement.getOwner() != roadToCheck.getOwner()) {
+    			continue;
+    		}
     		if (corner1 == cornerOfSettlement || corner2 == cornerOfSettlement) {
     			return true;
     		}
