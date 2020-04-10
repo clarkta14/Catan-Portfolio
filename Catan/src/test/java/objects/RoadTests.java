@@ -21,5 +21,13 @@ public class RoadTests {
 		Road player2Road = new Road(player2);
 		assertEquals(player2, player2Road.getOwner());
 	}
+	
+	@Test
+	public void testAngle1() {
+		Player player1 = new Player(Color.BLUE);
+		Road player1Road = new Road(player1);
+		player1Road.setAngle(2);
+		assertEquals(2, player1Road.getAngle());
+	}
 
 }
