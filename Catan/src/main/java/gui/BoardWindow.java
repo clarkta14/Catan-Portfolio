@@ -14,7 +14,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -22,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -44,8 +41,8 @@ public class BoardWindow extends JPanel {
 	private CatanBoard catanBoard;
 	private int settlementSize = 12;
 
-	public BoardWindow(int numOfPlayers) {
-		this.catanBoard = new CatanBoard(numOfPlayers);
+	public BoardWindow(CatanBoard catanBoard) {
+		this.catanBoard = catanBoard;
 		setBackground(new Color(164, 200, 218));
 		// Handle Resizing Window
 		this.addComponentListener(new ComponentListener() {

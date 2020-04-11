@@ -6,15 +6,19 @@ import java.awt.Rectangle;
 import javax.swing.JFrame;
 
 import lib.GraphPaperLayout;
+import objects.CatanBoard;
 
 public class GameWindow {
     
+	private CatanBoard catanBoard;
 	private BoardWindow boardWindow;
-    //private SideBar sideBar; // To hold buttons for game options
+    private OptionsPanel options; // To hold buttons for game options
     //private GameState gameState; // Hold all player information
     
     public GameWindow(int numOfPlayers){
-    	this.boardWindow = new BoardWindow(numOfPlayers);
+    	this.catanBoard = new CatanBoard(numOfPlayers);
+    	this.boardWindow = new BoardWindow(this.catanBoard);
+    	this.options = new OptionsPanel(this.catanBoard);
         showGUI();
     }
 
@@ -28,7 +32,7 @@ public class GameWindow {
         content.setLayout(new GraphPaperLayout(dim));
         
         //Adding components to the window
-        //content.add(sideBar,new Rectangle(0,0,1,5));
+        content.add(options,new Rectangle(0,0,1,5));
         content.add(boardWindow,new Rectangle(1,0,4,4));
 	//content.add(gameState,new Rectangle(1,4,4,2));
         

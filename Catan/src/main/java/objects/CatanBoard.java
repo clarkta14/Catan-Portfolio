@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import gui.OptionsPanel;
+
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     ArrayList<Player> players;
@@ -159,8 +161,12 @@ public class CatanBoard {
 		}
 	}
 
-	private Player getCurrentPlayer() {
+	public Player getCurrentPlayer() {
 		return this.players.get(this.currentPlayer);
+	}
+	
+	public int getCurrentPlayerNum() {
+		return this.currentPlayer;
 	}
 	
 	private void incrementPlayerInit() {
@@ -169,7 +175,9 @@ public class CatanBoard {
 		} else if (this.turnCount < this.numPlayers - 1) {
 			this.currentPlayer++;
 		}
-	};
+	}
 	
-
+	private void nextPlayer() {
+		this.currentPlayer = (this.currentPlayer + 1) % this.numPlayers;
+	}
 }
