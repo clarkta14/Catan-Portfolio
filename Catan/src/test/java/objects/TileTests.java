@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -48,6 +49,19 @@ public class TileTests {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		tile.setRobber(true);
 		assertTrue(tile.isRobber());
+	}
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void testGetSettlements() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(3, settlementPlayer1);
+		HashMap<Integer, Settlement> map = new HashMap<Integer, Settlement>() {{
+			put(3, settlementPlayer1);
+		}};
+		assertEquals(map, tile.getSettlements());
 	}
 
 	@Test
