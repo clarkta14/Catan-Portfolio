@@ -3,10 +3,23 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
 public class TileTests {
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void testSetHexCorners() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		ArrayList<Point> points = new ArrayList<Point>() {{
+			add(new Point(1,1)); add(new Point(2,2));
+		}};
+		tile.setHexCorners(points);
+		assertEquals(points, tile.getHexCorners());
+	}
 
 	@Test
 	public void testCheckValidRoadPlacement1() {
