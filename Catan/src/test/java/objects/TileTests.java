@@ -63,6 +63,23 @@ public class TileTests {
 		}};
 		assertEquals(map, tile.getSettlements());
 	}
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void testGetRoads() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(3, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		tile.addRoad(3, 2, roadToPlace);
+		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
+		ArrayList<Integer> position = new ArrayList<Integer>() {{
+			add(3);
+			add(2);
+		}};
+		assertEquals(roadToPlace, roads.get(position));
+	}
 
 	@Test
 	public void testCheckValidRoadPlacement1() {
