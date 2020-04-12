@@ -4,11 +4,11 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-public class PlayerComponent {
+public class OptionsPanelComponent {
 	private JComponent swingComponent;
 	private Rectangle box;
 	
-	public PlayerComponent(JComponent jc, Rectangle r) {
+	public OptionsPanelComponent(JComponent jc, Rectangle r) {
 		this.swingComponent = jc;
 		this.box = r;
 	}

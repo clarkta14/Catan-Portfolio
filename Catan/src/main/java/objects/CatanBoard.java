@@ -1,44 +1,18 @@
 package objects;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import gui.OptionsPanel;
-
 public class CatanBoard {
     private ArrayList<Tile> tiles;
-    ArrayList<Player> players;
-    boolean initialSetup;
-    int currentPlayer;
-    int numPlayers;
-    int turnCount;
+    private PlayersController turnController;
     
-    public CatanBoard(int numberOfPlayers){
-    	this.numPlayers = numberOfPlayers;
-    	this.players = createPlayers(numPlayers);
+    public CatanBoard(PlayersController turnController){
+    	this.turnController = turnController;
         this.tiles = new ArrayList<Tile>();
-        this.initialSetup = true;
-        this.turnCount = 0;
-        this.currentPlayer = 0;
         shuffleTiles();
-    }
-    
-    private ArrayList<Player> createPlayers(int num) {
- 	   ArrayList<Player> plyrs = new ArrayList<>();
- 	   Player p = new Player(Color.BLUE);
- 	   plyrs.add(p);
- 	   if(num != 3) {
- 		  p = new Player(Color.RED);
- 	 	  plyrs.add(p);
-	   }
- 	   p = new Player(Color.WHITE);
- 	   plyrs.add(p);
- 	   p = new Player(Color.ORANGE);
- 	   plyrs.add(p);
- 	   return plyrs;
     }
     
     private void shuffleTiles() {
@@ -122,33 +96,26 @@ public class CatanBoard {
 	}
 
 	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		if (this.initialSetup) {
-			placeSettlement(tiles, corners);
-		}		
+		placeSettlement(tiles, corners);	
 	}
 	
 	public void locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		if (this.initialSetup) {
-			placeRoad(tilesToCorners, tileToRoadOrientation);
-			incrementPlayerInit();
-			this.turnCount++;
-		}
+		placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 	
 	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
+		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
     	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
 	}
 
-	private void addSettlementToTiles(ArrayList<Integer> tiles, ArrayList<Integer> corners,
-			Settlement newlyAddedSettlement) {
-		for(int i = 0; i < tiles.size(); i++) {
-			this.tiles.get(tiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+	private void addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
 	}
 
 	private void placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		Road newRoad = new Road(getCurrentPlayer());
+		Road newRoad = new Road(this.turnController.getCurrentPlayer());
 		addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
 	}
 
@@ -159,25 +126,5 @@ public class CatanBoard {
 			newRoad.setAngle(angle);
 			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
 		}
-	}
-
-	public Player getCurrentPlayer() {
-		return this.players.get(this.currentPlayer);
-	}
-	
-	public int getCurrentPlayerNum() {
-		return this.currentPlayer;
-	}
-	
-	private void incrementPlayerInit() {
-		if (this.turnCount > this.numPlayers - 1) {
-			this.currentPlayer--;
-		} else if (this.turnCount < this.numPlayers - 1) {
-			this.currentPlayer++;
-		}
-	}
-	
-	private void nextPlayer() {
-		this.currentPlayer = (this.currentPlayer + 1) % this.numPlayers;
 	}
 }

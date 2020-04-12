@@ -7,18 +7,21 @@ import javax.swing.JFrame;
 
 import lib.GraphPaperLayout;
 import objects.CatanBoard;
+import objects.PlayersController;
 
 public class GameWindow {
     
+	private PlayersController turnController;
 	private CatanBoard catanBoard;
 	private BoardWindow boardWindow;
     private OptionsPanel options; // To hold buttons for game options
     //private GameState gameState; // Hold all player information
     
     public GameWindow(int numOfPlayers){
-    	this.catanBoard = new CatanBoard(numOfPlayers);
+    	this.turnController = new PlayersController(numOfPlayers);
+    	this.catanBoard = new CatanBoard(this.turnController);
     	this.boardWindow = new BoardWindow(this.catanBoard);
-    	this.options = new OptionsPanel(this.catanBoard);
+    	this.options = new OptionsPanel(this);
         showGUI();
     }
 
@@ -41,5 +44,13 @@ public class GameWindow {
         frame.setVisible(true); 
         boardWindow.repaint();
     }
+    
+    public PlayersController getPlayersController() {
+    	return this.turnController;
+    }
+
+	public BoardWindow getBoardWindow() {
+		return this.boardWindow;
+	}
 }
 
