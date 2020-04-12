@@ -89,7 +89,7 @@ public class TileTests {
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(false, tile.checkValidRoadPlacement(5, 0, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(5, 0, roadToPlace));
 	}
 	
 	@Test
@@ -100,7 +100,7 @@ public class TileTests {
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(true, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 	}
 	
 	@Test
@@ -109,7 +109,7 @@ public class TileTests {
 		Player player1 = new Player(Color.red);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(false, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ public class TileTests {
 		
 		Player player2 = new Player(Color.blue);
 		Road roadToPlace = new Road(player2);
-		assertEquals(false, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 	}
 	
 	@Test
@@ -132,11 +132,11 @@ public class TileTests {
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(true, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
 		Road roadToConnect = new Road(player1);
-		assertEquals(true, tile.checkValidRoadPlacement(2, 1, roadToConnect));
+		assertTrue(tile.checkValidRoadPlacement(2, 1, roadToConnect));
 	}
 	
 	@Test
@@ -147,12 +147,12 @@ public class TileTests {
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(true, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
 		Player player2 = new Player(Color.blue);
 		Road roadToConnect = new Road(player2);
-		assertEquals(false, tile.checkValidRoadPlacement(2, 1, roadToConnect));
+		assertFalse(tile.checkValidRoadPlacement(2, 1, roadToConnect));
 	}
 	
 	@Test
@@ -163,11 +163,11 @@ public class TileTests {
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		
-		assertEquals(true, tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
 		Road roadToConnect = new Road(player1);
-		assertEquals(false, tile.checkValidRoadPlacement(3, 2, roadToConnect));
+		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToConnect));
 	}
 
 }
