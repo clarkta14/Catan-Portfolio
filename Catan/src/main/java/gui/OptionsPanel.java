@@ -45,7 +45,7 @@ public class OptionsPanel extends JPanel {
 	}
 
 	public void setupPhase() {
-		if(this.turnController.inSetupPhase()) {
+		if(boardGUI.getState().equals(GUIStates.setup)) {
 			final JLabel start = new JLabel("Setup phase for Player " + (this.turnController.getCurrentPlayerNum() + 1));
 			start.setFont(font);
 			setupPanel.add(new OptionsPanelComponent(start, new Rectangle(2,3,10,2)));

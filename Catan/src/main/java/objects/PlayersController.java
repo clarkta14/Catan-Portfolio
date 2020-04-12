@@ -15,7 +15,7 @@ public class PlayersController {
         this.backwardsSetup = false;
         this.currentPlayer = 0;
 	}
-	
+
 	private ArrayList<Player> createPlayers(int num) {
 	 	   ArrayList<Player> plyrs = new ArrayList<>();
 	 	   Player p = new Player(Color.BLUE);
@@ -37,10 +37,6 @@ public class PlayersController {
 	
 	public int getCurrentPlayerNum() {
 		return this.currentPlayer;
-	}
-	
-	public boolean inSetupPhase() {
-		return this.initialSetup;
 	}
 	
 	public void nextPlayer() {

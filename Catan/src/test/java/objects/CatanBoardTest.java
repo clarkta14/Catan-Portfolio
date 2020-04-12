@@ -27,7 +27,7 @@ public class CatanBoardTest {
 	public void testConstruct4Player() {
 		PlayersController pc = new PlayersController(4);
 		CatanBoard cb = new CatanBoard(pc);
-		assertEquals(cb.players.size(), 4);
+		assertEquals(cb.getTiles().size(), 19);
 	}
 	
 	@Test
