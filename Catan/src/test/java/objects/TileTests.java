@@ -10,7 +10,7 @@ public class TileTests {
 
 	@Test
 	public void testCheckValidRoadPlacement1() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
@@ -21,7 +21,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacement2() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
@@ -32,7 +32,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacement3() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Road roadToPlace = new Road(player1);
 		
@@ -41,7 +41,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacementDifferentPlayer() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
@@ -53,7 +53,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacementConnectedToRoad() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
@@ -68,7 +68,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacementConnectedToRoadDifferentPlayer() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
@@ -84,7 +84,7 @@ public class TileTests {
 	
 	@Test
 	public void testCheckValidRoadPlacementLocationTaken() {
-		Tile tile = new Tile(null, 1, 5, TileType.brick);
+		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);

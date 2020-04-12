@@ -82,13 +82,23 @@ public class CatanBoard {
         }
         
         for(int i = 0; i < 18; i++){
-            this.tiles.add(new Tile(positions.get(i), i, numbers.get(i), types.get(i)));
+            this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
         }
         
         // Placing the desert tile with robber on the board
-        Tile desertTile = new Tile(positions.get(18), 18, 7, TileType.desert);
-        desertTile.setRobber();
-        this.tiles.add(desertTile);
+    	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
+    	desertTile.setRobber();
+    	this.tiles.add(desertTile);
+    	
+    	swapTileForRobberPlacement();
+    }
+    
+    public void swapTileForRobberPlacement() {
+    	int tileIndexToSwapWith = (int) (Math.random() * 17);    	
+    	Point temp = this.tiles.get(18).getLocation();
+    	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
+    	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
+    	Collections.swap(this.tiles, tileIndexToSwapWith, 18);
     }
     
 	public ArrayList<Tile> getTiles() {
