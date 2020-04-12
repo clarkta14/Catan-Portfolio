@@ -19,7 +19,7 @@ public class PlayersControllerTests {
 	}
 	
 	@Test
-	public void testNextPlayerSetup() {
+	public void testNextPlayerSetup_4Players() {
 		PlayersController pc = new PlayersController(4);
 		assertEquals(0, pc.getCurrentPlayerNum());
 		pc.nextPlayer();
@@ -37,7 +37,7 @@ public class PlayersControllerTests {
 	}
 	
 	@Test
-	public void testNextPlayerAfterSetup() {
+	public void testNextPlayerAfterSetup_4Players() {
 		PlayersController pc = new PlayersController(4);
 		// setup phase
 		for(int i = 0; i < 8; i++) {
@@ -49,6 +49,38 @@ public class PlayersControllerTests {
 		pc.nextPlayer();
 		pc.nextPlayer();
 		assertEquals(3, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayerNum());
+	}
+	
+	@Test
+	public void testNextPlayerSetup_3Players() {
+		PlayersController pc = new PlayersController(3);
+		assertEquals(0, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(1, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(2, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(2, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(1, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayerNum());
+	}
+	
+	@Test
+	public void testNextPlayerAfterSetup_3Players() {
+		PlayersController pc = new PlayersController(3);
+		// setup phase
+		for(int i = 0; i < 6; i++) {
+			pc.nextPlayer();
+		}
+		assertEquals(0, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(1, pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		assertEquals(2, pc.getCurrentPlayerNum());
 		pc.nextPlayer();
 		assertEquals(0, pc.getCurrentPlayerNum());
 	}
