@@ -20,6 +20,14 @@ public class TileTests {
 		tile.setHexCorners(points);
 		assertEquals(points, tile.getHexCorners());
 	}
+	
+	@Test
+	public void testSetLocation() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Point location = new Point(1,1);
+		tile.setLocation(location);
+		assertEquals(location, tile.getLocation());
+	}
 
 	@Test
 	public void testCheckValidRoadPlacement1() {

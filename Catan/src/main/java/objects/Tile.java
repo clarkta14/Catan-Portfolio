@@ -36,6 +36,10 @@ public class Tile {
 		return this.corners;
 	}
 
+	public void setLocation(Point location) {
+		this.pos = location;
+	}
+	
 	public Point getLocation() {
 		return this.pos;
 	}
@@ -92,6 +96,10 @@ public class Tile {
 			this.hexEdgeToRoad.put(edge2, r);
 		}
 	}
+	
+	public HashMap<ArrayList<Integer>, Road> getRoads() {
+		return this.hexEdgeToRoad;
+	}
 
 	public boolean checkValidRoadPlacement(int corner1, int corner2, Road roadToCheck) {
 		ArrayList<Integer> newEdge = new ArrayList<Integer>();
@@ -121,13 +129,5 @@ public class Tile {
 		}
 
 		return false;
-	}
-
-	public HashMap<ArrayList<Integer>, Road> getRoads() {
-		return this.hexEdgeToRoad;
-	}
-
-	public void setLocation(Point location) {
-		this.pos = location;
 	}
 }
