@@ -10,6 +10,13 @@ import org.junit.Test;
 
 public class TileTests {
 	
+	@Test
+	public void testConstructorWithNumber() {
+		int number = 5;
+		Tile tile = new Tile(null, number, TileType.brick);
+		assertEquals(number, tile.getNumber());
+	}
+	
 	@SuppressWarnings("serial")
 	@Test
 	public void testSetHexCorners() {
