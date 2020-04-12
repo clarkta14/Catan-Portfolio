@@ -36,7 +36,7 @@ public class OptionsPanel extends JPanel {
 		this.setupPanel = new ArrayList<>();
 		this.infoPanel = new ArrayList<>();
 		this.setLayout(new GraphPaperLayout(new Dimension(14, 24)));
-		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(""), new Rectangle(2, 0, 10, 1));
+		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(""), new Rectangle(1, 1, 12, 1));
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
 		this.currentPlayerNameBox.getSwingComponent().setForeground(Color.CYAN);
 		setCurrentPlayer(this.turnController.getCurrentPlayer(), this.turnController.getCurrentPlayerNum());
@@ -84,15 +84,15 @@ public class OptionsPanel extends JPanel {
 	
 				
 			});
-			begin.setText("place");
-			setupPanel.add(new OptionsPanelComponent(begin, new Rectangle(4,6,6,3)));
+			begin.setText("Place");
+			setupPanel.add(new OptionsPanelComponent(begin, new Rectangle(4,6,6,2)));
 			setupPanel();
 		}
 	}
 
 	public void setCurrentPlayer(Player p, int num) {
 		JLabel label = (JLabel) currentPlayerNameBox.getSwingComponent();
-		label.setText("Player: " + (num + 1));
+		label.setText("    Player " + (num + 1));
 		label.setOpaque(true);
 		label.setBackground(p.getColor());
 	}
@@ -106,14 +106,14 @@ public class OptionsPanel extends JPanel {
 		}
 		
 		((JLabel) infoPanel.get(0).getSwingComponent()).setText(string);
-		setPanelOnWindow(infoPanel);
+		setOnOptionsPanel(infoPanel);
 	}
 	
 	public void setupPanel() {
-		setPanelOnWindow(setupPanel);
+		setOnOptionsPanel(setupPanel);
 	}
 
-	private void setPanelOnWindow(ArrayList<OptionsPanelComponent> panel) {
+	private void setOnOptionsPanel(ArrayList<OptionsPanelComponent> panel) {
 		this.removeAll();
 		add(this.currentPlayerNameBox.getSwingComponent(), this.currentPlayerNameBox.getRectangle());
 		for (OptionsPanelComponent opc : panel) {
