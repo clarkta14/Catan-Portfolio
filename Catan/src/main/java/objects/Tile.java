@@ -58,8 +58,8 @@ public class Tile {
 		return this.number;
 	}
 
-	public void setRobber() {
-		this.isRobber = true;
+	public void setRobber(boolean isRobber) {
+		this.isRobber = isRobber;
 	}
 
 	public Boolean isRobber() {

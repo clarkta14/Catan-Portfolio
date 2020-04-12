@@ -11,6 +11,13 @@ import org.junit.Test;
 public class TileTests {
 	
 	@Test
+	public void testConstructorWithType() {
+		TileType type = TileType.brick;
+		Tile tile = new Tile(null, 5, type);
+		assertEquals(type, tile.getType());
+	}
+	
+	@Test
 	public void testConstructorWithNumber() {
 		int number = 5;
 		Tile tile = new Tile(null, number, TileType.brick);
@@ -34,6 +41,13 @@ public class TileTests {
 		Point location = new Point(1,1);
 		tile.setLocation(location);
 		assertEquals(location, tile.getLocation());
+	}
+	
+	@Test
+	public void testSetRobber() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		tile.setRobber(true);
+		assertTrue(tile.isRobber());
 	}
 
 	@Test

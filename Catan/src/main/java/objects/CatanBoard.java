@@ -87,7 +87,7 @@ public class CatanBoard {
         
         // Placing the desert tile with robber on the board
     	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
-    	desertTile.setRobber();
+    	desertTile.setRobber(true);
     	this.tiles.add(desertTile);
     	
     	swapTileForRobberPlacement();
