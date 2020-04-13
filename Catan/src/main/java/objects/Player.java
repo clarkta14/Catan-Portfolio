@@ -9,7 +9,7 @@ public class Player {
 		this.color = color;
 	}
 
-	public Object getColor() {
+	public Color getColor() {
 		return this.color;
 	}
 }

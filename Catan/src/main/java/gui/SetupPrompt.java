@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,7 +14,6 @@ import javax.swing.JPanel;
 public class SetupPrompt {
 	
 	private int numPlayers = 0;
-	private String[] numberStrings = { "3", "4"};
 	private JFrame frame;
 	
 	public SetupPrompt() {

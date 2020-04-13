@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -42,9 +40,10 @@ public class BoardWindow extends JPanel {
 	private int hexagonSide;
 	private CatanBoard catanBoard;
 	private int settlementSize = 12;
+	private GUIStates state = GUIStates.setup;
 
-	public BoardWindow(int numOfPlayers) {
-		this.catanBoard = new CatanBoard(numOfPlayers);
+	public BoardWindow(CatanBoard catanBoard) {
+		this.catanBoard = catanBoard;
 		setBackground(new Color(164, 200, 218));
 		// Handle Resizing Window
 		this.addComponentListener(new ComponentListener() {
@@ -828,57 +827,60 @@ public class BoardWindow extends JPanel {
 		}
 		return -1;
 	}
+	
+	public void setState(GUIStates s) {
+		this.state = s;
+	}
+	
+	public GUIStates getState() {
+		return this.state;
+	}
 
 	class BoardMouseListener extends MouseAdapter {
 		private Point lastClicked;
 
 		public void mouseClicked(MouseEvent e) {
-			Point p = new Point(e.getX(), e.getY());
-			if (p != null) {
-				ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
-				if (settlementLoc != null) {
-					ArrayList<Integer> tiles = settlementLoc.get(0);
-					ArrayList<Integer> corners = settlementLoc.get(1);
-
-					catanBoard.locationClicked(tiles, corners);
+			if(state.equals(GUIStates.drop_settlement)) {
+				Point p = new Point(e.getX(), e.getY());
+				if (p != null) {
+					ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
+					if (settlementLoc != null) {
+						ArrayList<Integer> tiles = settlementLoc.get(0);
+						ArrayList<Integer> corners = settlementLoc.get(1);
+	
+						catanBoard.locationClicked(tiles, corners);
+					}
+	
 				}
-
+				setState(GUIStates.idle);
+				repaint();
 			}
-			repaint();
 		}
 
 		public void mousePressed(MouseEvent e) {
-			Point p = new Point(e.getX(), e.getY());
-			lastClicked = p;
+			if(state.equals(GUIStates.drop_road)) {
+				Point prevClicked = new Point(e.getX(), e.getY());
+				lastClicked = prevClicked;
+			}
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			Point p = new Point(e.getX(), e.getY());
-			if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
-				ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
-				ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
-				if (loc1 != null && loc2 != null) {
-
-					// Newly added : Need to use this now..
-					HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
-					HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
-					System.out.println("Road Locations" + tileToCorners);
-					System.out.println("Road Orientations " + tileToRoadOrientation);
-					
-					ArrayList<Integer> tiles = loc1.get(0);
-					ArrayList<Integer> corners = loc1.get(1);
-
-					tiles.add(-1);
-					corners.add(-1);
-
-					tiles.addAll(loc2.get(0));
-					corners.addAll(loc2.get(1));
-
-					catanBoard.locationClicked(tiles, corners);
+			if(state.equals(GUIStates.drop_road)) {
+				Point p = new Point(e.getX(), e.getY());
+				if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
+					ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
+					ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
+					if (loc1 != null && loc2 != null) {
+						HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
+						HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
+	
+						catanBoard.locationClicked(tileToCorners, tileToRoadOrientation);
+					}
 				}
+				setState(GUIStates.idle);
+				repaint();
 			}
-			repaint();
 		}
 	}
 }

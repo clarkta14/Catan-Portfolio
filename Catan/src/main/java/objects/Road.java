@@ -8,8 +8,11 @@ public class Road extends GameStructures{
 		this.angle = 0;
 	}
 	
-	public void setAngle(int a) {
-		this.angle = a;
+	public void setAngle(int angle) {
+		if (angle > 3) {
+			throw new IllegalArgumentException("Angle must be 1, 2, or 3.");
+		}
+		this.angle = angle;
 	}
 	
 	public int getAngle() {
