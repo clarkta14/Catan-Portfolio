@@ -75,13 +75,11 @@ public class Tile {
 	}
 	
 	public boolean checkValidSettlementPlacement(int corner, Settlement settlement) {
-		return true;
+		return !this.hexCornerToSettlement.containsKey(corner);
 	}
 
 	public void addSettlement(int corner, Settlement s) {
-		if (!this.hexCornerToSettlement.containsKey(corner)) {
 			this.hexCornerToSettlement.put(corner, s);
-		}
 	}
 
 	public HashMap<Integer, Settlement> getSettlements() {
