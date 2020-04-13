@@ -1,18 +1,41 @@
 package objects;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
-    private PlayersController turnController;
+    ArrayList<Player> players;
+    boolean initialSetup;
+    int currentPlayer;
+    int numPlayers;
+    int turnCount;
     
-    public CatanBoard(PlayersController turnController){
-    	this.turnController = turnController;
+    public CatanBoard(int numberOfPlayers){
+    	this.numPlayers = numberOfPlayers;
+    	this.players = createPlayers(numPlayers);
         this.tiles = new ArrayList<Tile>();
+        this.initialSetup = true;
+        this.turnCount = 0;
+        this.currentPlayer = 0;
         shuffleTiles();
+    }
+    
+    private ArrayList<Player> createPlayers(int num) {
+ 	   ArrayList<Player> plyrs = new ArrayList<>();
+ 	   Player p = new Player(Color.BLUE);
+ 	   plyrs.add(p);
+ 	   if(num != 3) {
+ 		  p = new Player(Color.RED);
+ 	 	  plyrs.add(p);
+	   }
+ 	   p = new Player(Color.WHITE);
+ 	   plyrs.add(p);
+ 	   p = new Player(Color.ORANGE);
+ 	   plyrs.add(p);
+ 	   return plyrs;
     }
     
     private void shuffleTiles() {
@@ -86,55 +109,113 @@ public class CatanBoard {
         }
         
         // Placing the desert tile with robber on the board
-    	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
-    	desertTile.setRobber(true);
-    	this.tiles.add(desertTile);
-    	
-    	swapTileForRobberPlacement();
-    }
-    
-    public void swapTileForRobberPlacement() {
-    	int tileIndexToSwapWith = (int) (Math.random() * 17);    	
-    	Point temp = this.tiles.get(18).getLocation();
-    	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
-    	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
-    	Collections.swap(this.tiles, tileIndexToSwapWith, 18);
+        Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
+        desertTile.setRobber();
+        this.tiles.add(desertTile);
     }
     
 	public ArrayList<Tile> getTiles() {
 		return this.tiles;
 	}
 
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		placeSettlement(tiles, corners);	
-	}
-	
-	public void locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		placeRoad(tilesToCorners, tileToRoadOrientation);
-	}
-	
-	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
-    	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
+	public void locationClicked(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
+		if (this.initialSetup) {
+			handleInitialSetup(tileNums, cornerNums);
+		}		
 	}
 
-	private void addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
-		for(int i = 0; i < selectedTiles.size(); i++) {
-			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+	private void handleInitialSetup(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
+		if (tileNums.contains(-1)) {
+			placeRoad(tileNums, cornerNums);
+			incrementPlayerInit();
+	    	this.turnCount++;
+		} else {
+			placeSettlement(tileNums, cornerNums);
+		}
+	}
+	
+	private void placeSettlement(ArrayList<Integer> tileNums, ArrayList<Integer> cornerNums) {
+		Settlement newlyAddedSettlement = new Settlement(getCurrentPlayer());
+    	for(int i = 0; i < tileNums.size(); i++) {
+    		Tile selectedTile = this.tiles.get(tileNums.get(i));
+    		Integer selectedCornerNum = cornerNums.get(i);
+    		selectedTile.addSettlement(selectedCornerNum, newlyAddedSettlement);
     	}
 	}
 
-	private void placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		Road newRoad = new Road(this.turnController.getCurrentPlayer());
-		addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
+	private void placeRoad(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		ArrayList<Integer> tiles2 = new ArrayList<Integer>();
+		ArrayList<Integer> corners2 = new ArrayList<Integer>();
+		splitCornerTileLists(tiles, corners, tiles2, corners2);
+		
+		ArrayList<Integer> edges = getEdgesFromCorners(tiles, corners, tiles2, corners2);
+		
+		Road newRoad = new Road(getCurrentPlayer());
+		addRoadToTiles(newRoad, tiles, tiles2, edges);
 	}
 
-	private void addRoadToTiles(Road newRoad, HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		for (int tileNum : tilesToCorners.keySet()) {
-			ArrayList<Integer> corners = tilesToCorners.get(tileNum);
-			int angle = tileToRoadOrientation.get(tileNum);
-			newRoad.setAngle(angle);
-			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
+	private void addRoadToTiles(Road newRoad, ArrayList<Integer> tiles, ArrayList<Integer> tiles2,
+			ArrayList<Integer> edges) {
+		int count = 0;
+		for (int i = 0; i < tiles.size(); i++) {
+			if (tiles.get(i) == tiles2.get(i)) {
+				setRoadAngle(newRoad, edges.get(count*2), edges.get((count*2) + 1));
+				this.tiles.get(tiles.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
+				this.tiles.get(tiles2.get(i)).addRoad(edges.get(count*2), edges.get((count*2) + 1), newRoad);
+				count++;
+			}
 		}
 	}
+
+	private void setRoadAngle(Road newRoad, int p1, int p2) {
+		if (p1 > p2) {
+			int temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
+		if (p1 == 0 && p2 == 1 || p1 == 3 && p2 == 4) {
+			newRoad.setAngle(1);
+		} else if (p1 == 0 && p2 == 5 || p1 == 2 && p2 == 3) {
+			newRoad.setAngle(0);
+		} else if (p1 == 1 && p2 == 2 || p1 == 4 && p2 == 5) {
+			newRoad.setAngle(2);
+		}
+	}
+
+	private ArrayList<Integer> getEdgesFromCorners(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
+		ArrayList<Integer> edges = new ArrayList<Integer>();
+		for (int i = 0; i < tiles.size(); i++) {
+			if (tiles.get(i) == tiles2.get(i)) {
+				edges.add(corners.get(i));
+				edges.add(corners2.get(i));
+			}
+		}
+		return edges;
+	}
+
+	private void splitCornerTileLists(ArrayList<Integer> tiles, ArrayList<Integer> corners, ArrayList<Integer> tiles2, ArrayList<Integer> corners2) {
+		for (int i = 0; i < tiles.size(); i ++) {
+			if (tiles.get(i) == -1) {
+				tiles2.addAll(tiles.subList(i+1, tiles.size()));
+				tiles.subList(i, tiles.size()).clear();
+				
+				corners2.addAll(corners.subList(i+1, corners.size()));
+				corners.subList(i, corners.size()).clear();
+			}
+		}
+	}
+
+	private Player getCurrentPlayer() {
+		return this.players.get(this.currentPlayer);
+	}
+	
+	private void incrementPlayerInit() {
+		if (this.turnCount > this.numPlayers - 1) {
+			this.currentPlayer--;
+		} else if (this.turnCount < this.numPlayers - 1) {
+			this.currentPlayer++;
+		}
+	};
+	
+
 }
