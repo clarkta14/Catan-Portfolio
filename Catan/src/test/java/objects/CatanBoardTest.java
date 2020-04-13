@@ -204,6 +204,37 @@ public class CatanBoardTest {
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, new Settlement(pc.getCurrentPlayer()));
 		assertFalse(result);
 	}
+	
+	@Test
+	public void testAddSettlementToTilesTwoSettlementsTwoSpacesAway() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		clearClicks();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, new Settlement(pc.getCurrentPlayer()));
+		
+		clearClicks();
+		
+		tileNums.add(1);
+		tileNums.add(2);
+		tileNums.add(5);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, new Settlement(pc.getCurrentPlayer()));
+		assertTrue(result);
+	}
 
 	private void makePlayerTurnInit(int tileNum, int settlementCorner, int roadCorner, int playerNum, int rAngle) {
 		addPlayerClickNums(tileNum, settlementCorner);
