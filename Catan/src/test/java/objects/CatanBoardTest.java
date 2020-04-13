@@ -96,8 +96,6 @@ public class CatanBoardTest {
 		Tile tile = tiles.get(p1roadTile);
 		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
 		assertEquals(0, roads.size());
-		
-		assertEquals(player1, pc.getCurrentPlayerNum());
 	}
 
 	@Test
@@ -168,6 +166,7 @@ public class CatanBoardTest {
 		registerPlayerDrag();
 		Road r = checkPlayerTileForRoad(playerNum, tileNum, settlementCorner, roadCorner);
 		assertEquals(rAngle, r.getAngle());
+		pc.nextPlayer();
 	}
 	
 	private Road checkPlayerTileForRoad(int playerNum, int tileNum, int roadCorner1, int roadCorner2) {
