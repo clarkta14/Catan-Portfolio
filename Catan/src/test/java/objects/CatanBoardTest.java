@@ -96,6 +96,8 @@ public class CatanBoardTest {
 		Tile tile = tiles.get(p1roadTile);
 		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
 		assertEquals(0, roads.size());
+		
+		assertEquals(player1, pc.getCurrentPlayerNum());
 	}
 
 	@Test
@@ -175,7 +177,7 @@ public class CatanBoardTest {
 		ArrayList<Integer> edge = new ArrayList<Integer>();
 		edge.add(roadCorner1); edge.add(roadCorner2);
 		Road r = roads.get(edge);
-		assertEquals(r.getOwner(), pc.getCurrentPlayer());
+		assertEquals(r.getOwner(), pc.getPlayer(playerNum));
 		return r;
 	}
 
@@ -184,7 +186,7 @@ public class CatanBoardTest {
 		Tile tile = tiles.get(tileNum);
 		HashMap<Integer, Settlement> settlements = tile.getSettlements();
 		Settlement s = settlements.get(cornerNum);
-		assertEquals(s.getOwner(), pc.getCurrentPlayer());
+		assertEquals(s.getOwner(), pc.getPlayer(playerNum));
 	}
 	
 	private void registerPlayerClick() {
@@ -210,7 +212,6 @@ public class CatanBoardTest {
 	private void addPlayerClickNums(int tileNum, int cornerNum) {
 		tileNums.add(tileNum);
 		cornerNums.add(cornerNum);
-	
 	}
 	
 	private void addPlayerDragNums(int tileNum, int cornerNum1, int cornerNum2) {

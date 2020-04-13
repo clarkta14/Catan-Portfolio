@@ -875,10 +875,11 @@ public class BoardWindow extends JPanel {
 						HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
 						HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
 	
-						catanBoard.locationClicked(tileToCorners, tileToRoadOrientation);
+						if (catanBoard.locationClicked(tileToCorners, tileToRoadOrientation)) {
+							setState(GUIStates.idle);
+						}
 					}
 				}
-				setState(GUIStates.idle);
 				repaint();
 			}
 		}

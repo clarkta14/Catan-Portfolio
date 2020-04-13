@@ -35,6 +35,10 @@ public class PlayersController {
 		return this.players.get(this.currentPlayer);
 	}
 	
+	public Player getPlayer(int playerNum) {
+		return this.players.get(playerNum);
+	}
+	
 	public int getCurrentPlayerNum() {
 		return this.currentPlayer;
 	}
