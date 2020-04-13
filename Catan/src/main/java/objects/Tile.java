@@ -88,7 +88,11 @@ public class Tile {
 	}
 	
 	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
-		if(this.hexEdgeToRoad.size() > 0) return true;
+		for(ArrayList<Integer> a : this.hexEdgeToRoad.keySet()) {
+			for(Integer i : a) {
+				if(i == corner) return true;
+			}
+		}
 		return false;
 	}
 
