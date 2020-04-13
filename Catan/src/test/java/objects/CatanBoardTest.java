@@ -137,10 +137,7 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTiles() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		clearClicks();
+		basicSetupForAddSettlementTests();
 		
 		tileNums.add(0);
 		tileNums.add(1);
@@ -156,10 +153,7 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTilesTwoSettlementsSamePlace() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		clearClicks();
+		basicSetupForAddSettlementTests();
 		
 		tileNums.add(0);
 		tileNums.add(1);
@@ -176,10 +170,7 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTilesTwoSettlementsOneSpaceAway() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		clearClicks();
+		basicSetupForAddSettlementTests();
 		
 		tileNums.add(0);
 		tileNums.add(1);
@@ -207,10 +198,7 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTilesTwoSettlementsTwoSpacesAway() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		clearClicks();
+		basicSetupForAddSettlementTests();
 		
 		tileNums.add(0);
 		tileNums.add(1);
@@ -238,10 +226,7 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTilesTwoSettlements11SpacesAway() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		clearClicks();
+		basicSetupForAddSettlementTests();
 		
 		tileNums.add(3);
 		cornerNums.add(0);
@@ -255,6 +240,12 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, new Settlement(pc.getCurrentPlayer()));
 		assertTrue(result);
+	}
+	
+	private void basicSetupForAddSettlementTests() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		clearClicks();
 	}
 
 	private void makePlayerTurnInit(int tileNum, int settlementCorner, int roadCorner, int playerNum, int rAngle) {
