@@ -1,13 +1,8 @@
 package Catan;
 
-import gui.BoardWindow;
 import gui.GameWindow;
 import gui.SetupPrompt;
 
-/**
- *
- * @author Indresh
- */
 public class Main {
 
 	@SuppressWarnings("unused")
