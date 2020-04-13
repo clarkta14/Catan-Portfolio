@@ -149,7 +149,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
-		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		assertTrue(result);
 	}
 	
@@ -165,8 +165,8 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
-		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
-		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		assertFalse(result);
 	}
 	
@@ -182,7 +182,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
-		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		
 		clearClicks();
 		
@@ -194,7 +194,7 @@ public class CatanBoardTest {
 		cornerNums.add(4);
 		cornerNums.add(0);
 		
-		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		assertFalse(result);
 	}
 	
@@ -210,7 +210,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
-		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		
 		clearClicks();
 		
@@ -222,7 +222,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
-		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		assertTrue(result);
 	}
 	
@@ -233,14 +233,14 @@ public class CatanBoardTest {
 		tileNums.add(3);
 		cornerNums.add(0);
 		
-		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		
 		clearClicks();
 		
 		tileNums.add(15);
 		cornerNums.add(3);
 		
-		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		assertTrue(result);
 	}
 	
@@ -280,7 +280,7 @@ public class CatanBoardTest {
 	}
 	
 	private void registerPlayerClick() {
-		cb.locationClicked(tileNums, cornerNums, GUIStates.drop_settlement);
+		cb.locationClicked(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		clearClicks();
 	}
 	
