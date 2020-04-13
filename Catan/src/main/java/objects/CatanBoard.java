@@ -119,9 +119,17 @@ public class CatanBoard {
 	}
 
 	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
+		boolean settlementLocationIsValid = true;
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid &&
+					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i), newlyAddedSettlement);
+    	}
+		
+		if(!settlementLocationIsValid) return false;
+		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
-    	}
+		}
 		return true;
 	}
 
