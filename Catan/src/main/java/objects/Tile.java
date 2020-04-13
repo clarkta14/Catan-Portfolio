@@ -86,6 +86,10 @@ public class Tile {
 		}
 		return true;
 	}
+	
+	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
+		return false;
+	}
 
 	public void addSettlement(int corner, Settlement s) {
 			this.hexCornerToSettlement.put(corner, s);

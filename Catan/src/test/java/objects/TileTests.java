@@ -239,5 +239,14 @@ public class TileTests {
 		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
 		assertTrue(actual);
 	}
+	
+	@Test
+	public void testCheckRoadAtCornerForGivenPlayerNoRoads() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		boolean result = tile.checkRoadAtCornerForGivenPlayer(0, player1);
+		
+		assertFalse(result);
+	}
 
 }
