@@ -215,5 +215,17 @@ public class TileTests {
 		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
 		assertFalse(actual);
 	}
+	
+	@Test
+	public void testCheckVaildSettlementPlacementTwoSettlementsCorners5and0() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlement0 = new Settlement(player1);
+		Settlement settlement1 = new Settlement(player1);
+		tile.addSettlement(0, settlement1);
+		
+		boolean actual = tile.checkValidSettlementPlacement(5, settlement0);
+		assertFalse(actual);
+	}
 
 }

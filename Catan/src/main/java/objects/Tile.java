@@ -78,7 +78,7 @@ public class Tile {
 		if (this.hexCornerToSettlement.containsKey(corner)) {
 			return false;
 		}
-		if (this.hexCornerToSettlement.containsKey(corner+1)) {
+		if (this.hexCornerToSettlement.containsKey((corner+1)%6)) {
 			return false;
 		}
 		if (this.hexCornerToSettlement.containsKey((corner+5)%6)) {
