@@ -840,6 +840,7 @@ public class BoardWindow extends JPanel {
 		private Point lastClicked;
 
 		public void mouseClicked(MouseEvent e) {
+			boolean settlementPlaced = false;
 			if(state.equals(GUIStates.drop_settlement)) {
 				Point p = new Point(e.getX(), e.getY());
 				if (p != null) {
@@ -848,12 +849,13 @@ public class BoardWindow extends JPanel {
 						ArrayList<Integer> tiles = settlementLoc.get(0);
 						ArrayList<Integer> corners = settlementLoc.get(1);
 	
-						catanBoard.locationClicked(tiles, corners);
+						settlementPlaced = catanBoard.placeSettlement(tiles, corners);
 					}
-	
 				}
-				setState(GUIStates.idle);
-				repaint();
+				if(settlementPlaced) {
+					setState(GUIStates.idle);
+					repaint();
+				}
 			}
 		}
 

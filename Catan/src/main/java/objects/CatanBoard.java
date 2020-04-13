@@ -104,7 +104,7 @@ public class CatanBoard {
 	public ArrayList<Tile> getTiles() {
 		return this.tiles;
 	}
-
+	
 	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		placeSettlement(tiles, corners);	
 	}
@@ -113,9 +113,9 @@ public class CatanBoard {
 		placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 	
-	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+	public boolean placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
 		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
-    	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
+    	return addSettlementToTiles(tiles, corners, newlyAddedSettlement);
 	}
 
 	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
