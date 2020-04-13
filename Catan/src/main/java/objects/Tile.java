@@ -73,6 +73,10 @@ public class Tile {
 	public Polygon getHexagon() {
 		return this.hexagon;
 	}
+	
+	public boolean checkValidSettlementPlacement(int corner, Settlement settlement) {
+		return true;
+	}
 
 	public void addSettlement(int corner, Settlement s) {
 		if (!this.hexCornerToSettlement.containsKey(corner)) {

@@ -169,5 +169,14 @@ public class TileTests {
 		Road roadToConnect = new Road(player1);
 		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToConnect));
 	}
+	
+	@Test public void testCheckVaildSettlementPlacementCorner0NoSettlements() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		
+		boolean actual = tile.checkValidSettlementPlacement(0, settlementPlayer1);
+		assertTrue(actual);
+	}
 
 }
