@@ -88,6 +88,7 @@ public class Tile {
 	}
 	
 	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
+		if(this.hexEdgeToRoad.size() > 0) return true;
 		return false;
 	}
 
