@@ -174,9 +174,8 @@ public class TileTests {
 	public void testCheckVaildSettlementPlacementCorner0NoSettlements() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
-		Settlement settlementPlayer1 = new Settlement(player1);
 		
-		boolean actual = tile.checkValidSettlementPlacement(0, settlementPlayer1);
+		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertTrue(actual);
 	}
 	
@@ -185,10 +184,9 @@ public class TileTests {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlement0 = new Settlement(player1);
-		Settlement settlement1 = new Settlement(player1);
-		tile.addSettlement(0, settlement1);
+		tile.addSettlement(0, settlement0);
 		
-		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
+		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertFalse(actual);
 	}
 	
@@ -196,11 +194,10 @@ public class TileTests {
 	public void testCheckVaildSettlementPlacementTwoSettlementsCorners0and1() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
-		Settlement settlement0 = new Settlement(player1);
 		Settlement settlement1 = new Settlement(player1);
 		tile.addSettlement(1, settlement1);
 		
-		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
+		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertFalse(actual);
 	}
 	
@@ -208,11 +205,10 @@ public class TileTests {
 	public void testCheckVaildSettlementPlacementTwoSettlementsCorners0and5() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
-		Settlement settlement0 = new Settlement(player1);
 		Settlement settlement1 = new Settlement(player1);
 		tile.addSettlement(5, settlement1);
 		
-		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
+		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertFalse(actual);
 	}
 	
@@ -221,10 +217,9 @@ public class TileTests {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlement0 = new Settlement(player1);
-		Settlement settlement1 = new Settlement(player1);
-		tile.addSettlement(0, settlement1);
+		tile.addSettlement(0, settlement0);
 		
-		boolean actual = tile.checkValidSettlementPlacement(5, settlement0);
+		boolean actual = tile.checkValidSettlementPlacement(5);
 		assertFalse(actual);
 	}
 	
@@ -232,11 +227,10 @@ public class TileTests {
 	public void testCheckVaildSettlementPlacementTwoSettlementsTwoSpacesAway() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
-		Settlement settlement0 = new Settlement(player1);
-		Settlement settlement1 = new Settlement(player1);
-		tile.addSettlement(2, settlement1);
+		Settlement settlement2 = new Settlement(player1);
+		tile.addSettlement(2, settlement2);
 		
-		boolean actual = tile.checkValidSettlementPlacement(0, settlement0);
+		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertTrue(actual);
 	}
 	

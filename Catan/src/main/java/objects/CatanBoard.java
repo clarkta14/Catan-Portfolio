@@ -122,7 +122,7 @@ public class CatanBoard {
 		boolean settlementLocationIsValid = true;
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			settlementLocationIsValid = settlementLocationIsValid &&
-					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i), newlyAddedSettlement);
+					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
     	}
 		
 		if(!settlementLocationIsValid) return false;
