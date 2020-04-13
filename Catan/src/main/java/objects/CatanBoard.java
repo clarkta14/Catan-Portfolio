@@ -123,7 +123,7 @@ public class CatanBoard {
 					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
     	}
 		
-		if(guistate != GUIStates.drop_settlement) {
+		if(guistate != GUIStates.drop_settlement_setup) {
 			for(int i = 0; i < selectedTiles.size(); i++) {
 				settlementLocationIsValid = settlementLocationIsValid &&
 					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
