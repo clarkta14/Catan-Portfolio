@@ -118,10 +118,11 @@ public class CatanBoard {
     	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
 	}
 
-	private void addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
+	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
     	}
+		return true;
 	}
 
 	private void placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
