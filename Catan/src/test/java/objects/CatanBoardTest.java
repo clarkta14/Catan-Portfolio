@@ -74,6 +74,29 @@ public class CatanBoardTest {
 		Road r = checkPlayerTileForRoad(player1, p1roadTile, p1road1, p1road2);
 		assertEquals(r.getAngle(), 2);
 	}
+	
+	@Test
+	public void testBoardInitSetupSettlementRoadBadPlacementNoConnections() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 10; int p1road1 = 1; int p1road2 = 2;
+
+		// Place Settlement
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		// Try to Place Road
+		addPlayerDragNums(p1roadTile, p1road1, p1road2);
+		registerPlayerDrag();
+
+		// Check no roads
+		ArrayList<Tile> tiles = cb.getTiles();
+		Tile tile = tiles.get(p1roadTile);
+		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
+		assertEquals(0, roads.size());
+	}
 
 	@Test
 	public void testBoardInitSetup3Player() {
