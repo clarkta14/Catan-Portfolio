@@ -840,8 +840,8 @@ public class BoardWindow extends JPanel {
 		private Point lastClicked;
 
 		public void mouseClicked(MouseEvent e) {
-			boolean settlementPlaced = false;
 			if(state.equals(GUIStates.drop_settlement)) {
+				boolean settlementPlaced = false;
 				Point p = new Point(e.getX(), e.getY());
 				if (p != null) {
 					ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
