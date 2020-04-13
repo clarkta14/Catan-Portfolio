@@ -90,7 +90,11 @@ public class Tile {
 	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
 		for(ArrayList<Integer> a : this.hexEdgeToRoad.keySet()) {
 			for(Integer i : a) {
-				if(i == corner) return true;
+				if(i == corner) {
+					Road road = this.hexEdgeToRoad.get(a);
+					if(road.getOwner().getColor().equals(player.getColor()))
+						return true;
+				}
 			}
 		}
 		return false;

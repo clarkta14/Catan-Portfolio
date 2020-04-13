@@ -273,5 +273,18 @@ public class TileTests {
 		
 		assertFalse(result);
 	}
+	
+	@Test
+	public void testCheckRoadAtCornerForGivenPlayerOneValidRoadDifferentPlayer() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Player player2 = new Player(Color.orange);
+		Road road = new Road(player2);
+		tile.addRoad(0, 1, road);
+		
+		boolean result = tile.checkRoadAtCornerForGivenPlayer(0, player1);
+		
+		assertFalse(result);
+	}
 
 }
