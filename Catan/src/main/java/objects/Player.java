@@ -30,6 +30,9 @@ public class Player {
 	}
 
 	public void removeResource(TileType type, int numberOfResource) {
+		if(numberOfResource < 0) {
+			throw new IllegalArgumentException();
+		}
 		int totalNumResource = this.resources.get(type) - numberOfResource;
 		if(totalNumResource < 0) {
 			throw new IndexOutOfBoundsException();

@@ -84,7 +84,7 @@ public class PlayerTests {
 	}
 
 	@Test
-	public void testRemoveOneFromOneBrickResource() {
+	public void testRemoveOneFromOneResource() {
 		Player player = new Player(Color.orange);
 		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 
@@ -93,7 +93,7 @@ public class PlayerTests {
 	}
 
 	@Test
-	public void testRemoveOneFromTwoBrickResources() {
+	public void testRemoveOneFromTwoResources() {
 		Player player = new Player(Color.orange);
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
@@ -102,7 +102,7 @@ public class PlayerTests {
 	}
 	
 	@Test
-	public void testRemoveOneTwiceFromTwoBrickResources() {
+	public void testRemoveOneTwiceFromTwoResources() {
 		Player player = new Player(Color.orange);
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
@@ -114,7 +114,7 @@ public class PlayerTests {
 	}
 
 	@Test
-	public void testRemoveOneFromZeroBrickResources() {
+	public void testRemoveOneFromZeroResources() {
 		try {
 			Player player = new Player(Color.orange);
 			player.removeResource(TileType.brick, 1);
@@ -125,13 +125,24 @@ public class PlayerTests {
 	}
 	
 	@Test
-	public void testRemoveTwoFromOneBrickResources() {
+	public void testRemoveTwoFromOneResource() {
 		try {
 			Player player = new Player(Color.orange);
 			assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 			player.removeResource(TileType.brick, 2);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
+			// pass
+		}
+	}
+	
+	@Test
+	public void testRemoveNegativeFromResource() {
+		try {
+			Player player = new Player(Color.orange);
+			player.removeResource(TileType.brick, -1);
+			fail();
+		} catch (IllegalArgumentException e) {
 			// pass
 		}
 	}
