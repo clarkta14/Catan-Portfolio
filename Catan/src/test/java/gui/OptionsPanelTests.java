@@ -87,5 +87,36 @@ public class OptionsPanelTests {
 		
 		EasyMock.verify(bw, gw);
 	}
+	
+	@Test
+	public void testEndTurnListenerSetup() {
+		BoardWindow bw = EasyMock.partialMockBuilder(BoardWindow.class)
+				.addMockedMethod("getState")
+				.createMock();
+		GameWindow gw = EasyMock.partialMockBuilder(GameWindow.class)
+				.addMockedMethod("getPlayersController")
+				.addMockedMethod("getBoardWindow")
+				.createMock();
+		
+		PlayersController pc = new PlayersController(4);
+
+		EasyMock.expect(gw.getPlayersController()).andStubReturn(pc);
+		EasyMock.expect(gw.getBoardWindow()).andStubReturn(bw);
+		EasyMock.expect(bw.getState()).andStubReturn(GUIStates.setup);
+		
+		EasyMock.replay(bw, gw);
+		
+		OptionsPanel op = new OptionsPanel(gw);
+		EndTurnListener etl = op.new EndTurnListener();
+		
+		
+		assertEquals(0, pc.getCurrentPlayerNum());
+		etl.actionPerformed(null);
+		assertEquals(0, pc.getCurrentPlayerNum());
+		etl.actionPerformed(null);
+		assertEquals(0, pc.getCurrentPlayerNum());
+		
+		EasyMock.verify(bw, gw);
+	}
 
 }
