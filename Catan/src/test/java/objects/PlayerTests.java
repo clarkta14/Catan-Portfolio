@@ -28,4 +28,11 @@ public class PlayerTests {
 		player.addResource(TileType.brick, 1);
 		assertEquals(1, player.getResource(TileType.brick));
 	}
+	
+	@Test
+	public void testAddOneWoolResource() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wool, 1);
+		assertEquals(1, player.getResource(TileType.wool));
+	}
 }
