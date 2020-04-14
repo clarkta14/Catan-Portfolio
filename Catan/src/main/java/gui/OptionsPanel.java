@@ -88,10 +88,36 @@ public class OptionsPanel extends JPanel {
 				timer.stop();
 				turnController.nextPlayer();
 				setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-				boardGUI.setState(GUIStates.setup);
-				setupPanel();
+				if(turnController.isInitialSetup()) {
+					boardGUI.setState(GUIStates.setup);
+					setupPanel();
+				} else {
+					boardGUI.setState(GUIStates.idle);
+					setNonSetupOptions();
+				}
 			}	
 		}	
+	}
+	
+	private void setNonSetupOptions() {
+		ArrayList<OptionsPanelComponent> content = new ArrayList<OptionsPanelComponent>();
+		JLabel label = new JLabel("Player 1's turn: ");
+		label.setFont(font);
+		content.add(new OptionsPanelComponent(label, new Rectangle(2,3,10,2)));
+		
+		JButton placeSettlementButton = new JButton();
+		placeSettlementButton.setText("Place Settlement");
+		content.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,6,6,2)));
+		
+		JButton placeRoadButton = new JButton();
+		placeRoadButton.setText("Place Road");
+		content.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,10,6,2)));
+		
+		JButton endTurnButton = new JButton();
+		endTurnButton.setText("End Turn");
+		content.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
+		
+		setOnOptionsPanel(content);
 	}
 
 	public void setCurrentPlayer(Player p, int num) {
