@@ -49,44 +49,44 @@ public class OptionsPanel extends JPanel {
 			final JLabel start = new JLabel("Setup phase: ");
 			start.setFont(font);
 			setupPanel.add(new OptionsPanelComponent(start, new Rectangle(2,3,10,2)));
-			JButton begin = new JButton(new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if(boardGUI.getState().equals(GUIStates.setup)) {
-						boardGUI.setState(GUIStates.drop_settlement_setup);
-						placeInfoPanel("Place a settlement");
-						timer = new Timer(50, new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
-									timer.stop();
-									boardGUI.setState(GUIStates.drop_road);
-									placeInfoPanel("Place a road");
-									timer = new Timer(50, new ActionListener() {
-										@Override
-										public void actionPerformed(ActionEvent e) {
-											if(!boardGUI.getState().equals(GUIStates.drop_road)) {
-												timer.stop();
-												turnController.nextPlayer();
-												setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-												boardGUI.setState(GUIStates.setup);
-												setupPanel();
-											}	
-										}	
-									});
-									timer.start();
-								}
-							}
-						});
-						timer.start();
-					}
-				}
-	
-				
-			});
+			JButton begin = new JButton(new DropSettlementSetupListener());
 			begin.setText("Place");
 			setupPanel.add(new OptionsPanelComponent(begin, new Rectangle(4,6,6,2)));
 			setupPanel();
+		}
+	}
+	
+	class DropSettlementSetupListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GUIStates.setup)) {
+				boardGUI.setState(GUIStates.drop_settlement_setup);
+				placeInfoPanel("Place a settlement");
+				timer = new Timer(50, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
+							timer.stop();
+							boardGUI.setState(GUIStates.drop_road);
+							placeInfoPanel("Place a road");
+							timer = new Timer(50, new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									if(!boardGUI.getState().equals(GUIStates.drop_road)) {
+										timer.stop();
+										turnController.nextPlayer();
+										setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
+										boardGUI.setState(GUIStates.setup);
+										setupPanel();
+									}	
+								}	
+							});
+							timer.start();
+						}
+					}
+				});
+				timer.start();
+			}
 		}
 	}
 
