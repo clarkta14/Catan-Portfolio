@@ -62,32 +62,36 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GUIStates.setup)) {
 				boardGUI.setState(GUIStates.drop_settlement_setup);
 				placeInfoPanel("Place a settlement");
-				timer = new Timer(50, new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
-							timer.stop();
-							boardGUI.setState(GUIStates.drop_road);
-							placeInfoPanel("Place a road");
-							timer = new Timer(50, new ActionListener() {
-								@Override
-								public void actionPerformed(ActionEvent e) {
-									if(!boardGUI.getState().equals(GUIStates.drop_road)) {
-										timer.stop();
-										turnController.nextPlayer();
-										setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-										boardGUI.setState(GUIStates.setup);
-										setupPanel();
-									}	
-								}	
-							});
-							timer.start();
-						}
-					}
-				});
+				timer = new Timer(50, new PlaceRoadSetupListener());
 				timer.start();
 			}
 		}
+	}
+	
+	class PlaceRoadSetupListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
+				timer.stop();
+				boardGUI.setState(GUIStates.drop_road);
+				placeInfoPanel("Place a road");
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class ResetStateListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!boardGUI.getState().equals(GUIStates.drop_road)) {
+				timer.stop();
+				turnController.nextPlayer();
+				setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
+				boardGUI.setState(GUIStates.setup);
+				setupPanel();
+			}	
+		}	
 	}
 
 	public void setCurrentPlayer(Player p, int num) {
