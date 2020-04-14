@@ -25,14 +25,23 @@ public class PlayerTests {
 	@Test
 	public void testAddOneBrickResource() {
 		Player player = new Player(Color.orange);
-		player.addResource(TileType.brick, 1);
-		assertEquals(1, player.getResource(TileType.brick));
+		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 	}
 	
 	@Test
 	public void testAddOneWoolResource() {
 		Player player = new Player(Color.orange);
-		player.addResource(TileType.wool, 1);
-		assertEquals(1, player.getResource(TileType.wool));
+		assertEquals(1, addAndGetResourceForPlayer(player, TileType.wool, 1));
+	}
+	
+	@Test
+	public void testAddTwoBrickResource() {
+		Player player = new Player(Color.orange);
+		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
+	}
+	
+	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
+		player.addResource(type, numberOfResource);
+		return player.getResource(type);
 	}
 }
