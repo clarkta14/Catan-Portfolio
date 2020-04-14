@@ -63,4 +63,8 @@ public class PlayersController {
 			this.currentPlayer = (this.currentPlayer + 1) % this.players.size();
 		}
 	}
+	
+	public boolean isInitialSetup() {
+		return this.initialSetup;
+	}
 }
