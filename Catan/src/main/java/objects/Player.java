@@ -31,6 +31,9 @@ public class Player {
 
 	public void removeResource(TileType type, int numberOfResource) {
 		int totalNumResource = this.resources.get(type) - numberOfResource;
+		if(totalNumResource < 0) {
+			throw new IndexOutOfBoundsException();
+		}
 		this.resources.replace(type, totalNumResource);
 	}
 
