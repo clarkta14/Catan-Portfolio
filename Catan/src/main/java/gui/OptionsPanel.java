@@ -26,6 +26,7 @@ public class OptionsPanel extends JPanel {
 	private PlayersController turnController;
 	private BoardWindow boardGUI;
 	private ArrayList<OptionsPanelComponent> setupPanel;
+	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
 	private Timer timer;
 
@@ -41,6 +42,7 @@ public class OptionsPanel extends JPanel {
 		this.currentPlayerNameBox.getSwingComponent().setForeground(Color.CYAN);
 		setCurrentPlayer(this.turnController.getCurrentPlayer(), this.turnController.getCurrentPlayerNum());
 		add(this.currentPlayerNameBox.getSwingComponent(), this.currentPlayerNameBox.getRectangle());
+		createActionPanel();
 		setupPhase();
 	}
 
@@ -93,31 +95,36 @@ public class OptionsPanel extends JPanel {
 					setupPanel();
 				} else {
 					boardGUI.setState(GUIStates.idle);
-					setNonSetupOptions();
+					setOnOptionsPanel(actionPanel);
 				}
 			}	
 		}	
 	}
 	
-	private void setNonSetupOptions() {
-		ArrayList<OptionsPanelComponent> content = new ArrayList<OptionsPanelComponent>();
-		JLabel label = new JLabel("Player 1's turn: ");
-		label.setFont(font);
-		content.add(new OptionsPanelComponent(label, new Rectangle(2,3,10,2)));
-		
+	private void createActionPanel() {
+		actionPanel = new ArrayList<>();
 		JButton placeSettlementButton = new JButton();
 		placeSettlementButton.setText("Place Settlement");
-		content.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,6,6,2)));
+		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
 		
 		JButton placeRoadButton = new JButton();
 		placeRoadButton.setText("Place Road");
-		content.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,10,6,2)));
+		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,6,6,2)));
 		
-		JButton endTurnButton = new JButton();
+		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
-		content.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
-		
-		setOnOptionsPanel(content);
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,8,6,2)));
+	}
+	
+	class EndTurnListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GUIStates.idle)) {
+				turnController.nextPlayer();
+				setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
+				//TODO: roll the dice and allocate resources
+			}
+		}
 	}
 
 	public void setCurrentPlayer(Player p, int num) {
