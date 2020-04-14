@@ -126,6 +126,9 @@ public class Tile {
 	}
 
 	public boolean checkValidRoadPlacement(int corner1, int corner2, Road roadToCheck) {
+		if (Math.abs(corner1 - corner2) != 1 && Math.abs(corner1 - corner2) != 5) {
+			return false;
+		}
 		ArrayList<Integer> newEdge = new ArrayList<Integer>();
 		newEdge.add(corner1); newEdge.add(corner2);
 		if (this.hexEdgeToRoad.containsKey(newEdge)) {

@@ -113,6 +113,17 @@ public class TileTests {
 	}
 	
 	@Test
+	public void testCheckValidRoadPlacementTooLong() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(1, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		
+		assertFalse(tile.checkValidRoadPlacement(1, 4, roadToPlace));
+	}
+	
+	@Test
 	public void testCheckValidRoadPlacementDifferentPlayer() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
