@@ -22,6 +22,9 @@ public class Player {
 	}
 
 	public void addResource(TileType type, int numberOfResource) {
+		if(numberOfResource < 0) {
+			throw new IllegalArgumentException();
+		}
 		int prevNumResource = this.resources.get(type);
 		this.resources.replace(type, prevNumResource + numberOfResource);
 	}
