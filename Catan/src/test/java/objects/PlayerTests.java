@@ -100,6 +100,18 @@ public class PlayerTests {
 		player.removeResource(TileType.brick, 1);
 		assertEquals(1, player.getResource(TileType.brick));
 	}
+	
+	@Test
+	public void testRemoveOneTwiceFromTwoBrickResources() {
+		Player player = new Player(Color.orange);
+		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
+
+		player.removeResource(TileType.brick, 1);
+		assertEquals(1, player.getResource(TileType.brick));
+		
+		player.removeResource(TileType.brick, 1);
+		assertEquals(0, player.getResource(TileType.brick));
+	}
 
 	@Test
 	public void testRemoveOneFromZeroBrickResources() {
