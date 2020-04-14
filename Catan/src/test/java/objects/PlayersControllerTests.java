@@ -88,9 +88,19 @@ public class PlayersControllerTests {
 	}
 	
 	@Test
-	public void testIsInitialSetup() {
+	public void testIsInitialSetup3Players() {
 		PlayersController pc = new PlayersController(3);
 		for(int i = 0; i < 6; i++) {
+			assertTrue(pc.isInitialSetup());
+			pc.nextPlayer();
+		}
+		assertFalse(pc.isInitialSetup());
+	}
+	
+	@Test
+	public void testIsInitialSetup4Players() {
+		PlayersController pc = new PlayersController(4);
+		for(int i = 0; i < 8; i++) {
 			assertTrue(pc.isInitialSetup());
 			pc.nextPlayer();
 		}
