@@ -49,6 +49,17 @@ public class PlayerTests {
 		assertEquals(2, player.getResource(TileType.brick));
 	}
 	
+	@Test
+	public void testAddNegativeResources() {
+		try {
+			Player player = new Player(Color.orange);
+			player.addResource(TileType.brick, -1);
+			fail();
+		} catch (IllegalArgumentException e) {
+			// pass
+		}
+	}
+	
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResource(type);
