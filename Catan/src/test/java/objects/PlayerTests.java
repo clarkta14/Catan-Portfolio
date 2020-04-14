@@ -40,6 +40,15 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 	}
 	
+	@Test
+	public void testAddOneResourceTwice() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 1);
+		assertEquals(1, player.getResource(TileType.brick));
+		player.addResource(TileType.brick, 1);
+		assertEquals(2, player.getResource(TileType.brick));
+	}
+	
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResource(type);
