@@ -111,6 +111,18 @@ public class PlayerTests {
 			// pass
 		}
 	}
+	
+	@Test
+	public void testRemoveTwoFromOneBrickResources() {
+		try {
+			Player player = new Player(Color.orange);
+			assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
+			player.removeResource(TileType.brick, 2);
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+			// pass
+		}
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
