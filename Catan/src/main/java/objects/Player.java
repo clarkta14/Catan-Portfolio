@@ -29,6 +29,11 @@ public class Player {
 		this.resources.replace(type, prevNumResource + numberOfResource);
 	}
 
+	public void removeResource(TileType type, int numberOfResource) {
+		int totalNumResource = this.resources.get(type) - numberOfResource;
+		this.resources.replace(type, totalNumResource);
+	}
+
 	public int getResource(TileType type) {
 		return this.resources.get(type);
 	}

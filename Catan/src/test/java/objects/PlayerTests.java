@@ -83,6 +83,15 @@ public class PlayerTests {
 		}
 	}
 	
+	@Test
+	public void testRemoveOneFromOneBrickResource() {
+		Player player = new Player(Color.orange);
+		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
+		
+		player.removeResource(TileType.brick, 1);
+		assertEquals(0, player.getResource(TileType.brick));
+	}
+	
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResource(type);
