@@ -53,12 +53,12 @@ public class OptionsPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(boardGUI.getState().equals(GUIStates.setup)) {
-						boardGUI.setState(GUIStates.drop_settlement);
+						boardGUI.setState(GUIStates.drop_settlement_setup);
 						placeInfoPanel("Place a settlement");
 						timer = new Timer(50, new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								if(!boardGUI.getState().equals(GUIStates.drop_settlement)) {
+								if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
 									timer.stop();
 									boardGUI.setState(GUIStates.drop_road);
 									placeInfoPanel("Place a road");
