@@ -61,11 +61,22 @@ public class PlayerTests {
 	}
 	
 	@Test
-	public void testAddMaxResources() {
+	public void testAddMaxResourcesPlusOne() {
 		try {
 			Player player = new Player(Color.orange);
 			player.addResource(TileType.brick, Integer.MAX_VALUE);
 			player.addResource(TileType.brick, 1);
+			fail();
+		} catch (IllegalArgumentException e) {
+			// pass
+		}
+	}
+	
+	@Test
+	public void testAddMaxPlusOneResources() {
+		try {
+			Player player = new Player(Color.orange);
+			player.addResource(TileType.brick, Integer.MAX_VALUE + 1);
 			fail();
 		} catch (IllegalArgumentException e) {
 			// pass
