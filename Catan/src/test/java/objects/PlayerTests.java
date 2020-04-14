@@ -26,6 +26,6 @@ public class PlayerTests {
 	public void testAddOneBrickResource() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.brick, 1);
-		assertTrue(true);
+		assertEquals(1, player.getResource(TileType.brick));
 	}
 }

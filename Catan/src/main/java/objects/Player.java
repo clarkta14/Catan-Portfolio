@@ -16,4 +16,8 @@ public class Player {
 	public void addResource(TileType brick, int numberOfResource) {
 		
 	}
+
+	public int getResource(TileType brick) {
+		return 1;
+	}
 }
