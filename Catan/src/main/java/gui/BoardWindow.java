@@ -840,7 +840,8 @@ public class BoardWindow extends JPanel {
 		private Point lastClicked;
 
 		public void mouseClicked(MouseEvent e) {
-			if(state.equals(GUIStates.drop_settlement)) {
+			if(state.equals(GUIStates.drop_settlement) || state.equals(GUIStates.drop_settlement_setup)) {
+				boolean settlementPlaced = false;
 				Point p = new Point(e.getX(), e.getY());
 				if (p != null) {
 					ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
@@ -848,12 +849,13 @@ public class BoardWindow extends JPanel {
 						ArrayList<Integer> tiles = settlementLoc.get(0);
 						ArrayList<Integer> corners = settlementLoc.get(1);
 	
-						catanBoard.locationClicked(tiles, corners);
+						settlementPlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
 					}
-	
 				}
-				setState(GUIStates.idle);
-				repaint();
+				if(settlementPlaced) {
+					setState(GUIStates.idle);
+					repaint();
+				}
 			}
 		}
 

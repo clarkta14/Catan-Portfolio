@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import gui.GUIStates;
+
 public class CatanBoardTest {
 	
 	// Player numbers
@@ -157,6 +159,135 @@ public class CatanBoardTest {
 		
 		makePlayerTurnInit(p1tile2, p1corner2, p1road2, player1, 2);
 	}
+	
+	@Test
+	public void testAddSettlementToTiles() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddSettlementToTilesTwoSettlementsSamePlace() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testAddSettlementToTilesTwoSettlementsOneSpaceAway() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		
+		clearClicks();
+		
+		tileNums.add(1);
+		tileNums.add(4);
+		tileNums.add(5);
+		
+		cornerNums.add(2);
+		cornerNums.add(4);
+		cornerNums.add(0);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testAddSettlementToTilesTwoSettlementsTwoSpacesAway() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		
+		clearClicks();
+		
+		tileNums.add(1);
+		tileNums.add(2);
+		tileNums.add(5);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddSettlementToTilesTwoSettlements11SpacesAway() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(3);
+		cornerNums.add(0);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		
+		clearClicks();
+		
+		tileNums.add(15);
+		cornerNums.add(3);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement_setup);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testAddSettlementToTilesNotSetup() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GUIStates.drop_settlement);
+		assertFalse(result);
+	}
+	
+	private void basicSetupForAddSettlementTests() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		clearClicks();
+	}
 
 	private void makePlayerTurnInit(int tileNum, int settlementCorner, int roadCorner, int playerNum, int rAngle) {
 		addPlayerClickNums(tileNum, settlementCorner);
@@ -189,7 +320,7 @@ public class CatanBoardTest {
 	}
 	
 	private void registerPlayerClick() {
-		cb.locationClicked(tileNums, cornerNums);
+		cb.locationClicked(tileNums, cornerNums, GUIStates.drop_settlement_setup);
 		clearClicks();
 	}
 	

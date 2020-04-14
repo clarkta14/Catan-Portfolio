@@ -36,6 +36,10 @@ public class Tile {
 		return this.corners;
 	}
 
+	public void setLocation(Point location) {
+		this.pos = location;
+	}
+	
 	public Point getLocation() {
 		return this.pos;
 	}
@@ -54,8 +58,8 @@ public class Tile {
 		return this.number;
 	}
 
-	public void setRobber() {
-		this.isRobber = true;
+	public void setRobber(boolean isRobber) {
+		this.isRobber = isRobber;
 	}
 
 	public Boolean isRobber() {
@@ -69,11 +73,35 @@ public class Tile {
 	public Polygon getHexagon() {
 		return this.hexagon;
 	}
+	
+	public boolean checkValidSettlementPlacement(int corner) {
+		if (this.hexCornerToSettlement.containsKey(corner)) {
+			return false;
+		}
+		if (this.hexCornerToSettlement.containsKey((corner+1)%6)) {
+			return false;
+		}
+		if (this.hexCornerToSettlement.containsKey((corner+5)%6)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
+		for(ArrayList<Integer> a : this.hexEdgeToRoad.keySet()) {
+			for(Integer i : a) {
+				if(i == corner) {
+					Road road = this.hexEdgeToRoad.get(a);
+					if(road.getOwner().getColor().equals(player.getColor()))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public void addSettlement(int corner, Settlement s) {
-		if (!this.hexCornerToSettlement.containsKey(corner)) {
 			this.hexCornerToSettlement.put(corner, s);
-		}
 	}
 
 	public HashMap<Integer, Settlement> getSettlements() {
@@ -91,6 +119,10 @@ public class Tile {
 			this.hexEdgeToRoad.put(edge, r);
 			this.hexEdgeToRoad.put(edge2, r);
 		}
+	}
+	
+	public HashMap<ArrayList<Integer>, Road> getRoads() {
+		return this.hexEdgeToRoad;
 	}
 
 	public boolean checkValidRoadPlacement(int corner1, int corner2, Road roadToCheck) {
@@ -121,13 +153,5 @@ public class Tile {
 		}
 
 		return false;
-	}
-
-	public HashMap<ArrayList<Integer>, Road> getRoads() {
-		return this.hexEdgeToRoad;
-	}
-
-	public void setLocation(Point location) {
-		this.pos = location;
 	}
 }

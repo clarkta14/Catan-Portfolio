@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import gui.GUIStates;
+
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
@@ -87,7 +89,7 @@ public class CatanBoard {
         
         // Placing the desert tile with robber on the board
     	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
-    	desertTile.setRobber();
+    	desertTile.setRobber(true);
     	this.tiles.add(desertTile);
     	
     	swapTileForRobberPlacement();
@@ -104,24 +106,36 @@ public class CatanBoard {
 	public ArrayList<Tile> getTiles() {
 		return this.tiles;
 	}
-
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		placeSettlement(tiles, corners);	
+	
+	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GUIStates guistate) {
+		addSettlementToTiles(tiles, corners, guistate);	
 	}
 	
 	public boolean locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
 		return placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
-	
-	private void placeSettlement(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
-    	addSettlementToTiles(tiles, corners, newlyAddedSettlement);
-	}
 
-	private void addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Settlement newlyAddedSettlement) {
+	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GUIStates guistate) {
+		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
+		boolean settlementLocationIsValid = true;
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid &&
+					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
+    	}
+		
+		if(guistate != GUIStates.drop_settlement_setup) {
+			for(int i = 0; i < selectedTiles.size(); i++) {
+				settlementLocationIsValid = settlementLocationIsValid &&
+					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
+    		}
+		}
+		
+		if(!settlementLocationIsValid) return false;
+		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
-    	}
+		}
+		return true;
 	}
 
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
