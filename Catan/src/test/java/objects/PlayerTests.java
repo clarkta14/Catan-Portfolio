@@ -21,4 +21,11 @@ public class PlayerTests {
 		Player player2 = new Player(Color.blue);
 		assertEquals(Color.blue, player2.getColor());
 	}
+	
+	@Test
+	public void testAddOneBrickResource() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 1);
+		assertTrue(true);
+	}
 }

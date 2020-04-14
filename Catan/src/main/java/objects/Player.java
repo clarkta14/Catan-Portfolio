@@ -12,4 +12,8 @@ public class Player {
 	public Color getColor() {
 		return this.color;
 	}
+
+	public void addResource(TileType brick, int numberOfResource) {
+		
+	}
 }
