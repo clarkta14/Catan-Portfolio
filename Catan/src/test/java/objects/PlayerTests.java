@@ -154,6 +154,20 @@ public class PlayerTests {
 		plyr.addResource(TileType.wood, 1);
 		assertTrue(plyr.canBuyRoad());
 	}
+	
+	@Test
+	public void testCanBuyRoad_WithoutEnoughResources_notEnoughWood() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.brick, 1);
+		assertTrue(!plyr.canBuyRoad());
+	}
+	
+	@Test
+	public void testCanBuyRoad_WithoutEnoughResources_notEnoughBrick() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.wood, 1);
+		assertTrue(!plyr.canBuyRoad());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
