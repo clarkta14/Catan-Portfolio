@@ -47,4 +47,8 @@ public class Player {
 	public boolean canBuyRoad() {
 		return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0;
 	}
+	
+	public boolean canBuySettlement() {
+		return true;
+	}
 }
