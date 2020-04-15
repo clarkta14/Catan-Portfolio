@@ -414,6 +414,46 @@ public class CatanBoardTest {
 	}
 	
 	@Test
+	public void testBuySettlement_WithoutEnoughResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
+		HashSet<Integer> bannedtiles = new HashSet<>();
+		for(Tile t : cb.getTiles()) {
+			if(t.getType() == TileType.brick || t.getType() == TileType.wood || t.getType() == TileType.wool || t.getType() == TileType.wheat) {
+				bannedtiles.add(t.getNumber());
+			}
+		}
+		for(int i = 1; i <= 12; i++) {
+			if(!bannedtiles.contains(i)) {
+				tilesToAddSettlementsTo.add(i);
+			}
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.distributeResources(tileNum);
+		}
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wool) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wheat) == 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wool);
+		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wheat);
+		
+		assertTrue(!cb.buySettlement());
+		assertEquals(numOfBricksBeforeBuy, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
+		assertEquals(numOfWoolBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wool));
+		assertEquals(numOfWheatBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wheat));
+	}
+	
+	@Test
 	public void testBuySettlement_WithNoResources() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
