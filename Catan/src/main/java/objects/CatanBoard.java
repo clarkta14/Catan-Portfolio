@@ -193,7 +193,7 @@ public class CatanBoard {
 		}
 	}
 
-	public boolean buyRoad() {
+	boolean buyRoad() {
 		if(this.turnController.getCurrentPlayer().canBuyRoad()) {
 			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
@@ -202,7 +202,7 @@ public class CatanBoard {
 		return false;
 	}
 
-	public boolean buySettlement() {
+	boolean buySettlement() {
 		if(this.turnController.getCurrentPlayer().canBuySettlement()) {
 			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);

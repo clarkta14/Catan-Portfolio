@@ -511,7 +511,7 @@ public class CatanBoardTest {
 		TileType TileType1 = cb.getTiles().get(1).getType();
 		TileType TileType2 = cb.getTiles().get(2).getType();
 		if (TileType1 == TileType2) {
-			assertEquals(2, TileType1);
+			assertEquals(2, currentPlayer.getResource(TileType1));
 		} else {
 			assertEquals(1, currentPlayer.getResource(TileType1));
 			assertEquals(1, currentPlayer.getResource(TileType2));
