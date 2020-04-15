@@ -141,7 +141,11 @@ public class CatanBoard {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
-			// TODO: add in method call to distribute resources
+			Player currentPlayer = this.turnController.getCurrentPlayer();
+			for (int i = 0; i < selectedTiles.size(); i++) {
+				Tile currentTile = this.tiles.get(selectedTiles.get(i));
+				currentPlayer.addResource(currentTile.getType(), 1);
+			}
 		}
 		return true;
 	}
@@ -173,7 +177,9 @@ public class CatanBoard {
 	
 	public int endTurnAndRoll() {
 		Random random = new Random();
-		return random.nextInt(6) + random.nextInt(6) + 2;
+		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
+		distributeResources(rolled);
+		return rolled;
 	}
 
 	public void distributeResources(int number) {

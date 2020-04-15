@@ -493,6 +493,49 @@ public class CatanBoardTest {
 		assertEquals(numOfWoolBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wool));
 		assertEquals(numOfWheatBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wheat));
 	}
+		
+	@Test
+	public void testDistributeResourcesOnLastSettlementPlacedSetup() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		
+		selectedTiles.add(1); corners.add(4);
+		selectedTiles.add(2); corners.add(0);
+		
+		cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup_final);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		TileType TileType1 = cb.getTiles().get(1).getType();
+		TileType TileType2 = cb.getTiles().get(2).getType();
+		if (TileType1 == TileType2) {
+			assertEquals(2, TileType1);
+		} else {
+			assertEquals(1, currentPlayer.getResource(TileType1));
+			assertEquals(1, currentPlayer.getResource(TileType2));
+		}
+		
+	}
+	
+	@Test
+	public void testDistributeResourcesOnLastSettlementPlacedSetup1Tile() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		
+		selectedTiles.add(2); corners.add(4);
+		
+		cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup_final);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		TileType TileType2 = cb.getTiles().get(2).getType();
+		assertEquals(1, currentPlayer.getResource(TileType2));
+		
+	}
 	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
