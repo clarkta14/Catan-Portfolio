@@ -173,4 +173,13 @@ public class CatanBoard {
 			}
 		}
 	}
+
+	public boolean buyRoad() {
+		if(this.turnController.getCurrentPlayer().getResource(TileType.brick) > 0 && this.turnController.getCurrentPlayer().getResource(TileType.wood) > 0) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			return true;
+		}
+		return false;
+	}
 }

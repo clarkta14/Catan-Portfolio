@@ -300,6 +300,37 @@ public class CatanBoardTest {
 		assertTrue(pc.getCurrentPlayer().getResource(cb.getTiles().get(4).getType()) > 0);
 	}
 	
+	@Test
+	public void testBuyRoad_WithEnoughResources() {
+		// 1 Brick + 1 Wood = 1 Road
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
+		for(Tile t : cb.getTiles()) {
+			if(t.getType() == TileType.brick) {
+				tilesToAddSettlementsTo.add(t.getNumber());
+			} else if(t.getType() == TileType.wood) {
+				tilesToAddSettlementsTo.add(t.getNumber());
+			}
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.distributeResources(tileNum);
+		}
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) > 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) > 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		
+		assertTrue(cb.buyRoad());
+		assertEquals(numOfBricksBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wood));
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
