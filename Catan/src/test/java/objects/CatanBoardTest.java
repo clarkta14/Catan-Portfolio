@@ -316,6 +316,26 @@ public class CatanBoardTest {
 		assertTrue(result);
 	}
 	
+	@Test
+	public void testAddSettlementToTilesNotSetupWrongOwner() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		pc.nextPlayer();
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
