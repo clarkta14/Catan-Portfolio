@@ -184,8 +184,7 @@ public class CatanBoard {
 	}
 
 	public boolean buySettlement() {
-		if(this.turnController.getCurrentPlayer().getResource(TileType.brick) > 0 && this.turnController.getCurrentPlayer().getResource(TileType.wood) > 0 &&
-				this.turnController.getCurrentPlayer().getResource(TileType.wool) > 0 && this.turnController.getCurrentPlayer().getResource(TileType.wheat) > 0) {
+		if(this.turnController.getCurrentPlayer().canBuySettlement()) {
 			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
