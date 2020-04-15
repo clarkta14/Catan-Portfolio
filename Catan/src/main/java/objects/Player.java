@@ -22,7 +22,7 @@ public class Player {
 	}
 
 	public void addResource(TileType type, int numberOfResource) {
-		if(numberOfResource < 0 || this.resources.get(type) == Integer.MAX_VALUE || numberOfResource > Integer.MAX_VALUE) {
+		if(numberOfResource < 0 || this.resources.get(type) == Integer.MAX_VALUE) {
 			throw new IllegalArgumentException();
 		}
 		int prevNumResource = this.resources.get(type);
