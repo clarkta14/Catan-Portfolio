@@ -413,6 +413,28 @@ public class CatanBoardTest {
 		assertEquals(numOfWheatBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wheat));
 	}
 	
+	@Test
+	public void testBuySettlement_WithNoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wool) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wheat) == 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wool);
+		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wheat);
+		
+		assertTrue(!cb.buyRoad());
+		assertEquals(numOfBricksBeforeBuy, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
+		assertEquals(numOfWoolBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wool));
+		assertEquals(numOfWheatBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wheat));
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
