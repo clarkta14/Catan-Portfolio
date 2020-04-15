@@ -110,6 +110,7 @@ public class CatanBoard {
 	
 	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
 		addSettlementToTiles(tiles, corners, gameState);	
+
 	}
 	
 	public boolean locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
@@ -173,5 +174,36 @@ public class CatanBoard {
 	public int endTurnAndRoll() {
 		Random random = new Random();
 		return random.nextInt(6) + random.nextInt(6) + 2;
+	}
+
+	public void distributeResources(int number) {
+		for (Tile t : this.tiles) {
+			if(t.getNumber() == number) {
+				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
+				for(Settlement settlement : settlementsOnTile.values()) {
+					settlement.getOwner().addResource(t.getType(), 1);
+				}
+			}
+		}
+	}
+
+	public boolean buyRoad() {
+		if(this.turnController.getCurrentPlayer().canBuyRoad()) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean buySettlement() {
+		if(this.turnController.getCurrentPlayer().canBuySettlement()) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+			return true;
+		}
+		return false;
 	}
 }
