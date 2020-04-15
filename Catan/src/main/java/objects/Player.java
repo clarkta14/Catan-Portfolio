@@ -43,4 +43,8 @@ public class Player {
 	public int getResource(TileType type) {
 		return this.resources.get(type);
 	}
+
+	public boolean canBuyRoad() {
+		return true;
+	}
 }
