@@ -49,6 +49,6 @@ public class Player {
 	}
 	
 	public boolean canBuySettlement() {
-		return true;
+		return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
 	}
 }
