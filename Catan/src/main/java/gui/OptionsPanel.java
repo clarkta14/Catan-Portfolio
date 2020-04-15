@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -104,8 +105,15 @@ public class OptionsPanel extends JPanel {
 				} else {
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
+					addCancelButtonToInfoPanel();
 				}
 			}	
+		}
+
+		private void addCancelButtonToInfoPanel() {
+			JButton cancelButton = new JButton(new CancelAction());
+			cancelButton.setText("Cancel");
+			infoPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,6,6,2)));			
 		}	
 	}
 	
@@ -122,6 +130,14 @@ public class OptionsPanel extends JPanel {
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
 		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,8,6,2)));
+	}
+	
+	class CancelAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			boardGUI.setState(GameStates.idle);
+			setOnOptionsPanel(actionPanel);
+		}
 	}
 	
 	class PlaceSettlementListener extends AbstractAction {
