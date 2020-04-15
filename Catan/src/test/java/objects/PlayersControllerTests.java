@@ -119,4 +119,17 @@ public class PlayersControllerTests {
 			pc.nextPlayer();
 		}
 	}
+	
+	@Test
+	public void testIsBackwardsSetup4Players() {
+		PlayersController pc = new PlayersController(4);
+		for(int i = 0; i < 8; i++) {
+			if (i > 3) {
+				assertTrue(pc.isBackwardsSetup());
+			} else {
+				assertFalse(pc.isBackwardsSetup());
+			}
+			pc.nextPlayer();
+		}
+	}
 }
