@@ -303,7 +303,6 @@ public class CatanBoardTest {
 	
 	@Test
 	public void testBuyRoad_WithEnoughResources() {
-		// 1 Brick + 1 Wood = 1 Road
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
