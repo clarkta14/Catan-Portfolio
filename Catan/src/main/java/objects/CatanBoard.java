@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
 import gui.GUIStates;
 
@@ -161,5 +162,10 @@ public class CatanBoard {
 			newRoad.setAngle(angle);
 			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
 		}
+	}
+	
+	public int endTurnAndRoll() {
+		Random random = new Random();
+		return random.nextInt(6) + random.nextInt(6) + 2;
 	}
 }

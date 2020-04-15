@@ -21,7 +21,7 @@ public class GameWindow {
     	this.turnController = new PlayersController(numOfPlayers);
     	this.catanBoard = new CatanBoard(this.turnController);
     	this.boardWindow = new BoardWindow(this.catanBoard);
-    	this.options = new OptionsPanel(this);
+    	this.options = new OptionsPanel(this, catanBoard);
         showGUI();
     }
 

@@ -6,6 +6,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.OptionsPanel.EndTurnListener;
+import objects.CatanBoard;
 import objects.PlayersController;
 
 public class OptionsPanelTests {
@@ -21,6 +22,7 @@ public class OptionsPanelTests {
 				.createMock();
 		
 		PlayersController pc = new PlayersController(3);
+		CatanBoard cb = new CatanBoard(pc);
 		
 		// put it in not the setup phase
 		for(int i = 0; i < 6; i++) {
@@ -33,7 +35,7 @@ public class OptionsPanelTests {
 		
 		EasyMock.replay(bw, gw);
 		
-		OptionsPanel op = new OptionsPanel(gw);
+		OptionsPanel op = new OptionsPanel(gw, cb);
 		EndTurnListener etl = op.new EndTurnListener();
 		
 		
@@ -59,6 +61,7 @@ public class OptionsPanelTests {
 				.createMock();
 		
 		PlayersController pc = new PlayersController(4);
+		CatanBoard cb = new CatanBoard(pc);
 		
 		// put it in not the setup phase
 		for(int i = 0; i < 8; i++) {
@@ -71,7 +74,7 @@ public class OptionsPanelTests {
 		
 		EasyMock.replay(bw, gw);
 		
-		OptionsPanel op = new OptionsPanel(gw);
+		OptionsPanel op = new OptionsPanel(gw, cb);
 		EndTurnListener etl = op.new EndTurnListener();
 		
 		
@@ -99,6 +102,7 @@ public class OptionsPanelTests {
 				.createMock();
 		
 		PlayersController pc = new PlayersController(4);
+		CatanBoard cb = new CatanBoard(pc);
 
 		EasyMock.expect(gw.getPlayersController()).andStubReturn(pc);
 		EasyMock.expect(gw.getBoardWindow()).andStubReturn(bw);
@@ -106,7 +110,7 @@ public class OptionsPanelTests {
 		
 		EasyMock.replay(bw, gw);
 		
-		OptionsPanel op = new OptionsPanel(gw);
+		OptionsPanel op = new OptionsPanel(gw, cb);
 		EndTurnListener etl = op.new EndTurnListener();
 		
 		

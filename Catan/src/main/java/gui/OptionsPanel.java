@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import lib.GraphPaperLayout;
+import objects.CatanBoard;
 import objects.Player;
 import objects.PlayersController;
 
@@ -23,16 +24,18 @@ public class OptionsPanel extends JPanel {
 	private final Font font = new Font("Arial", 1, 16);
 	private OptionsPanelComponent currentPlayerNameBox;
 	private GameWindow gameWindow;
-	private PlayersController turnController;
+	private PlayersController playerController;
 	private BoardWindow boardGUI;
+	private CatanBoard catanBoard;
 	private ArrayList<OptionsPanelComponent> setupPanel;
 	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
 	private Timer timer;
 
-	public OptionsPanel(GameWindow gameWindow) {
+	public OptionsPanel(GameWindow gameWindow, CatanBoard catanBoard) {
 		this.gameWindow = gameWindow;
-		this.turnController = this.gameWindow.getPlayersController();
+		this.catanBoard = catanBoard;
+		this.playerController = this.gameWindow.getPlayersController();
 		this.boardGUI = this.gameWindow.getBoardWindow();
 		this.setupPanel = new ArrayList<>();
 		this.infoPanel = new ArrayList<>();
@@ -40,7 +43,7 @@ public class OptionsPanel extends JPanel {
 		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(""), new Rectangle(1, 1, 12, 1));
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
 		this.currentPlayerNameBox.getSwingComponent().setForeground(Color.CYAN);
-		setCurrentPlayer(this.turnController.getCurrentPlayer(), this.turnController.getCurrentPlayerNum());
+		setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
 		add(this.currentPlayerNameBox.getSwingComponent(), this.currentPlayerNameBox.getRectangle());
 		createActionPanel();
 		setupPhase();
@@ -88,9 +91,9 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(!boardGUI.getState().equals(GUIStates.drop_road)) {
 				timer.stop();
-				turnController.nextPlayer();
-				setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-				if(turnController.isInitialSetup()) {
+				playerController.nextPlayer();
+				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
+				if(playerController.isInitialSetup()) {
 					boardGUI.setState(GUIStates.setup);
 					setupPanel();
 				} else {
@@ -120,9 +123,11 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GUIStates.idle)) {
-				turnController.nextPlayer();
-				setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-				//TODO: roll the dice and allocate resources
+				playerController.nextPlayer();
+				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
+				
+				//TODO: roll the dice and allocate resources (beware 7)
+				catanBoard.endTurnAndRoll();
 			}
 		}
 	}

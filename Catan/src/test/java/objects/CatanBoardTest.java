@@ -283,6 +283,20 @@ public class CatanBoardTest {
 		assertFalse(result);
 	}
 	
+	@Test
+	public void testEndTurnAndRoll() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		//TODO: figure out a better way to test.
+		for (int i = 0; i < 10000; i++) {
+			int result = cb.endTurnAndRoll();
+			if(result < 2 || result > 12) {
+				fail("Rolled out of bounds: " + result);
+			}
+		}
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
