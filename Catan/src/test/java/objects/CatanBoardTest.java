@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -307,9 +308,7 @@ public class CatanBoardTest {
 		cb = new CatanBoard(pc);
 		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
 		for(Tile t : cb.getTiles()) {
-			if(t.getType() == TileType.brick) {
-				tilesToAddSettlementsTo.add(t.getNumber());
-			} else if(t.getType() == TileType.wood) {
+			if(t.getType() == TileType.brick || t.getType() == TileType.wood) {
 				tilesToAddSettlementsTo.add(t.getNumber());
 			}
 		}
@@ -329,6 +328,40 @@ public class CatanBoardTest {
 		assertTrue(cb.buyRoad());
 		assertEquals(numOfBricksBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.brick));
 		assertEquals(numOfWoodBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wood));
+	}
+	
+	@Test
+	public void testBuyRoad_WithoutEnoughResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
+		HashSet<Integer> bannedtiles = new HashSet<>();
+		for(Tile t : cb.getTiles()) {
+			if(t.getType() == TileType.brick || t.getType() == TileType.wood) {
+				bannedtiles.add(t.getNumber());
+			}
+		}
+		for(int i = 1; i <= 12; i++) {
+			if(!bannedtiles.contains(i)) {
+				tilesToAddSettlementsTo.add(i);
+			}
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.distributeResources(tileNum);
+		}
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) == 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		
+		assertTrue(!cb.buyRoad());
+		assertEquals(numOfBricksBeforeBuy, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
 	}
 	
 	private void basicSetupForAddSettlementTests() {
