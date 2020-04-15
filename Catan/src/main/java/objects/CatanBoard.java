@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import gui.GUIStates;
+import gui.GameStates;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
@@ -107,7 +107,7 @@ public class CatanBoard {
 		return this.tiles;
 	}
 	
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GUIStates guistate) {
+	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates guistate) {
 		addSettlementToTiles(tiles, corners, guistate);	
 	}
 	
@@ -115,7 +115,7 @@ public class CatanBoard {
 		return placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 
-	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GUIStates guistate) {
+	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates guistate) {
 		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
 		boolean settlementLocationIsValid = true;
 		for(int i = 0; i < selectedTiles.size(); i++) {
@@ -123,7 +123,7 @@ public class CatanBoard {
 					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
     	}
 		
-		if(guistate != GUIStates.drop_settlement_setup) {
+		if(guistate != GameStates.drop_settlement_setup) {
 			for(int i = 0; i < selectedTiles.size(); i++) {
 				settlementLocationIsValid = settlementLocationIsValid &&
 					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());

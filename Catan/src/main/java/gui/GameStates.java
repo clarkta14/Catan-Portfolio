@@ -1,6 +1,6 @@
 package gui;
 
-public enum GUIStates {
+public enum GameStates {
 	setup,
 	drop_settlement,
 	drop_settlement_setup,
