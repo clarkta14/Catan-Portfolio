@@ -3,6 +3,7 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -281,6 +282,21 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+	}
+	
+	@Test
+	public void testDistributeResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		//Adding settlements for players at specified locations
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(5, 4, 1)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(4, 8, 3)), new ArrayList<>(Arrays.asList(1, 5, 3)), GameStates.drop_settlement_setup);
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(18, 17, 14)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
+	
+		cb.distributeResources(cb.getTiles().get(5).getNumber());
+		System.out.println(cb.getTiles().get(5).getSettlements());
+		assertTrue(pc.getCurrentPlayer().getResource(cb.getTiles().get(5).getType()) > 0);
 	}
 	
 	private void basicSetupForAddSettlementTests() {

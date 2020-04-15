@@ -162,4 +162,15 @@ public class CatanBoard {
 			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
 		}
 	}
+
+	public void distributeResources(int number) {
+		for (Tile t : this.tiles) {
+			if(t.getNumber() == number) {
+				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
+				for(Settlement settlement : settlementsOnTile.values()) {
+					settlement.getOwner().addResource(t.getType(), 1);
+				}
+			}
+		}
+	}
 }
