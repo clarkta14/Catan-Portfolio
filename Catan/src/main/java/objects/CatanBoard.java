@@ -182,4 +182,16 @@ public class CatanBoard {
 		}
 		return false;
 	}
+
+	public boolean buySettlement() {
+		if(this.turnController.getCurrentPlayer().getResource(TileType.brick) > 0 && this.turnController.getCurrentPlayer().getResource(TileType.wood) > 0 &&
+				this.turnController.getCurrentPlayer().getResource(TileType.wool) > 0 && this.turnController.getCurrentPlayer().getResource(TileType.wheat) > 0) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+			return true;
+		}
+		return false;
+	}
 }

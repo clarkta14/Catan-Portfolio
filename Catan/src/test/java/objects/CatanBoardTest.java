@@ -379,6 +379,40 @@ public class CatanBoardTest {
 		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
 	}
 	
+	@Test
+	public void testBuySettlement_WithEnoughResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
+		for(Tile t : cb.getTiles()) {
+			if(t.getType() == TileType.brick || t.getType() == TileType.wood || t.getType() == TileType.wool || t.getType() == TileType.wheat) {
+				tilesToAddSettlementsTo.add(t.getNumber());
+			}
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		}
+		for(int tileNum : tilesToAddSettlementsTo) {
+			cb.distributeResources(tileNum);
+		}
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) > 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) > 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wool) > 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wheat) > 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wool);
+		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wheat);
+		
+		assertTrue(cb.buySettlement());
+		assertEquals(numOfBricksBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wood));
+		assertEquals(numOfWoolBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wool));
+		assertEquals(numOfWheatBeforeBuy - 1, pc.getCurrentPlayer().getResource(TileType.wheat));
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
