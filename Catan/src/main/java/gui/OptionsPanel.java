@@ -122,7 +122,7 @@ public class OptionsPanel extends JPanel {
 		placeSettlementButton.setText("Place Settlement");
 		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
 		
-		JButton placeRoadButton = new JButton();
+		JButton placeRoadButton = new JButton(new PlaceRoadListener());
 		placeRoadButton.setText("Place Road");
 		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,6,6,2)));
 		
@@ -154,9 +154,21 @@ public class OptionsPanel extends JPanel {
 	class PlaceSettlementListener extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(boardGUI.getState().equals(GameStates.idle)) {
+			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuySettlement()) {
 				placeInfoPanel("Place a settlement");
 				boardGUI.setState(GameStates.drop_settlement);
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class PlaceRoadListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyRoad()) {
+				placeInfoPanel("Place a settlement");
+				boardGUI.setState(GameStates.drop_road);
 				timer = new Timer(50, new ResetStateListener());
 				timer.start();
 			}
