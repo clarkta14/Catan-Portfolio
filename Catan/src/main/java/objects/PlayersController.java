@@ -67,4 +67,8 @@ public class PlayersController {
 	public boolean isInitialSetup() {
 		return this.initialSetup;
 	}
+	
+	public boolean isBackwardsSetup() {
+		return this.backwardsSetup;
+	}
 }

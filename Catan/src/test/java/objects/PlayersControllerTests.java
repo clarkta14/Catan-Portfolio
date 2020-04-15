@@ -106,4 +106,17 @@ public class PlayersControllerTests {
 		}
 		assertFalse(pc.isInitialSetup());
 	}
+	
+	@Test
+	public void testIsBackwardsSetup3Players() {
+		PlayersController pc = new PlayersController(3);
+		for(int i = 0; i < 6; i++) {
+			if (i > 2) {
+				assertTrue(pc.isBackwardsSetup());
+			} else {
+				assertFalse(pc.isBackwardsSetup());
+			}
+			pc.nextPlayer();
+		}
+	}
 }
