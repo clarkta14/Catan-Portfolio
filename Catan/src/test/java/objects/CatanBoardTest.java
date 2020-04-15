@@ -574,12 +574,12 @@ public class CatanBoardTest {
 	}
 	
 	private void registerPlayerClick() {
-		cb.locationClicked(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		cb.settlementLocationClick(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		clearClicks();
 	}
 	
 	private void registerPlayerDrag() {
-		cb.locationClicked(tileToCorners, tileToRoadOrientation);
+		cb.roadLocationClick(tileToCorners, tileToRoadOrientation);
 		clearDrags();
 	}
 	

@@ -108,12 +108,12 @@ public class CatanBoard {
 		return this.tiles;
 	}
 	
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
+	public void settlementLocationClick(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
 		addSettlementToTiles(tiles, corners, gameState);	
 
 	}
 	
-	public boolean locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
+	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
 		return placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 
