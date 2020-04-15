@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -127,9 +126,21 @@ public class OptionsPanel extends JPanel {
 		placeRoadButton.setText("Place Road");
 		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,6,6,2)));
 		
+		JButton tradeWithBankButton = new JButton();
+		tradeWithBankButton.setText("Trade Bank");
+		actionPanel.add(new OptionsPanelComponent(tradeWithBankButton, new Rectangle(4,8,6,2)));
+		
+		JButton tradeWithPlayerButton = new JButton();
+		tradeWithPlayerButton.setText("Trade Player");
+		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,10,6,2)));
+		
+		JButton buyDevCardButton = new JButton();
+		buyDevCardButton.setText("Buy Dev. Card");
+		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,12,6,2)));
+		
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
-		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,8,6,2)));
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
 	}
 	
 	class CancelAction extends AbstractAction {
