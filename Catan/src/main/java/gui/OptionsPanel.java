@@ -111,7 +111,7 @@ public class OptionsPanel extends JPanel {
 	
 	private void createActionPanel() {
 		actionPanel = new ArrayList<>();
-		JButton placeSettlementButton = new JButton();
+		JButton placeSettlementButton = new JButton(new PlaceSettlementListener());
 		placeSettlementButton.setText("Place Settlement");
 		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
 		
@@ -122,6 +122,17 @@ public class OptionsPanel extends JPanel {
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
 		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,8,6,2)));
+	}
+	
+	class PlaceSettlementListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				placeInfoPanel("Place a settlement");
+				boardGUI.setState(GameStates.drop_settlement);
+								
+			}
+		}
 	}
 	
 	class EndTurnListener extends AbstractAction {

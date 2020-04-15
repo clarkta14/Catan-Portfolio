@@ -851,9 +851,6 @@ public class BoardWindow extends JPanel {
 						ArrayList<Integer> corners = settlementLoc.get(1);
 	
 						settlementPlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
-						if (state.equals(GameStates.drop_settlement_setup_final)) {
-							System.out.println("Last one brodie");
-						}
 					}
 				}
 				if(settlementPlaced) {

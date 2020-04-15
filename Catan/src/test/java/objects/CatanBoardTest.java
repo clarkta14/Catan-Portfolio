@@ -268,7 +268,7 @@ public class CatanBoardTest {
 	}
 	
 	@Test
-	public void testAddSettlementToTilesNotSetup() {
+	public void testAddSettlementToTilesNotSetupBadPlacement() {
 		basicSetupForAddSettlementTests();
 		
 		tileNums.add(0);
@@ -295,6 +295,25 @@ public class CatanBoardTest {
 				fail("Rolled out of bounds: " + result);
 			}
 		}
+	}
+	
+	@Test
+	public void testAddSettlementToTilesNotSetupValidPlacement() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertTrue(result);
 	}
 	
 	private void basicSetupForAddSettlementTests() {
