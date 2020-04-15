@@ -314,8 +314,21 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		Player currentPlayer = pc.getCurrentPlayer();
+		
+		currentPlayer.addResource(TileType.brick, 1);
+		currentPlayer.addResource(TileType.wood, 1);
+		currentPlayer.addResource(TileType.wool, 1);
+		currentPlayer.addResource(TileType.wheat, 1);
+		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertTrue(result);
+		
+		
+		assertEquals(0, currentPlayer.getResource(TileType.brick));
+		assertEquals(0, currentPlayer.getResource(TileType.wood));
+		assertEquals(0, currentPlayer.getResource(TileType.wool));
+		assertEquals(0, currentPlayer.getResource(TileType.wheat));
 	}
 	
 	@Test

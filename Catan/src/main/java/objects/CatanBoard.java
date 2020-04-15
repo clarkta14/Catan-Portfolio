@@ -133,9 +133,14 @@ public class CatanBoard {
 				settlementLocationIsValid = settlementLocationIsValid ||
 					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
     		}
+			if(!settlementLocationIsValid) {
+				return false;
+			} 
+			if (!buySettlement()) {
+				return false;
+			}
 		}
 		
-		if(!settlementLocationIsValid) return false;
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
