@@ -50,7 +50,7 @@ public class OptionsPanel extends JPanel {
 	}
 
 	public void setupPhase() {
-		if(boardGUI.getState().equals(GUIStates.setup)) {
+		if(boardGUI.getState().equals(GameStates.setup)) {
 			final JLabel start = new JLabel("Setup phase: ");
 			start.setFont(font);
 			setupPanel.add(new OptionsPanelComponent(start, new Rectangle(2,3,10,2)));
@@ -64,8 +64,12 @@ public class OptionsPanel extends JPanel {
 	class DropSettlementSetupListener extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(boardGUI.getState().equals(GUIStates.setup)) {
-				boardGUI.setState(GUIStates.drop_settlement_setup);
+			if(boardGUI.getState().equals(GameStates.setup)) {
+				if (!playerController.isBackwardsSetup()) {
+					boardGUI.setState(GameStates.drop_settlement_setup);
+				} else {
+					boardGUI.setState(GameStates.drop_settlement_setup_final);
+				}
 				placeInfoPanel("Place a settlement");
 				timer = new Timer(50, new PlaceRoadSetupListener());
 				timer.start();
@@ -76,9 +80,10 @@ public class OptionsPanel extends JPanel {
 	class PlaceRoadSetupListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
+			if(!boardGUI.getState().equals(GameStates.drop_settlement_setup)
+					&& !boardGUI.getState().equals(GameStates.drop_settlement_setup_final)) {
 				timer.stop();
-				boardGUI.setState(GUIStates.drop_road);
+				boardGUI.setState(GameStates.drop_road);
 				placeInfoPanel("Place a road");
 				timer = new Timer(50, new ResetStateListener());
 				timer.start();
@@ -89,15 +94,15 @@ public class OptionsPanel extends JPanel {
 	class ResetStateListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!boardGUI.getState().equals(GUIStates.drop_road)) {
+			if(!boardGUI.getState().equals(GameStates.drop_road)) {
 				timer.stop();
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				if(playerController.isInitialSetup()) {
-					boardGUI.setState(GUIStates.setup);
+					boardGUI.setState(GameStates.setup);
 					setupPanel();
 				} else {
-					boardGUI.setState(GUIStates.idle);
+					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 				}
 			}	
@@ -122,7 +127,7 @@ public class OptionsPanel extends JPanel {
 	class EndTurnListener extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(boardGUI.getState().equals(GUIStates.idle)) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				

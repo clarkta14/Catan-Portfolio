@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
-import gui.GUIStates;
+import gui.GameStates;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
@@ -108,15 +108,15 @@ public class CatanBoard {
 		return this.tiles;
 	}
 	
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GUIStates guistate) {
-		addSettlementToTiles(tiles, corners, guistate);	
+	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
+		addSettlementToTiles(tiles, corners, gameState);	
 	}
 	
 	public boolean locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
 		return placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 
-	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GUIStates guistate) {
+	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates gameState) {
 		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
 		boolean settlementLocationIsValid = true;
 		for(int i = 0; i < selectedTiles.size(); i++) {
@@ -124,7 +124,7 @@ public class CatanBoard {
 					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
     	}
 		
-		if(guistate != GUIStates.drop_settlement_setup) {
+		if(gameState != GameStates.drop_settlement_setup && gameState != GameStates.drop_settlement_setup_final) {
 			for(int i = 0; i < selectedTiles.size(); i++) {
 				settlementLocationIsValid = settlementLocationIsValid &&
 					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
@@ -135,6 +135,9 @@ public class CatanBoard {
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+		}
+		if (gameState == GameStates.drop_settlement_setup_final) {
+			// TODO: add in method call to distribute resources
 		}
 		return true;
 	}

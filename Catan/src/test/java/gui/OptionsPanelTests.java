@@ -31,7 +31,7 @@ public class OptionsPanelTests {
 
 		EasyMock.expect(gw.getPlayersController()).andStubReturn(pc);
 		EasyMock.expect(gw.getBoardWindow()).andStubReturn(bw);
-		EasyMock.expect(bw.getState()).andStubReturn(GUIStates.idle);
+		EasyMock.expect(bw.getState()).andStubReturn(GameStates.idle);
 		
 		EasyMock.replay(bw, gw);
 		
@@ -70,7 +70,7 @@ public class OptionsPanelTests {
 
 		EasyMock.expect(gw.getPlayersController()).andStubReturn(pc);
 		EasyMock.expect(gw.getBoardWindow()).andStubReturn(bw);
-		EasyMock.expect(bw.getState()).andStubReturn(GUIStates.idle);
+		EasyMock.expect(bw.getState()).andStubReturn(GameStates.idle);
 		
 		EasyMock.replay(bw, gw);
 		
@@ -106,7 +106,7 @@ public class OptionsPanelTests {
 
 		EasyMock.expect(gw.getPlayersController()).andStubReturn(pc);
 		EasyMock.expect(gw.getBoardWindow()).andStubReturn(bw);
-		EasyMock.expect(bw.getState()).andStubReturn(GUIStates.setup);
+		EasyMock.expect(bw.getState()).andStubReturn(GameStates.setup);
 		
 		EasyMock.replay(bw, gw);
 		
