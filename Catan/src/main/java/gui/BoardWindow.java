@@ -861,7 +861,7 @@ public class BoardWindow extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			if(state.equals(GameStates.drop_road)) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
 				Point prevClicked = new Point(e.getX(), e.getY());
 				lastClicked = prevClicked;
 			}
@@ -869,7 +869,7 @@ public class BoardWindow extends JPanel {
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			if(state.equals(GameStates.drop_road)) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
 				Point p = new Point(e.getX(), e.getY());
 				if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
 					ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);

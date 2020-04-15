@@ -83,7 +83,7 @@ public class OptionsPanel extends JPanel {
 			if(!boardGUI.getState().equals(GameStates.drop_settlement_setup)
 					&& !boardGUI.getState().equals(GameStates.drop_settlement_setup_final)) {
 				timer.stop();
-				boardGUI.setState(GameStates.drop_road);
+				boardGUI.setState(GameStates.drop_road_setup);
 				placeInfoPanel("Place a road");
 				timer = new Timer(50, new ResetStateListenerSetup());
 				timer.start();
@@ -94,7 +94,7 @@ public class OptionsPanel extends JPanel {
 	class ResetStateListenerSetup implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!boardGUI.getState().equals(GameStates.drop_road)) {
+			if(!boardGUI.getState().equals(GameStates.drop_road_setup)) {
 				timer.stop();
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
