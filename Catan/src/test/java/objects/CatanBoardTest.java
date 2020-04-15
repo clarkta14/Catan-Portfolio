@@ -295,8 +295,9 @@ public class CatanBoardTest {
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(18, 17, 14)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
 	
 		cb.distributeResources(cb.getTiles().get(5).getNumber());
-		System.out.println(cb.getTiles().get(5).getSettlements());
 		assertTrue(pc.getCurrentPlayer().getResource(cb.getTiles().get(5).getType()) > 0);
+		cb.distributeResources(cb.getTiles().get(4).getNumber());
+		assertTrue(pc.getCurrentPlayer().getResource(cb.getTiles().get(4).getType()) > 0);
 	}
 	
 	private void basicSetupForAddSettlementTests() {
