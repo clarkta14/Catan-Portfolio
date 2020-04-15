@@ -85,13 +85,13 @@ public class OptionsPanel extends JPanel {
 				timer.stop();
 				boardGUI.setState(GameStates.drop_road);
 				placeInfoPanel("Place a road");
-				timer = new Timer(50, new ResetStateListener());
+				timer = new Timer(50, new ResetStateListenerSetup());
 				timer.start();
 			}
 		}
 	}
 	
-	class ResetStateListener implements ActionListener {
+	class ResetStateListenerSetup implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(!boardGUI.getState().equals(GameStates.drop_road)) {
@@ -130,9 +130,19 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle)) {
 				placeInfoPanel("Place a settlement");
 				boardGUI.setState(GameStates.drop_settlement);
-								
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
 			}
 		}
+	}
+	
+	class ResetStateListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				setOnOptionsPanel(actionPanel);
+			}	
+		}	
 	}
 	
 	class EndTurnListener extends AbstractAction {
@@ -147,6 +157,7 @@ public class OptionsPanel extends JPanel {
 			}
 		}
 	}
+	
 
 	public void setCurrentPlayer(Player p, int num) {
 		JLabel label = (JLabel) currentPlayerNameBox.getSwingComponent();
