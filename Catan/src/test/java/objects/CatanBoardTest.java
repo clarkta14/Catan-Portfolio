@@ -364,6 +364,22 @@ public class CatanBoardTest {
 		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
 	}
 	
+	@Test
+	public void testBuyRoad_WithNoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.brick) == 0);
+		assertTrue(pc.getCurrentPlayer().getResource(TileType.wood) == 0);
+		
+		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResource(TileType.brick);
+		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResource(TileType.wood);
+		
+		assertTrue(!cb.buyRoad());
+		assertEquals(numOfBricksBeforeBuy, pc.getCurrentPlayer().getResource(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, pc.getCurrentPlayer().getResource(TileType.wood));
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
