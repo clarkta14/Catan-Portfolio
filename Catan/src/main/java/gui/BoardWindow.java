@@ -12,6 +12,8 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -19,14 +21,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import objects.CatanBoard;
 import objects.Road;
 import objects.Settlement;
+import objects.Tile;
 import objects.TileType;
 
+@SuppressWarnings("serial")
 public class BoardWindow extends JPanel {
 
 	private int boardHeight;
@@ -34,43 +38,39 @@ public class BoardWindow extends JPanel {
 	private int widthMargin;
 	private final double sqrt3div2 = 0.86602540378;
 	private int hexagonSide;
-	private GUITile[][] tiles;
-	
-	public BoardWindow() {
-		setBackground(new Color(164,200,218));
-        //Handle Resizing Window
-        this.addComponentListener(new ComponentListener() {
-            public void componentResized(ComponentEvent e) {
-    		boardHeight = getHeight();
-    		hexagonSide = (boardHeight - 2 * heightMargin) / 8;
-    		widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
-            }
-            public void componentHidden(ComponentEvent e) {}
-            public void componentMoved(ComponentEvent e) {}
-            public void componentShown(ComponentEvent e) {}
-        });
-    }
-	
-	public void updateBoard(GUITile[][] tiles) {
-		this.tiles = tiles;
-		assignPolygonsToTiles();
+	private CatanBoard catanBoard;
+	private int settlementSize = 12;
+	private GameStates state = GameStates.setup;
+
+	public BoardWindow(CatanBoard catanBoard) {
+		this.catanBoard = catanBoard;
+		setBackground(new Color(164, 200, 218));
+		// Handle Resizing Window
+		this.addComponentListener(new ComponentListener() {
+			public void componentResized(ComponentEvent e) {
+				boardHeight = getHeight();
+				hexagonSide = (boardHeight - 2 * heightMargin) / 8;
+				widthMargin = (getWidth() - (int) (10 * hexagonSide * sqrt3div2)) / 2;
+			}
+
+			public void componentHidden(ComponentEvent e) {
+			}
+
+			public void componentMoved(ComponentEvent e) {
+			}
+
+			public void componentShown(ComponentEvent e) {
+			}
+		});
+		BoardMouseListener m = new BoardMouseListener();
+		addMouseListener(m);
+		addMouseMotionListener(m);
 	}
 
 	private void assignPolygonsToTiles() {
-		for (int x = 1; x <= 3; x++) {
-			makeHex(x, 1, findCenter((int) tiles[x][1].getPosition().getX(), (int) tiles[x][1].getPosition().getY()));
-		}
-		for (int x = 1; x <= 4; x++) {
-			makeHex(x, 2, findCenter((int) tiles[x][2].getPosition().getX(), (int) tiles[x][2].getPosition().getY()));
-		}
-		for (int x = 1; x <= 5; x++) {
-			makeHex(x, 3, findCenter((int) tiles[x][3].getPosition().getX(), (int) tiles[x][3].getPosition().getY()));
-		}
-		for (int x = 2; x <= 5; x++) {
-			makeHex(x, 4, findCenter((int) tiles[x][4].getPosition().getX(), (int) tiles[x][4].getPosition().getY()));
-		}
-		for (int x = 3; x <= 5; x++) {
-			makeHex(x, 5, findCenter((int) tiles[x][5].getPosition().getX(), (int) tiles[x][5].getPosition().getY()));
+		for (int x = 0; x <= 18; x++) {
+			makeHex(x, findCenter((int) this.catanBoard.getTiles().get(x).getLocation().getX(),
+					(int) this.catanBoard.getTiles().get(x).getLocation().getY()));
 		}
 	}
 
@@ -88,44 +88,16 @@ public class BoardWindow extends JPanel {
 	}
 
 	private void drawHexTiles(Graphics2D g2) {
-		for (int x = 1; x <= 3; x++) {
-			drawHexTile(x, 1, g2);
-			drawNumber(tiles[x][1], g2);
-			drawRobber(tiles[x][1], g2);
-			drawSettlements(tiles[x][1], g2);
-			drawRoads(tiles[x][1], g2);
-		}
-		for (int x = 1; x <= 4; x++) {
-			drawHexTile(x, 2, g2);
-			drawNumber(tiles[x][2], g2);
-			drawRobber(tiles[x][2], g2);
-			drawSettlements(tiles[x][2], g2);
-			drawRoads(tiles[x][2], g2);
-		}
-		for (int x = 1; x <= 5; x++) {
-			drawHexTile(x, 3, g2);
-			drawNumber(tiles[x][3], g2);
-			drawRobber(tiles[x][3], g2);
-			drawSettlements(tiles[x][3], g2);
-			drawRoads(tiles[x][3], g2);
-		}
-		for (int x = 2; x <= 5; x++) {
-			drawHexTile(x, 4, g2);
-			drawNumber(tiles[x][4], g2);
-			drawRobber(tiles[x][4], g2);
-			drawSettlements(tiles[x][4], g2);
-			drawRoads(tiles[x][4], g2);
-		}
-		for (int x = 3; x <= 5; x++) {
-			drawHexTile(x, 5, g2);
-			drawNumber(tiles[x][5], g2);
-			drawRobber(tiles[x][5], g2);
-			drawSettlements(tiles[x][5], g2);
-			drawRoads(tiles[x][5], g2);
+		for (int x = 0; x <= 18; x++) {
+			drawHexTile(this.catanBoard.getTiles().get(x), g2);
+			drawNumber(this.catanBoard.getTiles().get(x), g2);
+			drawRobber(this.catanBoard.getTiles().get(x), g2);
+			drawSettlements(this.catanBoard.getTiles().get(x), g2);
+			drawRoads(this.catanBoard.getTiles().get(x), g2);
 		}
 	}
 
-	private void drawRoads(GUITile tile, Graphics2D g2) {
+	private void drawRoads(Tile tile, Graphics2D g2) {
 		HashMap<ArrayList<Integer>, Road> roadLoc = tile.getRoads();
 		for (ArrayList<Integer> corners : roadLoc.keySet()) {
 			Graphics2D g2c = (Graphics2D) g2.create();
@@ -159,11 +131,12 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	private void drawSettlements(GUITile tile, Graphics2D g2) {
+	private void drawSettlements(Tile tile, Graphics2D g2) {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for (int corner : settlementLoc.keySet()) {
 			Point p = tile.getHexCorners().get(corner);
-			Shape circle = new Ellipse2D.Double((int) p.getX() - 12, (int) p.getY() - 12, 24, 24);
+			Shape circle = new Ellipse2D.Double((int) p.getX() - this.settlementSize,
+					(int) p.getY() - this.settlementSize, this.settlementSize * 2, this.settlementSize * 2);
 			g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
 			g2.fill(circle);
 			g2.setColor(Color.BLACK);
@@ -171,8 +144,8 @@ public class BoardWindow extends JPanel {
 		}
 	}
 
-	public void drawHexTile(int tileX, int tileY, Graphics2D g2) {
-		TileType type = this.tiles[tileX][tileY].getType();
+	public void drawHexTile(Tile tile, Graphics2D g2) {
+		TileType type = tile.getType();
 		assignPolygonsToTiles();
 
 		if (null == type) {
@@ -202,17 +175,17 @@ public class BoardWindow extends JPanel {
 				break;
 			}
 
-		g2.fillPolygon(this.tiles[tileX][tileY].getHexagon());
+		g2.fillPolygon(tile.getHexagon());
 		g2.setColor(Color.BLACK);
-		g2.drawPolygon(this.tiles[tileX][tileY].getHexagon());
+		g2.drawPolygon(tile.getHexagon());
 	}
 
-	public void drawNumber(GUITile tile, Graphics2D g2) {
+	public void drawNumber(Tile tile, Graphics2D g2) {
 		if (tile.getNumber() == 0 || tile.getNumber() == 7) {
 			return;
 		}
-		int x = (int) tile.getPosition().getX();
-		int y = (int) tile.getPosition().getY();
+		int x = (int) tile.getLocation().getX();
+		int y = (int) tile.getLocation().getY();
 		Point p = findCenter(x, y);
 
 		g2.setColor(Color.WHITE);
@@ -226,6 +199,7 @@ public class BoardWindow extends JPanel {
 	}
 
 	public Point findCenter(int x, int y) {
+
 		double xCenter = widthMargin + (3 * hexagonSide * sqrt3div2) + ((x - 1) * 2 * hexagonSide * sqrt3div2)
 				- ((y - 1) * hexagonSide * sqrt3div2);
 		double yCenter = boardHeight - (heightMargin + hexagonSide + ((y - 1) * hexagonSide * 1.5));
@@ -239,7 +213,7 @@ public class BoardWindow extends JPanel {
 		return p;
 	}
 
-	public void makeHex(int tileX, int tileY, Point center) {
+	public void makeHex(int tilePosInArray, Point center) {
 		int xCenter = (int) center.getX();
 		int yCenter = (int) center.getY();
 		ArrayList<Point> tileCorners = new ArrayList<>();
@@ -261,16 +235,16 @@ public class BoardWindow extends JPanel {
 		output.addPoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1);
 		tileCorners.add(
 				doublePoint(xCenter - (int) (hexagonSide * sqrt3div2) - 1, yCenter + (int) (.5 * hexagonSide) + 1));
-		this.tiles[tileX][tileY].setHexCorners(tileCorners);
-		this.tiles[tileX][tileY].setHexagon(output);
+		this.catanBoard.getTiles().get(tilePosInArray).setHexCorners(tileCorners);
+		this.catanBoard.getTiles().get(tilePosInArray).setHexagon(output);
 	}
 
-	private void drawRobber(GUITile tile, Graphics2D g2) {
+	private void drawRobber(Tile tile, Graphics2D g2) {
 		if (!tile.isRobber()) {
 			return;
 		}
-		int x = (int) tile.getPosition().getX();
-		int y = (int) tile.getPosition().getY();
+		int x = (int) tile.getLocation().getX();
+		int y = (int) tile.getLocation().getY();
 		Point p = findCenter(x, y);
 
 		g2.setColor(Color.PINK);
@@ -419,5 +393,498 @@ public class BoardWindow extends JPanel {
 		}
 
 		return new Dimension(new_width, new_height);
+	}
+
+	public ArrayList<ArrayList<Integer>> getStructureLocation(Point p) {
+		double x = p.getX();
+		double y = p.getY();
+		ArrayList<Integer> tile = new ArrayList<>();
+		ArrayList<Integer> corner = new ArrayList<>();
+		// Column search to see if the point clicked belongs to a location that could
+		// possibly hold a settlement
+		if (checkIfWithinColumn(x, 0)) {
+			if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(2);
+				corner.add(4);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(2);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 1)) {
+			if (heightMargin + 2 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(5);
+				tile.add(2);
+				corner.add(3);
+			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(4);
+				tile.add(2);
+				corner.add(0);
+			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 2)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(5);
+				tile.add(6);
+				corner.add(3);
+			} else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(6);
+				corner.add(0);
+				tile.add(2);
+				corner.add(2);
+				tile.add(5);
+				corner.add(4);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(2);
+				corner.add(1);
+				tile.add(5);
+				corner.add(5);
+				tile.add(1);
+				corner.add(3);
+			} else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(1);
+				corner.add(0);
+				tile.add(0);
+				corner.add(3);
+			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(0);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 3)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(11);
+				corner.add(3);
+			} else if (heightMargin + 2 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(11);
+				corner.add(0);
+				tile.add(6);
+				corner.add(2);
+				tile.add(10);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(6);
+				corner.add(1);
+				tile.add(10);
+				corner.add(5);
+				tile.add(5);
+				corner.add(3);
+			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(5);
+				corner.add(0);
+				tile.add(1);
+				corner.add(2);
+				tile.add(4);
+				corner.add(4);
+			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(1);
+				corner.add(1);
+				tile.add(4);
+				corner.add(5);
+				tile.add(0);
+				corner.add(3);
+			} else if (heightMargin + 8 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(0);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 4)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(2);
+				tile.add(15);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(11);
+				corner.add(1);
+				tile.add(15);
+				corner.add(5);
+				tile.add(10);
+				corner.add(3);
+			} else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(10);
+				corner.add(0);
+				tile.add(5);
+				corner.add(2);
+				tile.add(9);
+				corner.add(4);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(5);
+				corner.add(1);
+				tile.add(9);
+				corner.add(5);
+				tile.add(4);
+				corner.add(3);
+			} else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(4);
+				corner.add(0);
+				tile.add(0);
+				corner.add(2);
+				tile.add(3);
+				corner.add(4);
+			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(0);
+				corner.add(1);
+				tile.add(3);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 5)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(15);
+				corner.add(3);
+			} else if (heightMargin + 2 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(15);
+				corner.add(0);
+				tile.add(10);
+				corner.add(2);
+				tile.add(14);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(10);
+				corner.add(1);
+				tile.add(14);
+				corner.add(5);
+				tile.add(9);
+				corner.add(3);
+			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(9);
+				corner.add(0);
+				tile.add(4);
+				corner.add(2);
+				tile.add(8);
+				corner.add(4);
+			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(4);
+				corner.add(1);
+				tile.add(8);
+				corner.add(5);
+				tile.add(3);
+				corner.add(3);
+			} else if (heightMargin + 8 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(3);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 6)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(15);
+				corner.add(2);
+				tile.add(18);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(15);
+				corner.add(1);
+				tile.add(18);
+				corner.add(5);
+				tile.add(14);
+				corner.add(3);
+			} else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(14);
+				corner.add(0);
+				tile.add(9);
+				corner.add(2);
+				tile.add(13);
+				corner.add(4);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(9);
+				corner.add(1);
+				tile.add(13);
+				corner.add(5);
+				tile.add(8);
+				corner.add(3);
+			} else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(8);
+				corner.add(0);
+				tile.add(3);
+				corner.add(2);
+				tile.add(7);
+				corner.add(4);
+			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(3);
+				corner.add(1);
+				tile.add(7);
+				corner.add(5);
+			}
+		} else if (checkIfWithinColumn(x, 7)) {
+			if (heightMargin - this.settlementSize < y && y < heightMargin + this.settlementSize) {
+				tile.add(18);
+				corner.add(3);
+			} else if (heightMargin + 2 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(18);
+				corner.add(0);
+				tile.add(14);
+				corner.add(2);
+				tile.add(17);
+				corner.add(4);
+			} else if (heightMargin + 3 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(14);
+				corner.add(1);
+				tile.add(17);
+				corner.add(5);
+				tile.add(13);
+				corner.add(3);
+			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(13);
+				corner.add(0);
+				tile.add(8);
+				corner.add(2);
+				tile.add(12);
+				corner.add(4);
+			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(8);
+				corner.add(1);
+				tile.add(12);
+				corner.add(5);
+				tile.add(7);
+				corner.add(3);
+			} else if (heightMargin + 8 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 8 * hexagonSide + this.settlementSize) {
+				tile.add(7);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 8)) {
+			if (heightMargin + hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + hexagonSide / 2 + this.settlementSize) {
+				tile.add(18);
+				corner.add(2);
+			} else if (heightMargin + 3 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(18);
+				corner.add(1);
+				tile.add(17);
+				corner.add(3);
+			} else if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(17);
+				corner.add(0);
+				tile.add(13);
+				corner.add(2);
+				tile.add(16);
+				corner.add(4);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(13);
+				corner.add(1);
+				tile.add(16);
+				corner.add(5);
+				tile.add(12);
+				corner.add(3);
+			} else if (heightMargin + 13 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 13 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(12);
+				corner.add(0);
+				tile.add(7);
+				corner.add(2);
+			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(7);
+				corner.add(0);
+			}
+		} else if (checkIfWithinColumn(x, 9)) {
+			if (heightMargin + 2 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 2 * hexagonSide + this.settlementSize) {
+				tile.add(17);
+				corner.add(2);
+			} else if (heightMargin + 3 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 3 * hexagonSide + this.settlementSize) {
+				tile.add(17);
+				corner.add(1);
+				tile.add(16);
+				corner.add(3);
+			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
+				tile.add(16);
+				corner.add(3);
+				tile.add(12);
+				corner.add(0);
+			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
+					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
+				tile.add(12);
+				corner.add(1);
+			}
+		} else if (checkIfWithinColumn(x, 10)) {
+			if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(16);
+				corner.add(2);
+			} else if (heightMargin + 9 * hexagonSide / 2 - this.settlementSize < y
+					&& y < heightMargin + 9 * hexagonSide / 2 + this.settlementSize) {
+				tile.add(16);
+				corner.add(1);
+			}
+		}
+		if (!tile.isEmpty()) {
+			ArrayList<ArrayList<Integer>> toReturn = new ArrayList<>();
+			toReturn.add(tile);
+			toReturn.add(corner);
+			return toReturn;
+		}
+		return null;
+	}
+
+	public boolean checkIfWithinColumn(double x, int col) {
+		return widthMargin + col * sqrt3div2 * hexagonSide - this.settlementSize < x
+				&& x < widthMargin + col * sqrt3div2 * hexagonSide + this.settlementSize;
+	}
+
+	public HashMap<Integer, ArrayList<Integer>> getRoadLocation(ArrayList<ArrayList<Integer>> loc1,
+			ArrayList<ArrayList<Integer>> loc2) {
+		HashMap<Integer, ArrayList<Integer>> tileToCorners = new HashMap<>();
+		for (int i = 0; i < loc1.get(0).size(); i++) {
+			ArrayList<Integer> updatedCorners = new ArrayList<>();
+			if (tileToCorners.containsKey(loc1.get(0).get(i))) {
+				updatedCorners = tileToCorners.get(loc1.get(0).get(i));
+				updatedCorners.add(loc1.get(1).get(i));
+				tileToCorners.replace(loc1.get(0).get(i), updatedCorners);
+			} else {
+				updatedCorners.add(loc1.get(1).get(i));
+				tileToCorners.put(loc1.get(0).get(i), updatedCorners);
+			}
+		}
+		for (int i = 0; i < loc2.get(0).size(); i++) {
+			ArrayList<Integer> updatedCorners = new ArrayList<>();
+			if (tileToCorners.containsKey(loc2.get(0).get(i))) {
+				updatedCorners = tileToCorners.get(loc2.get(0).get(i));
+				updatedCorners.add(loc2.get(1).get(i));
+				tileToCorners.replace(loc2.get(0).get(i), updatedCorners);
+			} else {
+				updatedCorners.add(loc2.get(1).get(i));
+				tileToCorners.put(loc2.get(0).get(i), updatedCorners);
+			}
+		}
+
+		tileToCorners.entrySet().removeIf(entry -> entry.getValue().size() != 2);
+		return tileToCorners;
+	}
+
+	private HashMap<Integer, Integer> getRoadOrientations(HashMap<Integer, ArrayList<Integer>> tileToCorners) {
+		HashMap<Integer, Integer> tileToRoadOrientation = new HashMap<>();
+		for(int key : tileToCorners.keySet()) {
+			tileToRoadOrientation.put(key, getRoadOrientation(tileToCorners.get(key)));
+		}
+		return tileToRoadOrientation;
+	}
+	
+	private int getRoadOrientation(ArrayList<Integer> corners) {
+		int p1 = corners.get(0);
+		int p2 = corners.get(1);
+		if (p1 > p2) {
+			int temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
+		if (p1 == 0 && p2 == 5 || p1 == 2 && p2 == 3) {
+			return 0;
+		} else if (p1 == 0 && p2 == 1 || p1 == 3 && p2 == 4) {
+			return 1;
+		} else if (p1 == 1 && p2 == 2 || p1 == 4 && p2 == 5) {
+			return 2;
+		}
+		return -1;
+	}
+	
+	public void setState(GameStates s) {
+		this.state = s;
+	}
+	
+	public GameStates getState() {
+		return this.state;
+	}
+
+	class BoardMouseListener extends MouseAdapter {
+		private Point lastClicked;
+
+		public void mouseClicked(MouseEvent e) {
+			if(state.equals(GameStates.drop_settlement) || state.equals(GameStates.drop_settlement_setup) ||
+					state.equals(GameStates.drop_settlement_setup_final)) {
+				boolean settlementPlaced = false;
+				Point p = new Point(e.getX(), e.getY());
+				if (p != null) {
+					ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
+					if (settlementLoc != null) {
+						ArrayList<Integer> tiles = settlementLoc.get(0);
+						ArrayList<Integer> corners = settlementLoc.get(1);
+	
+						settlementPlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
+					}
+				}
+				if(settlementPlaced) {
+					setState(GameStates.idle);
+					repaint();
+				}
+			}
+		}
+
+		public void mousePressed(MouseEvent e) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
+				Point prevClicked = new Point(e.getX(), e.getY());
+				lastClicked = prevClicked;
+			}
+
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
+				Point p = new Point(e.getX(), e.getY());
+				if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
+					ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
+					ArrayList<ArrayList<Integer>> loc2 = getStructureLocation(p);
+					if (loc1 != null && loc2 != null) {
+						HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
+						HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
+	
+						if (catanBoard.roadLocationClick(tileToCorners, tileToRoadOrientation, state)) {
+							setState(GameStates.idle);
+						}
+					}
+				}
+				repaint();
+			}
+		}
 	}
 }

@@ -6,15 +6,23 @@ import java.awt.Rectangle;
 import javax.swing.JFrame;
 
 import lib.GraphPaperLayout;
+import objects.CatanBoard;
+import objects.PlayersController;
 
 public class GameWindow {
     
+	private PlayersController turnController;
+	private CatanBoard catanBoard;
 	private BoardWindow boardWindow;
-    //private SideBar sideBar; // To hold buttons for game options
-    //private GameState gameState; // Hold all player information
+    private OptionsPanel options; // To hold buttons for game options
+    private PlayerInfo playerInfo; // Hold all player information
     
-    public GameWindow(BoardWindow bw){
-    	this.boardWindow = bw;
+    public GameWindow(int numOfPlayers){
+    	this.turnController = new PlayersController(numOfPlayers);
+    	this.catanBoard = new CatanBoard(this.turnController);
+    	this.boardWindow = new BoardWindow(this.catanBoard);
+    	this.options = new OptionsPanel(this, catanBoard);
+    	this.playerInfo = new PlayerInfo(this.turnController, numOfPlayers);
         showGUI();
     }
 
@@ -28,14 +36,26 @@ public class GameWindow {
         content.setLayout(new GraphPaperLayout(dim));
         
         //Adding components to the window
-        //content.add(sideBar,new Rectangle(0,0,1,5));
+        content.add(options,new Rectangle(0,0,1,5));
         content.add(boardWindow,new Rectangle(1,0,4,4));
-	//content.add(gameState,new Rectangle(1,4,4,2));
+        content.add(playerInfo,new Rectangle(1,4,4,2));
         
         frame.setResizable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         frame.setVisible(true); 
         boardWindow.repaint();
     }
+    
+    public PlayersController getPlayersController() {
+    	return this.turnController;
+    }
+
+	public BoardWindow getBoardWindow() {
+		return this.boardWindow;
+	}
+	
+	public void refreshPlayerStats() {
+		playerInfo.updateAllPlayerInfo();
+	}
 }
 
