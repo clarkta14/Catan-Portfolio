@@ -166,7 +166,6 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && catanBoard.buyDevelopmentCard()) {
 				gameWindow.refreshPlayerStats();
-				repaint();
 			}
 		}
 	}

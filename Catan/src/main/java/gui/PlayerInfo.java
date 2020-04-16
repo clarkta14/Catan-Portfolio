@@ -77,6 +77,7 @@ public class PlayerInfo extends JPanel {
 	public void updateAllPlayerInfo() {
 		this.removeAll();
 		initializeAllPlayerInfo();
+		revalidate();
 	}
 	
 }
