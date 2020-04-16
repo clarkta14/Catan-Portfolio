@@ -162,6 +162,36 @@ public class TileTests {
 	}
 	
 	@Test
+	public void testCheckValidRoadPlacementConnectedToRoad2() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(3, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		
+		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		tile.addRoad(3, 2, roadToPlace);
+		
+		Road roadToConnect = new Road(player1);
+		assertTrue(tile.checkValidRoadPlacement(1, 2, roadToConnect));
+	}
+	
+	@Test
+	public void testCheckValidRoadPlacementConnectedToRoad3() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(3, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		
+		assertTrue(tile.checkValidRoadPlacement(2, 3, roadToPlace));
+		tile.addRoad(2, 3, roadToPlace);
+		
+		Road roadToConnect = new Road(player1);
+		assertTrue(tile.checkValidRoadPlacement(4, 3, roadToConnect));
+	}
+	
+	@Test
 	public void testCheckValidRoadPlacementConnectedToRoadDifferentPlayer() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
