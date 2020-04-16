@@ -5,6 +5,8 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import gui.GameStates;
+
 public class Tile {
 	private TileType type;
 	private int number;
@@ -125,7 +127,7 @@ public class Tile {
 		return this.hexEdgeToRoad;
 	}
 
-	public boolean checkValidRoadPlacement(ArrayList<Integer> edge, Road roadToCheck) {
+	public boolean checkValidRoadPlacement(ArrayList<Integer> edge, Road roadToCheck, GameStates gameState) {
 		int corner1 = edge.get(0);
 		int corner2 = edge.get(1);
 		if (Math.abs(corner1 - corner2) != 1 && Math.abs(corner1 - corner2) != 5) {
