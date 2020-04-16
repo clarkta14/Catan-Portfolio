@@ -75,7 +75,7 @@ public class CatanBoardTest {
 		
 		// Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(player1, p1roadTile, p1road1, p1road2);
 		assertEquals(r.getAngle(), 2);
 	}
@@ -94,7 +94,7 @@ public class CatanBoardTest {
 		
 		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 
 		// Check no roads
 		ArrayList<Tile> tiles = cb.getTiles();
@@ -330,6 +330,35 @@ public class CatanBoardTest {
 		assertEquals(0, (int) currentPlayer.resources.get(TileType.wood));
 		assertEquals(0, (int) currentPlayer.resources.get(TileType.wool));
 		assertEquals(0, (int) currentPlayer.resources.get(TileType.wheat));
+	}
+	
+	@Test
+	public void testAddSettlementToTilesNotSetupValidPlacementNoResources() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		
+		currentPlayer.addResource(TileType.brick, 1);
+		currentPlayer.addResource(TileType.wood, 1);
+		currentPlayer.addResource(TileType.wool, 1);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		
+		assertEquals(1, currentPlayer.getResource(TileType.brick));
+		assertEquals(1, currentPlayer.getResource(TileType.wood));
+		assertEquals(1, currentPlayer.getResource(TileType.wool));
 	}
 	
 	@Test
@@ -725,7 +754,7 @@ public class CatanBoardTest {
 		registerPlayerClick();
 		checkPlayerTileForSettlement(tileNum, settlementCorner, playerNum);
 		addPlayerDragNums(tileNum, settlementCorner, roadCorner);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(playerNum, tileNum, settlementCorner, roadCorner);
 		assertEquals(rAngle, r.getAngle());
 		pc.nextPlayer();
@@ -755,8 +784,8 @@ public class CatanBoardTest {
 		clearClicks();
 	}
 	
-	private void registerPlayerDrag() {
-		cb.roadLocationClick(tileToCorners, tileToRoadOrientation);
+	private void registerPlayerDragSetup() {
+		cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
 		clearDrags();
 	}
 	

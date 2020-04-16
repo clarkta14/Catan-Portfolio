@@ -128,8 +128,8 @@ public class CatanBoard {
 
 	}
 	
-	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
-		return placeRoad(tilesToCorners, tileToRoadOrientation);
+	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
+		return placeRoad(tilesToCorners, tileToRoadOrientation, gameState);
 	}
 
 	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates gameState) {
@@ -170,13 +170,18 @@ public class CatanBoard {
 		return true;
 	}
 
-	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
+	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
 		Road newRoad = new Road(this.turnController.getCurrentPlayer());
+		
 		Boolean validPlacement = false;
 		for (int tileNum : tilesToCorners.keySet()) {
 			Tile tileToCheck = this.tiles.get(tileNum);
 			ArrayList<Integer> edge = tilesToCorners.get(tileNum);
-			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge.get(0), edge.get(1), newRoad);
+			if (tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState) != tileToCheck.checkValidRoadPlacement(edge, newRoad, GameStates.drop_road)) {
+				validPlacement = false;
+				break;
+			}
+			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
 		}
 		if (validPlacement) {
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);

@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PlayersController {
 	private ArrayList<Player> players;
@@ -28,6 +29,7 @@ public class PlayersController {
 	 	   plyrs.add(p);
 	 	   p = new Player(Color.ORANGE);
 	 	   plyrs.add(p);
+	 	   Collections.shuffle(plyrs);
 	 	   return plyrs;
 	    }
 	
