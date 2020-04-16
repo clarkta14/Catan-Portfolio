@@ -214,6 +214,15 @@ public class PlayerTests {
 		plyr.addResource(TileType.wool, 1);
 		assertTrue(!plyr.canBuySettlement());
 	}
+	
+	@Test
+	public void testCanBuyDevelopmentCard_WithEnoughResources() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.ore, 1);
+		plyr.addResource(TileType.wool, 1);
+		plyr.addResource(TileType.wheat, 1);
+		assertTrue(plyr.canBuyDevelopmentCard());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

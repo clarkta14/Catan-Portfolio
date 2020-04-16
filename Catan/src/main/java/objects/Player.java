@@ -51,4 +51,8 @@ public class Player {
 	public boolean canBuySettlement() {
 		return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
 	}
+
+	public boolean canBuyDevelopmentCard() {
+		return this.resources.get(TileType.ore) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
+	}
 }
