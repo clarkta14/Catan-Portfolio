@@ -40,7 +40,7 @@ public class BoardWindow extends JPanel {
 	private int hexagonSide;
 	private CatanBoard catanBoard;
 	private int settlementSize = 12;
-	private GUIStates state = GUIStates.setup;
+	private GameStates state = GameStates.setup;
 
 	public BoardWindow(CatanBoard catanBoard) {
 		this.catanBoard = catanBoard;
@@ -828,11 +828,11 @@ public class BoardWindow extends JPanel {
 		return -1;
 	}
 	
-	public void setState(GUIStates s) {
+	public void setState(GameStates s) {
 		this.state = s;
 	}
 	
-	public GUIStates getState() {
+	public GameStates getState() {
 		return this.state;
 	}
 
@@ -840,7 +840,8 @@ public class BoardWindow extends JPanel {
 		private Point lastClicked;
 
 		public void mouseClicked(MouseEvent e) {
-			if(state.equals(GUIStates.drop_settlement) || state.equals(GUIStates.drop_settlement_setup)) {
+			if(state.equals(GameStates.drop_settlement) || state.equals(GameStates.drop_settlement_setup) ||
+					state.equals(GameStates.drop_settlement_setup_final)) {
 				boolean settlementPlaced = false;
 				Point p = new Point(e.getX(), e.getY());
 				if (p != null) {
@@ -853,14 +854,14 @@ public class BoardWindow extends JPanel {
 					}
 				}
 				if(settlementPlaced) {
-					setState(GUIStates.idle);
+					setState(GameStates.idle);
 					repaint();
 				}
 			}
 		}
 
 		public void mousePressed(MouseEvent e) {
-			if(state.equals(GUIStates.drop_road)) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
 				Point prevClicked = new Point(e.getX(), e.getY());
 				lastClicked = prevClicked;
 			}
@@ -868,7 +869,7 @@ public class BoardWindow extends JPanel {
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			if(state.equals(GUIStates.drop_road)) {
+			if(state.equals(GameStates.drop_road) || state.equals(GameStates.drop_road_setup)) {
 				Point p = new Point(e.getX(), e.getY());
 				if (Math.abs(p.x - lastClicked.x) > 5 || Math.abs(p.y - lastClicked.y) > 5) {
 					ArrayList<ArrayList<Integer>> loc1 = getStructureLocation(lastClicked);
@@ -877,8 +878,8 @@ public class BoardWindow extends JPanel {
 						HashMap<Integer, ArrayList<Integer>> tileToCorners = getRoadLocation(loc1, loc2);
 						HashMap<Integer, Integer> tileToRoadOrientation = getRoadOrientations(tileToCorners);
 	
-						if (catanBoard.locationClicked(tileToCorners, tileToRoadOrientation)) {
-							setState(GUIStates.idle);
+						if (catanBoard.roadLocationClick(tileToCorners, tileToRoadOrientation)) {
+							setState(GameStates.idle);
 						}
 					}
 				}

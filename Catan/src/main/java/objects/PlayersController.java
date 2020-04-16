@@ -59,8 +59,16 @@ public class PlayersController {
 					this.currentPlayer++;
 				}
 			}
-		}else {
+		} else {
 			this.currentPlayer = (this.currentPlayer + 1) % this.players.size();
 		}
+	}
+	
+	public boolean isInitialSetup() {
+		return this.initialSetup;
+	}
+	
+	public boolean isBackwardsSetup() {
+		return this.backwardsSetup;
 	}
 }

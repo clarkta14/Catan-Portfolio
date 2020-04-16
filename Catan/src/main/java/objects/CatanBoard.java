@@ -4,8 +4,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
-import gui.GUIStates;
+import gui.GameStates;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
@@ -107,15 +108,16 @@ public class CatanBoard {
 		return this.tiles;
 	}
 	
-	public void locationClicked(ArrayList<Integer> tiles, ArrayList<Integer> corners, GUIStates guistate) {
-		addSettlementToTiles(tiles, corners, guistate);	
+	public void settlementLocationClick(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
+		addSettlementToTiles(tiles, corners, gameState);	
+
 	}
 	
-	public boolean locationClicked(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
+	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
 		return placeRoad(tilesToCorners, tileToRoadOrientation);
 	}
 
-	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GUIStates guistate) {
+	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates gameState) {
 		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
 		boolean settlementLocationIsValid = true;
 		for(int i = 0; i < selectedTiles.size(); i++) {
@@ -123,17 +125,32 @@ public class CatanBoard {
 					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
     	}
 		
-		if(guistate != GUIStates.drop_settlement_setup) {
+		if(!settlementLocationIsValid) return false;
+		
+		if(gameState != GameStates.drop_settlement_setup && gameState != GameStates.drop_settlement_setup_final) {
+			settlementLocationIsValid = false;
 			for(int i = 0; i < selectedTiles.size(); i++) {
-				settlementLocationIsValid = settlementLocationIsValid &&
+				settlementLocationIsValid = settlementLocationIsValid ||
 					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
     		}
+			if(!settlementLocationIsValid) {
+				return false;
+			} 
+			if (!buySettlement()) {
+				return false;
+			}
 		}
 		
-		if(!settlementLocationIsValid) return false;
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+		}
+		if (gameState == GameStates.drop_settlement_setup_final) {
+			Player currentPlayer = this.turnController.getCurrentPlayer();
+			for (int i = 0; i < selectedTiles.size(); i++) {
+				Tile currentTile = this.tiles.get(selectedTiles.get(i));
+				currentPlayer.addResource(currentTile.getType(), 1);
+			}
 		}
 		return true;
 	}
@@ -161,5 +178,43 @@ public class CatanBoard {
 			newRoad.setAngle(angle);
 			this.tiles.get(tileNum).addRoad(corners.get(0), corners.get(1), newRoad);
 		}
+	}
+	
+	public int endTurnAndRoll() {
+		Random random = new Random();
+		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
+		distributeResources(rolled);
+		return rolled;
+	}
+
+	public void distributeResources(int number) {
+		for (Tile t : this.tiles) {
+			if(t.getNumber() == number) {
+				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
+				for(Settlement settlement : settlementsOnTile.values()) {
+					settlement.getOwner().addResource(t.getType(), 1);
+				}
+			}
+		}
+	}
+
+	boolean buyRoad() {
+		if(this.turnController.getCurrentPlayer().canBuyRoad()) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			return true;
+		}
+		return false;
+	}
+
+	boolean buySettlement() {
+		if(this.turnController.getCurrentPlayer().canBuySettlement()) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+			return true;
+		}
+		return false;
 	}
 }

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import lib.GraphPaperLayout;
+import objects.CatanBoard;
 import objects.Player;
 import objects.PlayersController;
 
@@ -23,15 +24,18 @@ public class OptionsPanel extends JPanel {
 	private final Font font = new Font("Arial", 1, 16);
 	private OptionsPanelComponent currentPlayerNameBox;
 	private GameWindow gameWindow;
-	private PlayersController turnController;
+	private PlayersController playerController;
 	private BoardWindow boardGUI;
+	private CatanBoard catanBoard;
 	private ArrayList<OptionsPanelComponent> setupPanel;
+	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
 	private Timer timer;
 
-	public OptionsPanel(GameWindow gameWindow) {
+	public OptionsPanel(GameWindow gameWindow, CatanBoard catanBoard) {
 		this.gameWindow = gameWindow;
-		this.turnController = this.gameWindow.getPlayersController();
+		this.catanBoard = catanBoard;
+		this.playerController = this.gameWindow.getPlayersController();
 		this.boardGUI = this.gameWindow.getBoardWindow();
 		this.setupPanel = new ArrayList<>();
 		this.infoPanel = new ArrayList<>();
@@ -39,56 +43,160 @@ public class OptionsPanel extends JPanel {
 		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(""), new Rectangle(1, 1, 12, 1));
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
 		this.currentPlayerNameBox.getSwingComponent().setForeground(Color.CYAN);
-		setCurrentPlayer(this.turnController.getCurrentPlayer(), this.turnController.getCurrentPlayerNum());
+		setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
 		add(this.currentPlayerNameBox.getSwingComponent(), this.currentPlayerNameBox.getRectangle());
+		createActionPanel();
 		setupPhase();
 	}
 
 	public void setupPhase() {
-		if(boardGUI.getState().equals(GUIStates.setup)) {
+		if(boardGUI.getState().equals(GameStates.setup)) {
 			final JLabel start = new JLabel("Setup phase: ");
 			start.setFont(font);
 			setupPanel.add(new OptionsPanelComponent(start, new Rectangle(2,3,10,2)));
-			JButton begin = new JButton(new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if(boardGUI.getState().equals(GUIStates.setup)) {
-						boardGUI.setState(GUIStates.drop_settlement_setup);
-						placeInfoPanel("Place a settlement");
-						timer = new Timer(50, new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								if(!boardGUI.getState().equals(GUIStates.drop_settlement_setup)) {
-									timer.stop();
-									boardGUI.setState(GUIStates.drop_road);
-									placeInfoPanel("Place a road");
-									timer = new Timer(50, new ActionListener() {
-										@Override
-										public void actionPerformed(ActionEvent e) {
-											if(!boardGUI.getState().equals(GUIStates.drop_road)) {
-												timer.stop();
-												turnController.nextPlayer();
-												setCurrentPlayer(turnController.getCurrentPlayer(), turnController.getCurrentPlayerNum());
-												boardGUI.setState(GUIStates.setup);
-												setupPanel();
-											}	
-										}	
-									});
-									timer.start();
-								}
-							}
-						});
-						timer.start();
-					}
-				}
-	
-				
-			});
+			JButton begin = new JButton(new DropSettlementSetupListener());
 			begin.setText("Place");
 			setupPanel.add(new OptionsPanelComponent(begin, new Rectangle(4,6,6,2)));
 			setupPanel();
 		}
 	}
+	
+	class DropSettlementSetupListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.setup)) {
+				if (!playerController.isBackwardsSetup()) {
+					boardGUI.setState(GameStates.drop_settlement_setup);
+				} else {
+					boardGUI.setState(GameStates.drop_settlement_setup_final);
+				}
+				placeInfoPanel("Place a settlement");
+				timer = new Timer(50, new PlaceRoadSetupListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class PlaceRoadSetupListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!boardGUI.getState().equals(GameStates.drop_settlement_setup)
+					&& !boardGUI.getState().equals(GameStates.drop_settlement_setup_final)) {
+				timer.stop();
+				boardGUI.setState(GameStates.drop_road_setup);
+				placeInfoPanel("Place a road");
+				timer = new Timer(50, new ResetStateListenerSetup());
+				timer.start();
+			}
+		}
+	}
+	
+	class ResetStateListenerSetup implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!boardGUI.getState().equals(GameStates.drop_road_setup)) {
+				timer.stop();
+				playerController.nextPlayer();
+				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
+				if(playerController.isInitialSetup()) {
+					boardGUI.setState(GameStates.setup);
+					setupPanel();
+				} else {
+					boardGUI.setState(GameStates.idle);
+					setOnOptionsPanel(actionPanel);
+					addCancelButtonToInfoPanel();
+				}
+			}	
+		}
+
+		private void addCancelButtonToInfoPanel() {
+			JButton cancelButton = new JButton(new CancelAction());
+			cancelButton.setText("Cancel");
+			infoPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,6,6,2)));			
+		}	
+	}
+	
+	private void createActionPanel() {
+		actionPanel = new ArrayList<>();
+		JButton placeSettlementButton = new JButton(new PlaceSettlementListener());
+		placeSettlementButton.setText("Place Settlement");
+		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
+		
+		JButton placeRoadButton = new JButton(new PlaceRoadListener());
+		placeRoadButton.setText("Place Road");
+		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,6,6,2)));
+		
+		JButton tradeWithBankButton = new JButton();
+		tradeWithBankButton.setText("Trade Bank");
+		actionPanel.add(new OptionsPanelComponent(tradeWithBankButton, new Rectangle(4,8,6,2)));
+		
+		JButton tradeWithPlayerButton = new JButton();
+		tradeWithPlayerButton.setText("Trade Player");
+		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,10,6,2)));
+		
+		JButton buyDevCardButton = new JButton();
+		buyDevCardButton.setText("Buy Dev. Card");
+		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,12,6,2)));
+		
+		JButton endTurnButton = new JButton(new EndTurnListener());
+		endTurnButton.setText("End Turn");
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
+	}
+	
+	class CancelAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			boardGUI.setState(GameStates.idle);
+			setOnOptionsPanel(actionPanel);
+		}
+	}
+	
+	class PlaceSettlementListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuySettlement()) {
+				placeInfoPanel("Place a settlement");
+				boardGUI.setState(GameStates.drop_settlement);
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class PlaceRoadListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyRoad()) {
+				placeInfoPanel("Place a settlement");
+				boardGUI.setState(GameStates.drop_road);
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class ResetStateListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				setOnOptionsPanel(actionPanel);
+			}	
+		}	
+	}
+	
+	class EndTurnListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				playerController.nextPlayer();
+				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
+				
+				//TODO: roll the dice and allocate resources (beware 7)
+				catanBoard.endTurnAndRoll();
+			}
+		}
+	}
+	
 
 	public void setCurrentPlayer(Player p, int num) {
 		JLabel label = (JLabel) currentPlayerNameBox.getSwingComponent();
