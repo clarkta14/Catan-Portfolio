@@ -167,7 +167,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyRoad()) {
-				placeInfoPanel("Place a settlement");
+				placeInfoPanel("Place a road");
 				boardGUI.setState(GameStates.drop_road);
 				timer = new Timer(50, new ResetStateListener());
 				timer.start();
