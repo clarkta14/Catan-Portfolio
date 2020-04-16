@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -88,8 +89,9 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(5, 0));
 		
-		assertFalse(tile.checkValidRoadPlacement(5, 0, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -99,8 +101,9 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
 		
-		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -108,8 +111,9 @@ public class TileTests {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
 		
-		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -119,8 +123,9 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(2, 3));
 		
-		assertTrue(tile.checkValidRoadPlacement(2, 3, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -130,8 +135,9 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(1, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(1, 4));
 		
-		assertFalse(tile.checkValidRoadPlacement(1, 4, roadToPlace));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -143,7 +149,9 @@ public class TileTests {
 		
 		Player player2 = new Player(Color.blue);
 		Road roadToPlace = new Road(player2);
-		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
+		
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace));
 	}
 	
 	@Test
@@ -153,12 +161,14 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
 		
-		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
+		edge = new ArrayList<Integer>( Arrays.asList(2, 1));
 		Road roadToConnect = new Road(player1);
-		assertTrue(tile.checkValidRoadPlacement(2, 1, roadToConnect));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToConnect));
 	}
 	
 	@Test
@@ -168,12 +178,14 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>(Arrays.asList(3, 2));
 		
-		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
+		edge = new ArrayList<Integer>( Arrays.asList(1, 2));
 		Road roadToConnect = new Road(player1);
-		assertTrue(tile.checkValidRoadPlacement(1, 2, roadToConnect));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToConnect));
 	}
 	
 	@Test
@@ -183,12 +195,14 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(2, 3));
 		
-		assertTrue(tile.checkValidRoadPlacement(2, 3, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 		tile.addRoad(2, 3, roadToPlace);
 		
+		edge = new ArrayList<Integer>( Arrays.asList(4, 3));
 		Road roadToConnect = new Road(player1);
-		assertTrue(tile.checkValidRoadPlacement(4, 3, roadToConnect));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToConnect));
 	}
 	
 	@Test
@@ -198,13 +212,15 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
 		
-		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
 		Player player2 = new Player(Color.blue);
 		Road roadToConnect = new Road(player2);
-		assertFalse(tile.checkValidRoadPlacement(2, 1, roadToConnect));
+		edge = new ArrayList<Integer>( Arrays.asList(2, 1));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToConnect));
 	}
 	
 	@Test
@@ -214,12 +230,13 @@ public class TileTests {
 		Settlement settlementPlayer1 = new Settlement(player1);
 		tile.addSettlement(3, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(3, 2));
 		
-		assertTrue(tile.checkValidRoadPlacement(3, 2, roadToPlace));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace));
 		tile.addRoad(3, 2, roadToPlace);
 		
 		Road roadToConnect = new Road(player1);
-		assertFalse(tile.checkValidRoadPlacement(3, 2, roadToConnect));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToConnect));
 	}
 	
 	@Test
