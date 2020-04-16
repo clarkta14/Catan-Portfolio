@@ -392,9 +392,11 @@ public class CatanBoardTest {
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(18, 17, 14)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
 	
 		cb.distributeResources(cb.getTiles().get(5).getNumber());
-		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) > 0);
+		if (cb.getTiles().get(5).getType() != TileType.desert)
+			assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) > 0);
 		cb.distributeResources(cb.getTiles().get(4).getNumber());
-		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(4).getType()) > 0);
+		if (cb.getTiles().get(4).getType() != TileType.desert)
+			assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(4).getType()) > 0);
 	}
 	
 	@Test
@@ -565,7 +567,7 @@ public class CatanBoardTest {
 			} else {
 				assertEquals(1,  currentPlayer.getResourceCount(TileType1));
 			}
-			if (TileType1 == TileType.desert) {
+			if (TileType2 == TileType.desert) {
 				assertEquals(0,  currentPlayer.getResourceCount(TileType2));
 			} else {
 				assertEquals(1,  currentPlayer.getResourceCount(TileType2));
@@ -756,6 +758,24 @@ public class CatanBoardTest {
 		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
 		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testPlaceRoadNotEnoughResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
+
+		// Place Settlement
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		// Try to Place Road
+		addPlayerDragNums(p1roadTile, p1road1, p1road2);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertFalse(result);
 	}
 	
 	private void basicSetupForAddSettlementTests() {

@@ -184,6 +184,9 @@ public class CatanBoard {
 			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
 		}
 		if (validPlacement) {
+			if (gameState == GameStates.drop_road && !buyRoad()) {
+					return false;
+			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
 			return true;
 		} else {

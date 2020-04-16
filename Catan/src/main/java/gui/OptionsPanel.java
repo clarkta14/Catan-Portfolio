@@ -139,7 +139,7 @@ public class OptionsPanel extends JPanel {
 		tradeWithPlayerButton.setText("Trade Player");
 		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,10,6,2)));
 		
-		JButton buyDevCardButton = new JButton();
+		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText("Buy Dev. Card");
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,12,6,2)));
 		
@@ -158,6 +158,16 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			boardGUI.setState(GameStates.idle);
 			setOnOptionsPanel(actionPanel);
+		}
+	}
+	
+	class BuyDevCardListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && catanBoard.buyDevelopmentCard()) {
+				gameWindow.refreshPlayerStats();
+				repaint();
+			}
 		}
 	}
 	
