@@ -9,18 +9,18 @@ public class DevelopmentCardTests {
 	@Test
 	public void testCreateKnightCard() {
 		DevelopmentCard knight = new KnightDevelopmentCard();
-		assertEquals(knight.getClass(), KnightDevelopmentCard.class);
+		assertEquals(knight.getDevelopmentCardType(), DevelopmentCardType.knight);
 	}
 	
 	@Test
 	public void testCreateProgressCard() {
 		DevelopmentCard progress = new ProgressDevelopmentCard();
-		assertEquals(progress.getClass(), ProgressDevelopmentCard.class);
+		assertEquals(progress.getDevelopmentCardType(), DevelopmentCardType.progress);
 	}
 	
 	@Test
 	public void testCreateVictoryPointCard() {
-		DevelopmentCard progress = new VictoryPointDevelopmentCard();
-		assertEquals(progress.getClass(), VictoryPointDevelopmentCard.class);
+		DevelopmentCard victoryPoint = new VictoryPointDevelopmentCard();
+		assertEquals(victoryPoint.getDevelopmentCardType(), DevelopmentCardType.victory_point);
 	}
 }

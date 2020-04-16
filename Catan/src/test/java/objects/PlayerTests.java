@@ -44,9 +44,9 @@ public class PlayerTests {
 	public void testAddOneResourceTwice() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.brick, 1);
-		assertEquals(1, player.getResource(TileType.brick));
+		assertEquals(1, (int) player.resources.get(TileType.brick));
 		player.addResource(TileType.brick, 1);
-		assertEquals(2, player.getResource(TileType.brick));
+		assertEquals(2, (int) player.resources.get(TileType.brick));
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class PlayerTests {
 		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0, player.getResource(TileType.brick));
+		assertEquals(0, (int) player.resources.get(TileType.brick));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1, player.getResource(TileType.brick));
+		assertEquals(1, (int) player.resources.get(TileType.brick));
 	}
 	
 	@Test
@@ -107,10 +107,10 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1, player.getResource(TileType.brick));
+		assertEquals(1, (int) player.resources.get(TileType.brick));
 		
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0, player.getResource(TileType.brick));
+		assertEquals(0, (int) player.resources.get(TileType.brick));
 	}
 
 	@Test
@@ -247,9 +247,69 @@ public class PlayerTests {
 		plyr.addResource(TileType.wool, 1);
 		assertTrue(!plyr.canBuyDevelopmentCard());
 	}
+	
+	@Test
+	public void testAddDevelopmentCard_KnightDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.knight);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 1);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+	}
+	
+	@Test
+	public void testAddDevelopmentCard_ProgressDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.progress);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+	}
+	
+	@Test
+	public void testAddDevelopmentCard_VictoryPointDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
+	}
+	
+	@Test
+	public void testRemoveDevelopmentCard_KnightDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.knight);
+		plyr.addDevelopmentCard(DevelopmentCardType.knight);
+		plyr.removeDevelopmentCard(DevelopmentCardType.knight);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 1);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+	}
+	
+	@Test
+	public void testRemoveDevelopmentCard_ProgressDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.progress);
+		plyr.addDevelopmentCard(DevelopmentCardType.progress);
+		plyr.removeDevelopmentCard(DevelopmentCardType.progress);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+	}
+	
+	@Test
+	public void testRemoveDevelopmentCard_VictoryPointDC() {
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		plyr.removeDevelopmentCard(DevelopmentCardType.victory_point);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
-		return player.getResource(type);
+		return player.resources.get(type);
 	}
 }

@@ -5,16 +5,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Stack;
 
 import gui.GameStates;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
+    private Stack<DevelopmentCardType> developmentCards;
     
-    public CatanBoard(PlayersController turnController){
+    @SuppressWarnings("serial")
+	public CatanBoard(PlayersController turnController){
     	this.turnController = turnController;
         this.tiles = new ArrayList<Tile>();
+        this.developmentCards = new Stack<DevelopmentCardType>() {{
+        	for(int i = 0; i < 14; i++) {
+        		push(DevelopmentCardType.knight);
+        	}
+			for(int i = 0; i < 6; i++) {
+				push(DevelopmentCardType.progress);    		
+			}
+			for(int i = 0; i < 5; i++) {
+				push(DevelopmentCardType.victory_point);
+			}
+        }};
+        Collections.shuffle(this.developmentCards);
         shuffleTiles();
     }
     
@@ -213,6 +228,17 @@ public class CatanBoard {
 			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
 			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean buyDevelopmentCard() {
+		if(this.turnController.getCurrentPlayer().canBuyDevelopmentCard()) {
+			this.turnController.getCurrentPlayer().removeResource(TileType.ore, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
+			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+			this.turnController.getCurrentPlayer().addDevelopmentCard(developmentCards.pop());
 			return true;
 		}
 		return false;

@@ -184,8 +184,6 @@ public class TileTests {
 	@Test
 	public void testCheckVaildSettlementPlacementCorner0NoSettlements() {
 		Tile tile = new Tile(null, 5, TileType.brick);
-		Player player1 = new Player(Color.red);
-		
 		boolean actual = tile.checkValidSettlementPlacement(0);
 		assertTrue(actual);
 	}

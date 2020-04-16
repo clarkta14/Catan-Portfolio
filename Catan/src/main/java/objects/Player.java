@@ -2,10 +2,12 @@ package objects;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Player {
 	private Color color;
-	private HashMap<TileType, Integer> resources;
+	protected HashMap<TileType, Integer> resources;
+	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -13,6 +15,12 @@ public class Player {
 		this.resources = new HashMap<TileType, Integer>() {{
 			for(TileType type : TileType.values()) {
 				put(type, 0);
+			}
+		}};
+		this.developmentCards = new HashMap<DevelopmentCardType, Stack<DevelopmentCard>>() {{
+			for(DevelopmentCardType type : DevelopmentCardType.values()) {
+				Stack<DevelopmentCard> s = new Stack<>();
+				put(type, s);
 			}
 		}};
 	}
@@ -40,10 +48,6 @@ public class Player {
 		this.resources.replace(type, totalNumResource);
 	}
 
-	public int getResource(TileType type) {
-		return this.resources.get(type);
-	}
-
 	public boolean canBuyRoad() {
 		return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0;
 	}
@@ -54,5 +58,21 @@ public class Player {
 
 	public boolean canBuyDevelopmentCard() {
 		return this.resources.get(TileType.ore) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
+	}
+
+	public void addDevelopmentCard(DevelopmentCardType cardType) {
+		Stack<DevelopmentCard> cards = this.developmentCards.get(cardType);
+		if(DevelopmentCardType.knight == cardType) {
+			cards.push(new KnightDevelopmentCard());
+		} else if(DevelopmentCardType.progress == cardType) {
+			cards.push(new ProgressDevelopmentCard());
+		} else if(DevelopmentCardType.victory_point == cardType) {
+			cards.push(new VictoryPointDevelopmentCard());
+		}
+		this.developmentCards.replace(cardType, cards);
+	}
+
+	public DevelopmentCard removeDevelopmentCard(DevelopmentCardType cardType) {
+		return this.developmentCards.get(cardType).pop();
 	}
 }
