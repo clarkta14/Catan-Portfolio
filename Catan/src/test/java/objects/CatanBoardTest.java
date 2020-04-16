@@ -554,10 +554,22 @@ public class CatanBoardTest {
 		TileType TileType1 = cb.getTiles().get(1).getType();
 		TileType TileType2 = cb.getTiles().get(2).getType();
 		if (TileType1 == TileType2) {
-			assertEquals(2,  currentPlayer.getResourceCount(TileType1));
+			if (TileType1 == TileType.desert) {
+				assertEquals(0,  currentPlayer.getResourceCount(TileType1));
+			} else {
+				assertEquals(2,  currentPlayer.getResourceCount(TileType1));
+			}
 		} else {
-			assertEquals(1,  currentPlayer.getResourceCount(TileType1));
-			assertEquals(1,  currentPlayer.getResourceCount(TileType2));
+			if (TileType1 == TileType.desert) {
+				assertEquals(0,  currentPlayer.getResourceCount(TileType1));
+			} else {
+				assertEquals(1,  currentPlayer.getResourceCount(TileType1));
+			}
+			if (TileType1 == TileType.desert) {
+				assertEquals(0,  currentPlayer.getResourceCount(TileType2));
+			} else {
+				assertEquals(1,  currentPlayer.getResourceCount(TileType2));
+			}
 		}
 		
 	}
@@ -576,6 +588,9 @@ public class CatanBoardTest {
 		
 		Player currentPlayer = pc.getCurrentPlayer();
 		TileType TileType2 = cb.getTiles().get(2).getType();
+		if (TileType2 == TileType.desert) {
+			assertEquals(0,  currentPlayer.getResourceCount(TileType2));
+		}
 		assertEquals(1,  currentPlayer.getResourceCount(TileType2));
 		
 	}
