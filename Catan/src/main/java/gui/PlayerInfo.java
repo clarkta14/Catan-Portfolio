@@ -43,7 +43,7 @@ public class PlayerInfo extends JPanel {
 			playerPanel.add(resourcesLabel);
 			displayPlayerResources(playerPanel, player);
 			
-			// TODO: when implemented, create labels for victory points
+			// TODO: when implemented, create label for victory points
 			
 			JLabel devCardsLabel = new JLabel("Development Cards");
 			devCardsLabel.setFont(new Font("Ariel", Font.BOLD, 14));
