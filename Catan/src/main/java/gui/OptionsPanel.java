@@ -193,6 +193,7 @@ public class OptionsPanel extends JPanel {
 				
 				//TODO: roll the dice and allocate resources (beware 7)
 				catanBoard.endTurnAndRoll();
+				gameWindow.refreshPlayerStats();
 			}
 		}
 	}

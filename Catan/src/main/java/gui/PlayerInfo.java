@@ -22,7 +22,7 @@ public class PlayerInfo extends JPanel {
 		initializeAllPlayerInfo();
 	}
 	
-	public void initializeAllPlayerInfo() {
+	private void initializeAllPlayerInfo() {
 		for(int i = 0; i < numOfPlayers; i++) {
 			JPanel playerPanel = new JPanel();
 			playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.PAGE_AXIS));
@@ -51,7 +51,8 @@ public class PlayerInfo extends JPanel {
 	}
 	
 	public void updateAllPlayerInfo() {
-		
+		this.removeAll();
+		initializeAllPlayerInfo();
 	}
 	
 }

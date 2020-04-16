@@ -53,5 +53,9 @@ public class GameWindow {
 	public BoardWindow getBoardWindow() {
 		return this.boardWindow;
 	}
+	
+	public void refreshPlayerStats() {
+		playerInfo.updateAllPlayerInfo();
+	}
 }
 
