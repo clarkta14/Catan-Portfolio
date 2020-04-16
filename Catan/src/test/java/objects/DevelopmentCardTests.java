@@ -11,4 +11,10 @@ public class DevelopmentCardTests {
 		DevelopmentCard knight = new KnightDevelopmentCard();
 		assertEquals(knight.getClass(), KnightDevelopmentCard.class);
 	}
+	
+	@Test
+	public void testCreateProgressCard() {
+		DevelopmentCard progress = new ProgressDevelopmentCard();
+		assertEquals(progress.getClass(), ProgressDevelopmentCard.class);
+	}
 }
