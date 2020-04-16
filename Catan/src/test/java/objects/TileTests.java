@@ -147,6 +147,22 @@ public class TileTests {
 	}
 	
 	@Test
+	public void testCheckInvalidRoadPlacementSetupSettlementBranchOff() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(5, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(5, 0));
+		
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
+		tile.addRoad(5, 0, roadToPlace);
+		
+		edge = new ArrayList<Integer>( Arrays.asList(5, 4));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
+	}
+	
+	@Test
 	public void testCheckValidRoadPlacementSetup() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);

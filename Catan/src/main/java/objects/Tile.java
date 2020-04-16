@@ -41,7 +41,7 @@ public class Tile {
 	public void setLocation(Point location) {
 		this.pos = location;
 	}
-	
+
 	public Point getLocation() {
 		return this.pos;
 	}
@@ -75,26 +75,26 @@ public class Tile {
 	public Polygon getHexagon() {
 		return this.hexagon;
 	}
-	
+
 	public boolean checkValidSettlementPlacement(int corner) {
 		if (this.hexCornerToSettlement.containsKey(corner)) {
 			return false;
 		}
-		if (this.hexCornerToSettlement.containsKey((corner+1)%6)) {
+		if (this.hexCornerToSettlement.containsKey((corner + 1) % 6)) {
 			return false;
 		}
-		if (this.hexCornerToSettlement.containsKey((corner+5)%6)) {
+		if (this.hexCornerToSettlement.containsKey((corner + 5) % 6)) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public boolean checkRoadAtCornerForGivenPlayer(int corner, Player player) {
-		for(ArrayList<Integer> a : this.hexEdgeToRoad.keySet()) {
-			for(Integer i : a) {
-				if(i == corner) {
+		for (ArrayList<Integer> a : this.hexEdgeToRoad.keySet()) {
+			for (Integer i : a) {
+				if (i == corner) {
 					Road road = this.hexEdgeToRoad.get(a);
-					if(road.getOwner().getColor().equals(player.getColor()))
+					if (road.getOwner().getColor().equals(player.getColor()))
 						return true;
 				}
 			}
@@ -103,7 +103,7 @@ public class Tile {
 	}
 
 	public void addSettlement(int corner, Settlement s) {
-			this.hexCornerToSettlement.put(corner, s);
+		this.hexCornerToSettlement.put(corner, s);
 	}
 
 	public HashMap<Integer, Settlement> getSettlements() {
@@ -122,7 +122,7 @@ public class Tile {
 			this.hexEdgeToRoad.put(edge2, r);
 		}
 	}
-	
+
 	public HashMap<ArrayList<Integer>, Road> getRoads() {
 		return this.hexEdgeToRoad;
 	}
@@ -134,20 +134,23 @@ public class Tile {
 			return false;
 		}
 		ArrayList<Integer> newEdge = new ArrayList<Integer>();
-		newEdge.add(corner1); newEdge.add(corner2);
+		newEdge.add(corner1);
+		newEdge.add(corner2);
 		if (this.hexEdgeToRoad.containsKey(newEdge)) {
 			return false;
 		}
-		if (gameState != GameStates.drop_road_setup) {
-			for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
-				Road road = hexEdgeToRoad.get(edgeOfRoad);
-				if (road.getOwner() != roadToCheck.getOwner()) {
-					continue;
-				}
-				for (int corner : edgeOfRoad) {
-					if (corner == corner1 || corner == corner2) {
-						return true;
+
+		for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
+			Road road = hexEdgeToRoad.get(edgeOfRoad);
+			if (road.getOwner() != roadToCheck.getOwner()) {
+				continue;
+			}
+			for (int corner : edgeOfRoad) {
+				if (corner == corner1 || corner == corner2) {
+					if (gameState == GameStates.drop_road_setup) {
+						return false;
 					}
+					return true;
 				}
 			}
 		}
