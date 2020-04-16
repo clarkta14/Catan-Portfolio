@@ -31,6 +31,7 @@ public class OptionsPanel extends JPanel {
 	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
 	private Timer timer;
+	private OptionsPanelComponent lastRolled;
 
 	public OptionsPanel(GameWindow gameWindow, CatanBoard catanBoard) {
 		this.gameWindow = gameWindow;
@@ -83,6 +84,7 @@ public class OptionsPanel extends JPanel {
 			if(!boardGUI.getState().equals(GameStates.drop_settlement_setup)
 					&& !boardGUI.getState().equals(GameStates.drop_settlement_setup_final)) {
 				timer.stop();
+				gameWindow.refreshPlayerStats();
 				boardGUI.setState(GameStates.drop_road_setup);
 				placeInfoPanel("Place a road");
 				timer = new Timer(50, new ResetStateListenerSetup());
@@ -105,6 +107,9 @@ public class OptionsPanel extends JPanel {
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 					addCancelButtonToInfoPanel();
+					int rolled = catanBoard.endTurnAndRoll();
+					setLastRolled(rolled);
+					gameWindow.refreshPlayerStats();
 				}
 			}	
 		}
@@ -134,13 +139,18 @@ public class OptionsPanel extends JPanel {
 		tradeWithPlayerButton.setText("Trade Player");
 		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,10,6,2)));
 		
-		JButton buyDevCardButton = new JButton();
+		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText("Buy Dev. Card");
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,12,6,2)));
 		
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
 		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
+		
+		this.lastRolled = new OptionsPanelComponent(new JLabel(""), new Rectangle(4, 18, 6, 2));
+		this.lastRolled.getSwingComponent().setFont(font);
+		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
+		actionPanel.add(this.lastRolled);
 	}
 	
 	class CancelAction extends AbstractAction {
@@ -148,6 +158,15 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			boardGUI.setState(GameStates.idle);
 			setOnOptionsPanel(actionPanel);
+		}
+	}
+	
+	class BuyDevCardListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && catanBoard.buyDevelopmentCard()) {
+				gameWindow.refreshPlayerStats();
+			}
 		}
 	}
 	
@@ -179,6 +198,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
+				gameWindow.refreshPlayerStats();
 				setOnOptionsPanel(actionPanel);
 			}	
 		}	
@@ -192,7 +212,8 @@ public class OptionsPanel extends JPanel {
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
 				//TODO: roll the dice and allocate resources (beware 7)
-				catanBoard.endTurnAndRoll();
+				int rolled = catanBoard.endTurnAndRoll();
+				setLastRolled(rolled);
 				gameWindow.refreshPlayerStats();
 			}
 		}
@@ -204,6 +225,12 @@ public class OptionsPanel extends JPanel {
 		label.setText("    Player " + (num + 1));
 		label.setOpaque(true);
 		label.setBackground(p.getColor());
+	}
+	
+	public void setLastRolled(int lastRolledNum) {
+		JLabel label = (JLabel) this.lastRolled.getSwingComponent();
+		label.setText("Last Rolled: " + lastRolledNum);
+		label.setOpaque(true);
 	}
 	
 	private void placeInfoPanel(String string) {

@@ -79,6 +79,10 @@ public class Player {
 		return this.developmentCards.get(cardType).pop();
 	}
 	
+	public int getDevelopmentCardCount(DevelopmentCardType cardType) {
+		return this.developmentCards.get(cardType).size();
+	}
+	
 	public boolean canAffordTrade(HashMap<TileType, Integer> payment) { 
 		for(TileType tt : payment.keySet()) {
 			if(this.resources.get(tt) < payment.get(tt)) {
