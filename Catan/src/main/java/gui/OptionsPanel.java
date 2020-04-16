@@ -83,6 +83,7 @@ public class OptionsPanel extends JPanel {
 			if(!boardGUI.getState().equals(GameStates.drop_settlement_setup)
 					&& !boardGUI.getState().equals(GameStates.drop_settlement_setup_final)) {
 				timer.stop();
+				gameWindow.refreshPlayerStats();
 				boardGUI.setState(GameStates.drop_road_setup);
 				placeInfoPanel("Place a road");
 				timer = new Timer(50, new ResetStateListenerSetup());
@@ -179,6 +180,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
+				gameWindow.refreshPlayerStats();
 				setOnOptionsPanel(actionPanel);
 			}	
 		}	
