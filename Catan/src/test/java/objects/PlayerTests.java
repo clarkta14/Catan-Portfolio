@@ -223,6 +223,30 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(plyr.canBuyDevelopmentCard());
 	}
+	
+	@Test
+	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughOre() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.wool, 1);
+		plyr.addResource(TileType.wheat, 1);
+		assertTrue(!plyr.canBuyDevelopmentCard());
+	}
+	
+	@Test
+	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughWool() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.ore, 1);
+		plyr.addResource(TileType.wheat, 1);
+		assertTrue(!plyr.canBuyDevelopmentCard());
+	}
+	
+	@Test
+	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughWheat() {
+		Player plyr = new Player(Color.orange);
+		plyr.addResource(TileType.ore, 1);
+		plyr.addResource(TileType.wool, 1);
+		assertTrue(!plyr.canBuyDevelopmentCard());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
