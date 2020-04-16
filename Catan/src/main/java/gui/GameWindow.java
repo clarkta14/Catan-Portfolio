@@ -15,13 +15,14 @@ public class GameWindow {
 	private CatanBoard catanBoard;
 	private BoardWindow boardWindow;
     private OptionsPanel options; // To hold buttons for game options
-    //private GameState gameState; // Hold all player information
+    private PlayerInfo playerInfo; // Hold all player information
     
     public GameWindow(int numOfPlayers){
     	this.turnController = new PlayersController(numOfPlayers);
     	this.catanBoard = new CatanBoard(this.turnController);
     	this.boardWindow = new BoardWindow(this.catanBoard);
     	this.options = new OptionsPanel(this, catanBoard);
+    	this.playerInfo = new PlayerInfo(this.turnController, numOfPlayers);
         showGUI();
     }
 
@@ -37,7 +38,7 @@ public class GameWindow {
         //Adding components to the window
         content.add(options,new Rectangle(0,0,1,5));
         content.add(boardWindow,new Rectangle(1,0,4,4));
-	//content.add(gameState,new Rectangle(1,4,4,2));
+        content.add(playerInfo,new Rectangle(1,4,4,2));
         
         frame.setResizable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -51,6 +52,10 @@ public class GameWindow {
 
 	public BoardWindow getBoardWindow() {
 		return this.boardWindow;
+	}
+	
+	public void refreshPlayerStats() {
+		playerInfo.updateAllPlayerInfo();
 	}
 }
 
