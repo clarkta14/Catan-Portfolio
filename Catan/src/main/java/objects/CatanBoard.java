@@ -156,11 +156,16 @@ public class CatanBoard {
 	}
 
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
-		Road newRoad = new Road(this.turnController.getCurrentPlayer());		
+		Road newRoad = new Road(this.turnController.getCurrentPlayer());
+		
 		Boolean validPlacement = false;
 		for (int tileNum : tilesToCorners.keySet()) {
 			Tile tileToCheck = this.tiles.get(tileNum);
 			ArrayList<Integer> edge = tilesToCorners.get(tileNum);
+			if (tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState) != tileToCheck.checkValidRoadPlacement(edge, newRoad, GameStates.drop_road)) {
+				validPlacement = false;
+				break;
+			}
 			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
 		}
 		if (validPlacement) {

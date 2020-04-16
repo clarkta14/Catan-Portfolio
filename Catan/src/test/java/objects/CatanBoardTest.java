@@ -324,11 +324,39 @@ public class CatanBoardTest {
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertTrue(result);
 		
-		
 		assertEquals(0, currentPlayer.getResource(TileType.brick));
 		assertEquals(0, currentPlayer.getResource(TileType.wood));
 		assertEquals(0, currentPlayer.getResource(TileType.wool));
 		assertEquals(0, currentPlayer.getResource(TileType.wheat));
+	}
+	
+	@Test
+	public void testAddSettlementToTilesNotSetupValidPlacementNoResources() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		
+		currentPlayer.addResource(TileType.brick, 1);
+		currentPlayer.addResource(TileType.wood, 1);
+		currentPlayer.addResource(TileType.wool, 1);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		
+		assertEquals(1, currentPlayer.getResource(TileType.brick));
+		assertEquals(1, currentPlayer.getResource(TileType.wood));
+		assertEquals(1, currentPlayer.getResource(TileType.wool));
 	}
 	
 	@Test
@@ -548,6 +576,31 @@ public class CatanBoardTest {
 		TileType TileType2 = cb.getTiles().get(2).getType();
 		assertEquals(1, currentPlayer.getResource(TileType2));
 		
+	}
+	
+	@Test
+	public void testPlaceRoadSetupNotValid() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+				
+		tileNums.add(1);
+		tileNums.add(2);
+		tileNums.add(5);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		
+		addPlayerDragNums(1, 3, 4);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertTrue(result);		
+		
+		addPlayerDragNums(1, 3, 2);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertFalse(result);	
 	}
 	
 	private void basicSetupForAddSettlementTests() {
