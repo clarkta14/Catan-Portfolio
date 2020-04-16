@@ -246,6 +246,9 @@ public class CatanBoard {
 	
 	public boolean tradeWithBank(HashMap<TileType, Integer> payment, TileType forThisType) {
 		if(!payment.keySet().contains(forThisType) && this.turnController.getCurrentPlayer().canAffordTrade(payment)) {
+			if(payment.values().stream().mapToInt(a -> a).sum() != 4) {
+				return false;
+			}
 			for(TileType tt : payment.keySet()) {
 				this.turnController.getCurrentPlayer().removeResource(tt, payment.get(tt));
 			}
