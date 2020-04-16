@@ -138,14 +138,16 @@ public class Tile {
 		if (this.hexEdgeToRoad.containsKey(newEdge)) {
 			return false;
 		}
-		for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
-			Road road = hexEdgeToRoad.get(edgeOfRoad);
-			if (road.getOwner() != roadToCheck.getOwner()) {
-				continue;
-			}
-			for (int corner : edgeOfRoad) {
-				if (corner == corner1 || corner == corner2) {
-					return true;
+		if (gameState != GameStates.drop_road_setup) {
+			for (ArrayList<Integer> edgeOfRoad : hexEdgeToRoad.keySet()) {
+				Road road = hexEdgeToRoad.get(edgeOfRoad);
+				if (road.getOwner() != roadToCheck.getOwner()) {
+					continue;
+				}
+				for (int corner : edgeOfRoad) {
+					if (corner == corner1 || corner == corner2) {
+						return true;
+					}
 				}
 			}
 		}

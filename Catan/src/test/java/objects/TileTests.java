@@ -131,15 +131,37 @@ public class TileTests {
 	}
 	
 	@Test
+	public void testCheckInvalidRoadPlacementSetup() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Player player1 = new Player(Color.red);
+		Settlement settlementPlayer1 = new Settlement(player1);
+		tile.addSettlement(5, settlementPlayer1);
+		Road roadToPlace = new Road(player1);
+		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(5, 0));
+		
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
+		tile.addRoad(5, 0, roadToPlace);
+		
+		edge = new ArrayList<Integer>( Arrays.asList(0, 1));
+		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
+	}
+	
+	@Test
 	public void testCheckValidRoadPlacementSetup() {
 		Tile tile = new Tile(null, 5, TileType.brick);
 		Player player1 = new Player(Color.red);
 		Settlement settlementPlayer1 = new Settlement(player1);
-		tile.addSettlement(3, settlementPlayer1);
+		tile.addSettlement(5, settlementPlayer1);
 		Road roadToPlace = new Road(player1);
 		ArrayList<Integer> edge = new ArrayList<Integer>( Arrays.asList(5, 0));
 		
-		assertFalse(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
+		tile.addRoad(5, 0, roadToPlace);
+		
+		Settlement settlementPlayer1_2 = new Settlement(player1);
+		tile.addSettlement(2, settlementPlayer1_2);
+		edge = new ArrayList<Integer>( Arrays.asList(2, 1));
+		assertTrue(tile.checkValidRoadPlacement(edge, roadToPlace, GameStates.drop_road_setup));
 	}
 	
 	@Test
