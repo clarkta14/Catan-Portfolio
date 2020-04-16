@@ -74,7 +74,7 @@ public class CatanBoardTest {
 		
 		// Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(player1, p1roadTile, p1road1, p1road2);
 		assertEquals(r.getAngle(), 2);
 	}
@@ -93,7 +93,7 @@ public class CatanBoardTest {
 		
 		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 
 		// Check no roads
 		ArrayList<Tile> tiles = cb.getTiles();
@@ -561,7 +561,7 @@ public class CatanBoardTest {
 		registerPlayerClick();
 		checkPlayerTileForSettlement(tileNum, settlementCorner, playerNum);
 		addPlayerDragNums(tileNum, settlementCorner, roadCorner);
-		registerPlayerDrag();
+		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(playerNum, tileNum, settlementCorner, roadCorner);
 		assertEquals(rAngle, r.getAngle());
 		pc.nextPlayer();
@@ -591,8 +591,8 @@ public class CatanBoardTest {
 		clearClicks();
 	}
 	
-	private void registerPlayerDrag() {
-		cb.roadLocationClick(tileToCorners, tileToRoadOrientation);
+	private void registerPlayerDragSetup() {
+		cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
 		clearDrags();
 	}
 	
