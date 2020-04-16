@@ -161,7 +161,7 @@ public class CatanBoard {
 		for (int tileNum : tilesToCorners.keySet()) {
 			Tile tileToCheck = this.tiles.get(tileNum);
 			ArrayList<Integer> edge = tilesToCorners.get(tileNum);
-			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, GameStates.drop_road_setup);
+			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
 		}
 		if (validPlacement) {
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
