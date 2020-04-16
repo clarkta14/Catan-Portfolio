@@ -75,4 +75,13 @@ public class Player {
 	public DevelopmentCard removeDevelopmentCard(DevelopmentCardType cardType) {
 		return this.developmentCards.get(cardType).pop();
 	}
+	
+	public boolean canAffordTrade(HashMap<TileType, Integer> payment) { 
+		for(TileType tt : payment.keySet()) {
+			if(this.resources.get(tt) < payment.get(tt)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

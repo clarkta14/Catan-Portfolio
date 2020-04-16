@@ -243,4 +243,15 @@ public class CatanBoard {
 		}
 		return false;
 	}
+	
+	public boolean tradeWithBank(HashMap<TileType, Integer> payment, TileType forThisType) {
+		if(!payment.keySet().contains(forThisType) && this.turnController.getCurrentPlayer().canAffordTrade(payment)) {
+			for(TileType tt : payment.keySet()) {
+				this.turnController.getCurrentPlayer().removeResource(tt, payment.get(tt));
+			}
+			this.turnController.getCurrentPlayer().addResource(forThisType, 1);
+			return true;
+		}
+		return false;
+	}
 }

@@ -624,6 +624,27 @@ public class CatanBoardTest {
 		assertTrue(totalDevCards == 0);
 	}
 	
+	@Test
+	public void testTradeWithBank_4DifferentResourcesAsPayment() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.ore, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> payment = new HashMap<>();
+		payment.put(TileType.brick, 1);
+		payment.put(TileType.ore, 1);
+		payment.put(TileType.wool, 1);
+		payment.put(TileType.wheat, 1);
+		assertTrue(cb.tradeWithBank(payment, TileType.wood));
+		assertEquals(0, (int) pc.getCurrentPlayer().resources.get(TileType.brick));
+		assertEquals(0, (int) pc.getCurrentPlayer().resources.get(TileType.ore));
+		assertEquals(0, (int) pc.getCurrentPlayer().resources.get(TileType.wool));
+		assertEquals(0, (int) pc.getCurrentPlayer().resources.get(TileType.wheat));
+		assertEquals(1, (int) pc.getCurrentPlayer().resources.get(TileType.wood));
+	}
+	
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
