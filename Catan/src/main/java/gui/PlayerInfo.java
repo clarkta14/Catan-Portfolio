@@ -1,11 +1,13 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import objects.DevelopmentCardType;
 import objects.Player;
 import objects.PlayersController;
 import objects.TileType;
@@ -30,25 +32,45 @@ public class PlayerInfo extends JPanel {
 			Player player = this.playerController.getPlayer(i);
 			JLabel playerNameLabel = new JLabel("Player " + (i+1));
 			playerNameLabel.setFont(new Font("Ariel", Font.BOLD, 24));
-			playerNameLabel.setForeground(player.getColor());
+			playerNameLabel.setOpaque(true);
+			playerNameLabel.setForeground(new Color(128,128,128));
+			playerNameLabel.setBackground(player.getColor());
+			playerNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+			playerPanel.add(playerNameLabel);
 			
-			displayPlayerResources(playerPanel, player, playerNameLabel);
+			JLabel resourcesLabel = new JLabel("Resources");
+			resourcesLabel.setFont(new Font("Ariel", Font.BOLD, 14));
+			playerPanel.add(resourcesLabel);
+			displayPlayerResources(playerPanel, player);
 			
-			// TODO: when implemented, create labels for victory points and development cards
+			// TODO: when implemented, create labels for victory points
 			
-			playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+			JLabel devCardsLabel = new JLabel("Development Cards");
+			devCardsLabel.setFont(new Font("Ariel", Font.BOLD, 14));
+			devCardsLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+			playerPanel.add(devCardsLabel);
+			displayPlayerDevelopmentCards(playerPanel, player);
+			
+			
+			playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
 			add(playerPanel);
 			
 		}
 	}
 
-	private void displayPlayerResources(JPanel playerPanel, Player player, JLabel playerNameLabel) {
-		playerPanel.add(playerNameLabel);
+	private void displayPlayerResources(JPanel playerPanel, Player player) {
 		for(TileType type : TileType.values()) {
 			if(type != TileType.desert) {
 				JLabel resourceLabel = new JLabel(type.name() + ": " + player.getResourceCount(type));
 				playerPanel.add(resourceLabel);
 			}
+		}
+	}
+
+	private void displayPlayerDevelopmentCards(JPanel playerPanel, Player player) {
+		for(DevelopmentCardType type : DevelopmentCardType.values()) {
+			JLabel devCardLabel = new JLabel(type.name() + ": " + player.getDevelopmentCardCount(type));
+			playerPanel.add(devCardLabel);
 		}
 	}
 	
