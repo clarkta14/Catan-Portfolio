@@ -45,7 +45,7 @@ public class PlayerInfo extends JPanel {
 	private void displayPlayerResources(JPanel playerPanel, Player player, JLabel playerNameLabel) {
 		playerPanel.add(playerNameLabel);
 		for(TileType type : TileType.values()) {
-			JLabel resourceLabel = new JLabel(type.name() + ": " + player.getResource(type));
+			JLabel resourceLabel = new JLabel(type.name() + ": " + player.getResourceCount(type));
 			playerPanel.add(resourceLabel);
 		}
 	}

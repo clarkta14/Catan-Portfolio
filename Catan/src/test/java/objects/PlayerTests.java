@@ -46,9 +46,9 @@ public class PlayerTests {
 	public void testAddOneResourceTwice() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.brick, 1);
-		assertEquals(1, (int) player.resources.get(TileType.brick));
+		assertEquals(1,  player.getResourceCount(TileType.brick));
 		player.addResource(TileType.brick, 1);
-		assertEquals(2, (int) player.resources.get(TileType.brick));
+		assertEquals(2,  player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class PlayerTests {
 		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0, (int) player.resources.get(TileType.brick));
+		assertEquals(0,  player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1, (int) player.resources.get(TileType.brick));
+		assertEquals(1,  player.getResourceCount(TileType.brick));
 	}
 	
 	@Test
@@ -109,10 +109,10 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1, (int) player.resources.get(TileType.brick));
+		assertEquals(1,  player.getResourceCount(TileType.brick));
 		
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0, (int) player.resources.get(TileType.brick));
+		assertEquals(0,  player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -353,6 +353,6 @@ public class PlayerTests {
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
-		return player.resources.get(type);
+		return player.getResourceCount(type);
 	}
 }

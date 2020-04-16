@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class Player {
 	private Color color;
-	protected HashMap<TileType, Integer> resources;
+	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
 		
 	@SuppressWarnings("serial")
@@ -83,5 +83,9 @@ public class Player {
 			}
 		}
 		return true;
+	}
+	
+	public int getResourceCount(TileType type) {
+		return this.resources.get(type);
 	}
 }
