@@ -30,6 +30,9 @@ public class Player {
 	}
 
 	public void addResource(TileType type, int numberOfResource) {
+		if(type == TileType.desert) {
+			return;
+		}
 		if(numberOfResource < 0 || this.resources.get(type) == Integer.MAX_VALUE) {
 			throw new IllegalArgumentException();
 		}

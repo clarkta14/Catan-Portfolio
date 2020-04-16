@@ -84,6 +84,13 @@ public class PlayerTests {
 			// pass
 		}
 	}
+	
+	@Test
+	public void testAddResourceDesert() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.desert, 1);
+		assertEquals(0, player.getResourceCount(TileType.desert));
+	}
 
 	@Test
 	public void testRemoveOneFromOneResource() {
