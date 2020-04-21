@@ -8,6 +8,7 @@ public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
+	private int victoryPoints = 0;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -94,5 +95,9 @@ public class Player {
 	
 	public int getResourceCount(TileType type) {
 		return this.resources.get(type);
+	}
+	
+	public int getVictoryPoints() {
+		return this.victoryPoints;
 	}
 }

@@ -357,6 +357,13 @@ public class PlayerTests {
 		payment.put(TileType.wheat, 1);
 		assertTrue(!plyr.canAffordTrade(payment));
 	}
+	
+	@Test
+	public void testGetVictoryPoints() {
+		Player plyr = new Player(Color.orange);
+		int vp = plyr.getVictoryPoints();
+		assertEquals(0, vp);
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
