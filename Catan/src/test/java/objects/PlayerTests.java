@@ -361,7 +361,7 @@ public class PlayerTests {
 	@Test
 	public void testGetVictoryPoints() {
 		Player plyr = new Player(Color.orange);
-		int vp = plyr.getVictoryPoints();
+		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(0, vp);
 	}
 	
@@ -369,7 +369,15 @@ public class PlayerTests {
 	public void testAlterVPSettlement() {
 		Player plyr = new Player(Color.orange);
 		plyr.alterVictoryPoints(VictoryPoints.settlement);
-		int vp = plyr.getVictoryPoints();
+		int vp = plyr.getNumberOfVictoryPoints();
+		assertEquals(1, vp);
+	}
+	
+	@Test
+	public void testAlterVPCity() {
+		Player plyr = new Player(Color.orange);
+		plyr.alterVictoryPoints(VictoryPoints.city);
+		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
 

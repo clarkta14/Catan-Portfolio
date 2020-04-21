@@ -97,13 +97,16 @@ public class Player {
 		return this.resources.get(type);
 	}
 	
-	public int getVictoryPoints() {
+	public int getNumberOfVictoryPoints() {
 		return this.victoryPoints;
 	}
 	
 	public void alterVictoryPoints(VictoryPoints reason) {
 		switch (reason) {
 			case settlement:
+				this.victoryPoints++;
+				break;
+			case city:
 				this.victoryPoints++;
 		}
 	}
