@@ -398,6 +398,15 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(3, vp);
 	}
+	
+	@Test
+	public void testIsVictor10VP() {
+		Player plyr = new Player(Color.orange);
+		for(int i = 0; i < 10; i++) {
+			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);			
+		}
+		assertTrue(plyr.isVictor());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
