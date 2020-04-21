@@ -153,6 +153,15 @@ public class OptionsPanel extends JPanel {
 		actionPanel.add(this.lastRolled);
 	}
 	
+	private ArrayList<OptionsPanelComponent> createVictoryPanel() {
+		ArrayList<OptionsPanelComponent> victoryPanel = new ArrayList<>();
+		int playerNum = this.playerController.getCurrentPlayerNum() + 1;
+		JLabel victoryMessage = new JLabel("Player " + playerNum + " WINS!!");
+		victoryMessage.setFont(font);
+		victoryPanel.add(new OptionsPanelComponent(victoryMessage, new Rectangle(2,3,10,2)));
+		return victoryPanel;
+	}
+	
 	class CancelAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -198,8 +207,13 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
-				gameWindow.refreshPlayerStats();
-				setOnOptionsPanel(actionPanel);
+				Player currentPlayer = playerController.getCurrentPlayer();
+				if(currentPlayer.isVictor()) {
+					setOnOptionsPanel(createVictoryPanel());
+				} else {
+					gameWindow.refreshPlayerStats();
+					setOnOptionsPanel(actionPanel);
+				}
 			}	
 		}	
 	}
