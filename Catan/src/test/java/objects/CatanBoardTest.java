@@ -175,6 +175,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
@@ -192,7 +193,9 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertFalse(result);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
@@ -210,8 +213,10 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
-		
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+
 		clearClicks();
 		
 		tileNums.add(1);
@@ -239,7 +244,9 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		clearClicks();
 		
@@ -263,7 +270,9 @@ public class CatanBoardTest {
 		tileNums.add(3);
 		cornerNums.add(0);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		clearClicks();
 		
@@ -287,6 +296,7 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
 		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
@@ -328,8 +338,10 @@ public class CatanBoardTest {
 		currentPlayer.addResource(TileType.wool, 1);
 		currentPlayer.addResource(TileType.wheat, 1);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		
 		assertEquals(0, currentPlayer.getResourceCount(TileType.brick));
@@ -359,8 +371,10 @@ public class CatanBoardTest {
 		currentPlayer.addResource(TileType.wood, 1);
 		currentPlayer.addResource(TileType.wool, 1);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		assertEquals(1,  currentPlayer.getResourceCount(TileType.brick));
 		assertEquals(1,  currentPlayer.getResourceCount(TileType.wood));
@@ -383,8 +397,10 @@ public class CatanBoardTest {
 		cornerNums.add(5);
 		
 		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
