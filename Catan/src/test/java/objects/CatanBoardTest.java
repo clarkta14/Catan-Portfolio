@@ -177,6 +177,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -194,6 +195,7 @@ public class CatanBoardTest {
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertFalse(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -222,6 +224,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertFalse(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -250,6 +253,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -268,6 +272,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -284,6 +289,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test

@@ -167,6 +167,7 @@ public class CatanBoard {
 				currentPlayer.addResource(currentTile.getType(), 1);
 			}
 		}
+		this.turnController.getCurrentPlayer().alterVictoryPoints(VictoryPoints.settlement);
 		return true;
 	}
 
