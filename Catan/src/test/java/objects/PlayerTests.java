@@ -388,6 +388,16 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
+	
+	@Test
+	public void testAlterVPMultiple() {
+		Player plyr = new Player(Color.orange);
+		plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
+		plyr.alterVictoryPoints(VictoryPoints.city);
+		plyr.alterVictoryPoints(VictoryPoints.settlement);
+		int vp = plyr.getNumberOfVictoryPoints();
+		assertEquals(3, vp);
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
