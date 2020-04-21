@@ -115,6 +115,6 @@ public class Player {
 	}
 	
 	public boolean isVictor() {
-		return true;
+		return this.victoryPoints == 10;
 	}
 }

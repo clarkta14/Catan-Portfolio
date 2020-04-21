@@ -407,6 +407,12 @@ public class PlayerTests {
 		}
 		assertTrue(plyr.isVictor());
 	}
+	
+	@Test
+	public void testIsVictor0VP() {
+		Player plyr = new Player(Color.orange);
+		assertFalse(plyr.isVictor());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
