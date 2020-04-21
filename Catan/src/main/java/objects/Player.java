@@ -108,6 +108,9 @@ public class Player {
 				break;
 			case city:
 				this.victoryPoints++;
+				break;
+			case devolopment_card:
+				this.victoryPoints++;
 		}
 	}
 }
