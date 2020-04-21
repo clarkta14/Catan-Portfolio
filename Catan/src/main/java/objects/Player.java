@@ -100,4 +100,11 @@ public class Player {
 	public int getVictoryPoints() {
 		return this.victoryPoints;
 	}
+	
+	public void alterVictoryPoints(VictoryPoints reason) {
+		switch (reason) {
+			case settlement:
+				this.victoryPoints++;
+		}
+	}
 }
