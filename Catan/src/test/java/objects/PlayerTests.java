@@ -427,27 +427,37 @@ public class PlayerTests {
 	public void testCanBuySettlementMaxNumber() {
 		Player player = new Player(Color.orange);
 		player.numSettlements = 5;
-		player.addResource(TileType.brick, 1);
-		player.addResource(TileType.wool, 1);
-		player.addResource(TileType.wood, 1);
-		player.addResource(TileType.wheat, 1);
+		addResourcesForSettlement(player);
 		
 		assertFalse(player.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuySettlementMinNumber() {
 		Player player = new Player(Color.orange);
-		player.addResource(TileType.brick, 1);
-		player.addResource(TileType.wool, 1);
-		player.addResource(TileType.wood, 1);
-		player.addResource(TileType.wheat, 1);
+		addResourcesForSettlement(player);
 		
 		assertTrue(player.canBuySettlement());
+	}
+	
+	@Test
+	public void testCanBuySettlementMaxPlus1() {
+		Player player = new Player(Color.orange);
+		player.numSettlements = 6;
+		addResourcesForSettlement(player);
+		
+		assertFalse(player.canBuySettlement());
 	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResourceCount(type);
+	}
+	
+	private void addResourcesForSettlement(Player player) {
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 1);
+		player.addResource(TileType.wood, 1);
+		player.addResource(TileType.wheat, 1);
 	}
 }

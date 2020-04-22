@@ -58,7 +58,7 @@ public class Player {
 	}
 	
 	public boolean canBuySettlement() {
-		if (this.numSettlements == 5) {
+		if (this.numSettlements >= 5) {
 			return false;
 		} else {
 			return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
