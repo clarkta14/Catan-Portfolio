@@ -434,6 +434,17 @@ public class PlayerTests {
 		
 		assertFalse(player.canBuySettlement());
 	}
+	
+	@Test
+	public void testCanBuySettlementMinNumber() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 1);
+		player.addResource(TileType.wood, 1);
+		player.addResource(TileType.wheat, 1);
+		
+		assertTrue(player.canBuySettlement());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
