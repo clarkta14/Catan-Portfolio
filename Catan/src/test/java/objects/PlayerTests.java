@@ -448,6 +448,12 @@ public class PlayerTests {
 		
 		assertFalse(player.canBuySettlement());
 	}
+	
+	@Test
+	public void testPlayerInitSettlementsNumber() {
+		Player player = new Player(Color.orange);
+		assertEquals(player.numSettlements, 2);
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

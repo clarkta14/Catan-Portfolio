@@ -9,7 +9,7 @@ public class Player {
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
 	private int victoryPoints = 0;
-	public int numSettlements;
+	public int numSettlements = 2;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
