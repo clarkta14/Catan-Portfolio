@@ -133,21 +133,15 @@ public class CatanBoard {
 	}
 
 	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates gameState) {
-		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		Settlement newlyAddedSettlement = new Settlement(currentPlayer);
 		boolean settlementLocationIsValid = true;
-		for(int i = 0; i < selectedTiles.size(); i++) {
-			settlementLocationIsValid = settlementLocationIsValid &&
-					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
-    	}
+		settlementLocationIsValid = checkForValidSettlementPlacementDistanceRule(selectedTiles, corners, settlementLocationIsValid);
 		
 		if(!settlementLocationIsValid) return false;
 		
 		if(gameState != GameStates.drop_settlement_setup && gameState != GameStates.drop_settlement_setup_final) {
-			settlementLocationIsValid = false;
-			for(int i = 0; i < selectedTiles.size(); i++) {
-				settlementLocationIsValid = settlementLocationIsValid ||
-					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
-    		}
+			settlementLocationIsValid = checkForValidSettlementPlacementConnectedToRoad(selectedTiles, corners, currentPlayer);
 			if(!settlementLocationIsValid) {
 				return false;
 			} 
@@ -156,19 +150,38 @@ public class CatanBoard {
 			}
 		}
 		
-		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
-			Player currentPlayer = this.turnController.getCurrentPlayer();
-			for (int i = 0; i < selectedTiles.size(); i++) {
-				Tile currentTile = this.tiles.get(selectedTiles.get(i));
-				currentPlayer.addResource(currentTile.getType(), 1);
-			}
+			distributeSetupResources(selectedTiles, currentPlayer);
 		}
-		this.turnController.getCurrentPlayer().alterVictoryPoints(VictoryPoints.settlement);
+		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
+	}
+
+	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
+		boolean settlementLocationIsValid = false;
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid ||
+				this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), currentPlayer);
+		}
+		return settlementLocationIsValid;
+	}
+
+	private boolean checkForValidSettlementPlacementDistanceRule(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, boolean settlementLocationIsValid) {
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid &&
+					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
+    	}
+		return settlementLocationIsValid;
+	}
+
+	private void distributeSetupResources(ArrayList<Integer> selectedTiles, Player currentPlayer) {
+		for (int i = 0; i < selectedTiles.size(); i++) {
+			Tile currentTile = this.tiles.get(selectedTiles.get(i));
+			currentPlayer.addResource(currentTile.getType(), 1);
+		}
 	}
 
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
