@@ -46,9 +46,9 @@ public class PlayerTests {
 	public void testAddOneResourceTwice() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.brick, 1);
-		assertEquals(1,  player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.brick));
 		player.addResource(TileType.brick, 1);
-		assertEquals(2,  player.getResourceCount(TileType.brick));
+		assertEquals(2, player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class PlayerTests {
 			// pass
 		}
 	}
-	
+
 	@Test
 	public void testAddResourceDesert() {
 		Player player = new Player(Color.orange);
@@ -98,7 +98,7 @@ public class PlayerTests {
 		assertEquals(1, addAndGetResourceForPlayer(player, TileType.brick, 1));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0,  player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -107,19 +107,19 @@ public class PlayerTests {
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1,  player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.brick));
 	}
-	
+
 	@Test
 	public void testRemoveOneTwiceFromTwoResources() {
 		Player player = new Player(Color.orange);
 		assertEquals(2, addAndGetResourceForPlayer(player, TileType.brick, 2));
 
 		player.removeResource(TileType.brick, 1);
-		assertEquals(1,  player.getResourceCount(TileType.brick));
-		
+		assertEquals(1, player.getResourceCount(TileType.brick));
+
 		player.removeResource(TileType.brick, 1);
-		assertEquals(0,  player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.brick));
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class PlayerTests {
 			// pass
 		}
 	}
-	
+
 	@Test
 	public void testRemoveTwoFromOneResource() {
 		try {
@@ -144,7 +144,7 @@ public class PlayerTests {
 			// pass
 		}
 	}
-	
+
 	@Test
 	public void testRemoveNegativeFromResource() {
 		try {
@@ -155,7 +155,7 @@ public class PlayerTests {
 			// pass
 		}
 	}
-	
+
 	@Test
 	public void testCanBuyRoad_WithEnoughResources() {
 		Player plyr = new Player(Color.orange);
@@ -163,21 +163,21 @@ public class PlayerTests {
 		plyr.addResource(TileType.wood, 1);
 		assertTrue(plyr.canBuyRoad());
 	}
-	
+
 	@Test
 	public void testCanBuyRoad_WithoutEnoughResources_notEnoughWood() {
 		Player plyr = new Player(Color.orange);
 		plyr.addResource(TileType.brick, 1);
 		assertTrue(!plyr.canBuyRoad());
 	}
-	
+
 	@Test
 	public void testCanBuyRoad_WithoutEnoughResources_notEnoughBrick() {
 		Player plyr = new Player(Color.orange);
 		plyr.addResource(TileType.wood, 1);
 		assertTrue(!plyr.canBuyRoad());
 	}
-	
+
 	@Test
 	public void testCanBuySettlement_WithEnoughResources() {
 		Player plyr = new Player(Color.orange);
@@ -187,7 +187,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(plyr.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuySettlement_WithoutEnoughResources_NotEnoughBrick() {
 		Player plyr = new Player(Color.orange);
@@ -196,7 +196,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(!plyr.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuySettlement_WithoutEnoughResources_NotEnoughWood() {
 		Player plyr = new Player(Color.orange);
@@ -205,7 +205,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(!plyr.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuySettlement_WithoutEnoughResources_NotEnoughWool() {
 		Player plyr = new Player(Color.orange);
@@ -214,7 +214,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(!plyr.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuySettlement_WithoutEnoughResources_NotEnoughWheat() {
 		Player plyr = new Player(Color.orange);
@@ -223,7 +223,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wool, 1);
 		assertTrue(!plyr.canBuySettlement());
 	}
-	
+
 	@Test
 	public void testCanBuyDevelopmentCard_WithEnoughResources() {
 		Player plyr = new Player(Color.orange);
@@ -232,7 +232,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(plyr.canBuyDevelopmentCard());
 	}
-	
+
 	@Test
 	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughOre() {
 		Player plyr = new Player(Color.orange);
@@ -240,7 +240,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(!plyr.canBuyDevelopmentCard());
 	}
-	
+
 	@Test
 	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughWool() {
 		Player plyr = new Player(Color.orange);
@@ -248,7 +248,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wheat, 1);
 		assertTrue(!plyr.canBuyDevelopmentCard());
 	}
-	
+
 	@Test
 	public void testCanBuyDevelopmentCard_WithoutEnoughResources_NotEnoughWheat() {
 		Player plyr = new Player(Color.orange);
@@ -256,7 +256,7 @@ public class PlayerTests {
 		plyr.addResource(TileType.wool, 1);
 		assertTrue(!plyr.canBuyDevelopmentCard());
 	}
-	
+
 	@Test
 	public void testAddDevelopmentCard_KnightDC() {
 		Player plyr = new Player(Color.orange);
@@ -265,7 +265,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
 	}
-	
+
 	@Test
 	public void testAddDevelopmentCard_ProgressDC() {
 		Player plyr = new Player(Color.orange);
@@ -274,7 +274,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
 	}
-	
+
 	@Test
 	public void testAddDevelopmentCard_VictoryPointDC() {
 		Player plyr = new Player(Color.orange);
@@ -283,7 +283,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
 	}
-	
+
 	@Test
 	public void testRemoveDevelopmentCard_KnightDC() {
 		Player plyr = new Player(Color.orange);
@@ -294,7 +294,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
 	}
-	
+
 	@Test
 	public void testRemoveDevelopmentCard_ProgressDC() {
 		Player plyr = new Player(Color.orange);
@@ -305,7 +305,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
 	}
-	
+
 	@Test
 	public void testRemoveDevelopmentCard_VictoryPointDC() {
 		Player plyr = new Player(Color.orange);
@@ -316,7 +316,7 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
 	}
-	
+
 	@Test
 	public void testCanAffordTrade_WithEnoughResources() {
 		Player plyr = new Player(Color.orange);
@@ -331,7 +331,7 @@ public class PlayerTests {
 		payment.put(TileType.wheat, 1);
 		assertTrue(plyr.canAffordTrade(payment));
 	}
-	
+
 	@Test
 	public void testCanAffordTrade_WithEnoughResources_ResourcesReapted() {
 		Player plyr = new Player(Color.orange);
@@ -344,7 +344,7 @@ public class PlayerTests {
 		payment.put(TileType.wheat, 1);
 		assertTrue(plyr.canAffordTrade(payment));
 	}
-	
+
 	@Test
 	public void testCanAffordTrade_WithoutEnoughResources() {
 		Player plyr = new Player(Color.orange);
@@ -357,14 +357,14 @@ public class PlayerTests {
 		payment.put(TileType.wheat, 1);
 		assertTrue(!plyr.canAffordTrade(payment));
 	}
-	
+
 	@Test
 	public void testGetVictoryPoints() {
 		Player plyr = new Player(Color.orange);
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(0, vp);
 	}
-	
+
 	@Test
 	public void testAlterVPSettlement() {
 		Player plyr = new Player(Color.orange);
@@ -372,7 +372,7 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
-	
+
 	@Test
 	public void testAlterVPCity() {
 		Player plyr = new Player(Color.orange);
@@ -380,7 +380,7 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
-	
+
 	@Test
 	public void testAlterVPDevoCard() {
 		Player plyr = new Player(Color.orange);
@@ -388,7 +388,7 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
-	
+
 	@Test
 	public void testAlterVPMultiple() {
 		Player plyr = new Player(Color.orange);
@@ -398,29 +398,41 @@ public class PlayerTests {
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(3, vp);
 	}
-	
+
 	@Test
 	public void testIsVictor10VP() {
 		Player plyr = new Player(Color.orange);
-		for(int i = 0; i < 10; i++) {
-			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);			
+		for (int i = 0; i < 10; i++) {
+			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
 		}
 		assertTrue(plyr.isVictor());
 	}
-	
+
 	@Test
 	public void testIsVictor0VP() {
 		Player plyr = new Player(Color.orange);
 		assertFalse(plyr.isVictor());
 	}
-	
+
 	@Test
 	public void testIsVictor11VP() {
 		Player plyr = new Player(Color.orange);
-		for(int i = 0; i < 11; i++) {
-			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);			
+		for (int i = 0; i < 11; i++) {
+			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
 		}
 		assertTrue(plyr.isVictor());
+	}
+
+	@Test
+	public void testCanBuySettlementMaxNumber() {
+		Player player = new Player(Color.orange);
+		player.numSettlements = 5;
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 1);
+		player.addResource(TileType.wood, 1);
+		player.addResource(TileType.wheat, 1);
+		
+		assertFalse(player.canBuySettlement());
 	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
