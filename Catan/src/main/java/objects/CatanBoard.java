@@ -295,4 +295,8 @@ public class CatanBoard {
 		}
 		return false;
 	}
+
+	public boolean addCityToTiles(ArrayList<Integer> tiles2, ArrayList<Integer> corners, GameStates state) {
+		return false;
+	}
 }

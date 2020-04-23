@@ -127,27 +127,31 @@ public class OptionsPanel extends JPanel {
 		placeSettlementButton.setText("Place Settlement");
 		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
 		
+		JButton placeCityButton = new JButton(new PlaceCityListener());
+		placeCityButton.setText("Upgrade to City");
+		actionPanel.add(new OptionsPanelComponent(placeCityButton, new Rectangle(4,6,6,2)));
+		
 		JButton placeRoadButton = new JButton(new PlaceRoadListener());
 		placeRoadButton.setText("Place Road");
-		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,6,6,2)));
+		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,8,6,2)));
 		
 		JButton tradeWithBankButton = new JButton();
 		tradeWithBankButton.setText("Trade Bank");
-		actionPanel.add(new OptionsPanelComponent(tradeWithBankButton, new Rectangle(4,8,6,2)));
+		actionPanel.add(new OptionsPanelComponent(tradeWithBankButton, new Rectangle(4,10,6,2)));
 		
 		JButton tradeWithPlayerButton = new JButton();
 		tradeWithPlayerButton.setText("Trade Player");
-		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,10,6,2)));
+		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,12,6,2)));
 		
 		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText("Buy Dev. Card");
-		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,12,6,2)));
+		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,14,6,2)));
 		
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText("End Turn");
-		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,14,6,2)));
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,16,6,2)));
 		
-		this.lastRolled = new OptionsPanelComponent(new JLabel(""), new Rectangle(4, 18, 6, 2));
+		this.lastRolled = new OptionsPanelComponent(new JLabel(""), new Rectangle(4, 20, 6, 2));
 		this.lastRolled.getSwingComponent().setFont(font);
 		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
 		actionPanel.add(this.lastRolled);
@@ -185,6 +189,18 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuySettlement()) {
 				placeInfoPanel("Place a settlement");
 				boardGUI.setState(GameStates.drop_settlement);
+				timer = new Timer(50, new ResetStateListener());
+				timer.start();
+			}
+		}
+	}
+	
+	class PlaceCityListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyCity()) {
+				placeInfoPanel("Upgrade a City");
+				boardGUI.setState(GameStates.drop_city);
 				timer = new Timer(50, new ResetStateListener());
 				timer.start();
 			}
