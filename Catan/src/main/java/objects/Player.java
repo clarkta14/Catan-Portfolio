@@ -122,4 +122,8 @@ public class Player {
 	public boolean isVictor() {
 		return this.victoryPoints >= 10;
 	}
+
+	public boolean canBuyCity() {
+		return true;
+	}
 }
