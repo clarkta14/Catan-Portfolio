@@ -422,6 +422,16 @@ public class PlayerTests {
 		}
 		assertTrue(plyr.isVictor());
 	}
+	
+	@Test
+	public void testGetVictoryPointsThroughVPDevoCard() {
+		Player plyr = new Player(Color.orange);
+		assertFalse(plyr.isVictor());
+		for(int i = 0; i < 10; i++) {
+			plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		}
+		assertTrue(plyr.isVictor());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

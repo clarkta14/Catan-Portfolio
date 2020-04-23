@@ -72,6 +72,7 @@ public class Player {
 			cards.push(new ProgressDevelopmentCard());
 		} else if(DevelopmentCardType.victory_point == cardType) {
 			cards.push(new VictoryPointDevelopmentCard());
+			alterVictoryPoints(VictoryPoints.devolopment_card);
 		}
 		this.developmentCards.replace(cardType, cards);
 	}
