@@ -940,6 +940,9 @@ public class CatanBoardTest {
 		cornerNums.add(5);
 		result = cb.addCityToTiles(tileNums, cornerNums);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
 		
 		for (Settlement s : settlements) {
 			assertFalse(s.isCity());

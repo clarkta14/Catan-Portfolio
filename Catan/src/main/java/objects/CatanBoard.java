@@ -308,8 +308,8 @@ public class CatanBoard {
 				canPlace = false;
 			}
 		}
-		buyCity();
 		if (canPlace) {
+			buyCity();
 			currentPlayer.alterVictoryPoints(VictoryPoints.city);
 			for (Settlement s : settlementsToConvert) {
 				s.upgradeToCity();
