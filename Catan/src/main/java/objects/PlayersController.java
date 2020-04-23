@@ -9,12 +9,14 @@ public class PlayersController {
 	private boolean initialSetup;
 	private boolean backwardsSetup;
 	private int currentPlayer;
+	private int totalNumOfPlayers;
 
 	public PlayersController(int numOfPlayers) {
     	this.players = createPlayers(numOfPlayers);
         this.initialSetup = true;
         this.backwardsSetup = false;
         this.currentPlayer = 0;
+        this.totalNumOfPlayers = numOfPlayers;
 	}
 
 	private ArrayList<Player> createPlayers(int num) {
@@ -72,5 +74,9 @@ public class PlayersController {
 	
 	public boolean isBackwardsSetup() {
 		return this.backwardsSetup;
+	}
+	
+	public int getTotalNumOfPlayers() {
+		return this.totalNumOfPlayers;
 	}
 }

@@ -132,4 +132,10 @@ public class PlayersControllerTests {
 			pc.nextPlayer();
 		}
 	}
+	
+	@Test
+	public void testGetTotalNumberOfPlayers() {
+		PlayersController pc = new PlayersController(4);
+		assertEquals(4, pc.getTotalNumOfPlayers());
+	}
 }
