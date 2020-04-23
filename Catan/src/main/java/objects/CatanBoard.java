@@ -304,7 +304,7 @@ public class CatanBoard {
 			Tile tile = this.tiles.get(tileNums.get(i));
 			Settlement settlement = tile.getSettlements().get(corners.get(i));
 			settlementsToConvert.add(settlement);
-			if (settlement == null) {
+			if (settlement == null || settlement.getOwner() != currentPlayer) {
 				canPlace = false;
 			}
 		}
