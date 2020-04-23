@@ -229,7 +229,11 @@ public class CatanBoard {
 			if(t.getNumber() == number) {
 				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
 				for(Settlement settlement : settlementsOnTile.values()) {
-					settlement.getOwner().addResource(t.getType(), 1);
+					if (settlement.isCity()) {
+						settlement.getOwner().addResource(t.getType(), 2);
+					} else {
+						settlement.getOwner().addResource(t.getType(), 1);
+					}
 				}
 			}
 		}

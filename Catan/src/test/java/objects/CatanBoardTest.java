@@ -422,6 +422,27 @@ public class CatanBoardTest {
 	}
 	
 	@Test
+	public void testDistributeResourcesCity() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		//Get a non-desert tile
+		Tile tile = cb.getTiles().get(0);
+		int tileNum = 0;
+		while (tile.getType() == TileType.desert) {
+			tileNum++;
+			tile = cb.getTiles().get(tileNum);
+		}
+		
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		Settlement settlement = cb.getTiles().get(tileNum).getSettlements().get(0);
+		settlement.upgradeToCity();
+	
+		cb.distributeResources(tile.getNumber());
+		assertEquals(2, pc.getCurrentPlayer().getResourceCount(tile.getType()));
+	}
+	
+	@Test
 	public void testBuyRoad_WithEnoughResources() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
