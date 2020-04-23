@@ -823,6 +823,51 @@ public class CatanBoardTest {
 		assertEquals(1, player.getResourceCount(TileType.wood));
 	}
 	
+	@Test
+	public void testBuyCityMaxNumberSettlements() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		Player player = pc.getCurrentPlayer();
+		player.numSettlements = 4;
+		addResourcesForCities(player, 5);
+		
+		assertEquals(player.numSettlements, 4);
+		assertEquals(player.numCities, 0);
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 3);
+		assertEquals(player.numCities, 1);
+		assertEquals(8, player.getResourceCount(TileType.wheat));
+		assertEquals(12, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 2);
+		assertEquals(player.numCities, 2);
+		assertEquals(6, player.getResourceCount(TileType.wheat));
+		assertEquals(9, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 1);
+		assertEquals(player.numCities, 3);
+		assertEquals(4, player.getResourceCount(TileType.wheat));
+		assertEquals(6, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		assertFalse(cb.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+	}
+	
+	private void addResourcesForCities(Player player, int numCities) {
+		player.addResource(TileType.wheat, numCities*2);
+		player.addResource(TileType.ore, numCities*3);
+	}
+	
 	private void addResourcesForSettlements(Player player, int numSettlements) {
 		player.addResource(TileType.brick, numSettlements);
 		player.addResource(TileType.wheat, numSettlements);

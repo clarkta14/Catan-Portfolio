@@ -283,4 +283,16 @@ public class CatanBoard {
 		}
 		return false;
 	}
+
+	public boolean buyCity() {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if (currentPlayer.canBuyCity()) {
+			currentPlayer.removeResource(TileType.ore, 3);
+			currentPlayer.removeResource(TileType.wheat, 2);
+			currentPlayer.numSettlements--;
+			currentPlayer.numCities++;
+			return true;
+		}
+		return false;
+	}
 }
