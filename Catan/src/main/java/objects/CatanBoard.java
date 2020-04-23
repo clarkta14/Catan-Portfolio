@@ -252,6 +252,7 @@ public class CatanBoard {
 			currentPlayer.removeResource(TileType.wood, 1);
 			currentPlayer.removeResource(TileType.wool, 1);
 			currentPlayer.removeResource(TileType.wheat, 1);
+			currentPlayer.numSettlements++;
 			return true;
 		}
 		return false;

@@ -800,6 +800,36 @@ public class CatanBoardTest {
 		assertFalse(result);
 	}
 	
+	@Test
+	public void testBuySettlementMaxNumberSettlements() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		Player player = pc.getCurrentPlayer();
+		addResourcesForSettlements(player, 4);
+		
+		assertEquals(player.numSettlements, 2);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 3);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 4);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 5);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 5);
+		
+		assertEquals(1, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+		assertEquals(1, player.getResourceCount(TileType.wool));
+		assertEquals(1, player.getResourceCount(TileType.wood));
+	}
+	
+	private void addResourcesForSettlements(Player player, int numSettlements) {
+		player.addResource(TileType.brick, numSettlements);
+		player.addResource(TileType.wheat, numSettlements);
+		player.addResource(TileType.wool, numSettlements);
+		player.addResource(TileType.wood, numSettlements);
+	}
+
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
