@@ -882,6 +882,16 @@ public class CatanBoardTest {
 		result = cb.addCityToTiles(tileNums, cornerNums);
 		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		assertTrue(result);
+		
+		ArrayList<Tile> tiles = cb.getTiles();
+		for (int i = 0; i < 3; i++) {
+			HashMap<Integer, Settlement> settlementMap = tiles.get(tileNums.get(i)).getSettlements();
+			Settlement city = settlementMap.get(cornerNums.get(i));
+			if (city == null) {
+				fail("City should be present");
+			}
+			assertTrue(city.isCity());
+		}
 	}
 	
 	private void addResourcesForCities(Player player, int numCities) {
