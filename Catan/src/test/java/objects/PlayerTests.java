@@ -456,7 +456,7 @@ public class PlayerTests {
 	}
 	
 	@Test 
-	public void testPlayerCanBuySettlementEnoughResources() {
+	public void testPlayerCanBuyCityEnoughResources() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 2);
 		player.addResource(TileType.ore, 3);
@@ -464,10 +464,17 @@ public class PlayerTests {
 	}
 	
 	@Test 
-	public void testPlayerCanNotBuySettlementNoWheat() {
+	public void testPlayerCanNotBuyCityNoWheat() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 1);
 		player.addResource(TileType.ore, 3);
+		assertFalse(player.canBuyCity());
+	}
+	@Test 
+	public void testPlayerCanNotBuyCityNoOre() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 2);
 		assertFalse(player.canBuyCity());
 	}
 
