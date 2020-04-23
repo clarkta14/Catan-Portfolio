@@ -614,8 +614,9 @@ public class CatanBoardTest {
 		TileType TileType2 = cb.getTiles().get(2).getType();
 		if (TileType2 == TileType.desert) {
 			assertEquals(0,  currentPlayer.getResourceCount(TileType2));
+		} else {
+			assertEquals(1,  currentPlayer.getResourceCount(TileType2));
 		}
-		assertEquals(1,  currentPlayer.getResourceCount(TileType2));
 		
 	}
 	
@@ -866,6 +867,8 @@ public class CatanBoardTest {
 	@Test
 	public void testAddCityToTilesValid() {
 		basicSetupForAddSettlementTests();
+		Player currentPlayer = pc.getCurrentPlayer();
+		addResourcesForCities(currentPlayer, 1);
 		
 		tileNums.add(0);
 		tileNums.add(1);
@@ -880,8 +883,10 @@ public class CatanBoardTest {
 		assertTrue(result);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		result = cb.addCityToTiles(tileNums, cornerNums);
-		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertEquals(0, currentPlayer.getResourceCount(TileType.wheat));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.ore));
 		
 		ArrayList<Tile> tiles = cb.getTiles();
 		for (int i = 0; i < 3; i++) {
@@ -891,6 +896,53 @@ public class CatanBoardTest {
 				fail("City should be present");
 			}
 			assertTrue(city.isCity());
+		}
+	}
+	
+	@Test
+	public void testAddCityToTilesNotOnSettlement() {
+		basicSetupForAddSettlementTests();
+		Player currentPlayer = pc.getCurrentPlayer();
+		addResourcesForCities(currentPlayer, 1);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		ArrayList<Tile> tiles = cb.getTiles();
+		ArrayList<Settlement> settlements = new ArrayList<Settlement>();
+		for (int i = 0; i < 3; i++) {
+			HashMap<Integer, Settlement> settlementMap = tiles.get(tileNums.get(i)).getSettlements();
+			Settlement settlement = settlementMap.get(cornerNums.get(i));
+			if (settlement == null) {
+				fail("Settlement should be present");
+			}
+			settlements.add(settlement);
+		}
+		
+		clearClicks();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(4);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		for (Settlement s : settlements) {
+			assertFalse(s.isCity());
 		}
 	}
 	

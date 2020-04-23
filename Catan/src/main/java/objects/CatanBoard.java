@@ -296,9 +296,25 @@ public class CatanBoard {
 		return false;
 	}
 
-	public boolean addCityToTiles(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+	public boolean addCityToTiles(ArrayList<Integer> tileNums, ArrayList<Integer> corners) {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
-		currentPlayer.alterVictoryPoints(VictoryPoints.city);
-		return true;
+		ArrayList<Settlement> settlementsToConvert = new ArrayList<Settlement>();
+		boolean canPlace = true;
+		for (int i = 0; i < tileNums.size(); i++) {
+			Tile tile = this.tiles.get(tileNums.get(i));
+			Settlement settlement = tile.getSettlements().get(corners.get(i));
+			settlementsToConvert.add(settlement);
+			if (settlement == null) {
+				canPlace = false;
+			}
+		}
+		buyCity();
+		if (canPlace) {
+			currentPlayer.alterVictoryPoints(VictoryPoints.city);
+			for (Settlement s : settlementsToConvert) {
+				s.upgradeToCity();
+			}
+		}
+		return canPlace;
 	}
 }
