@@ -851,7 +851,7 @@ public class BoardWindow extends JPanel {
 						ArrayList<Integer> corners = settlementLoc.get(1);
 						
 						if (state.equals(GameStates.drop_city)) {
-							structurePlaced = catanBoard.addCityToTiles(tiles, corners, state);
+							structurePlaced = catanBoard.addCityToTiles(tiles, corners);
 						} else {
 							structurePlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
 						}

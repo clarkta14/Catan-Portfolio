@@ -296,7 +296,9 @@ public class CatanBoard {
 		return false;
 	}
 
-	public boolean addCityToTiles(ArrayList<Integer> tiles2, ArrayList<Integer> corners, GameStates state) {
-		return false;
+	public boolean addCityToTiles(ArrayList<Integer> tiles, ArrayList<Integer> corners) {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		currentPlayer.alterVictoryPoints(VictoryPoints.city);
+		return true;
 	}
 }

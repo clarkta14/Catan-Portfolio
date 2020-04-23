@@ -863,6 +863,27 @@ public class CatanBoardTest {
 		assertEquals(3, player.getResourceCount(TileType.ore));
 	}
 	
+	@Test
+	public void testAddCityToTilesValid() {
+		basicSetupForAddSettlementTests();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertTrue(result);
+	}
+	
 	private void addResourcesForCities(Player player, int numCities) {
 		player.addResource(TileType.wheat, numCities*2);
 		player.addResource(TileType.ore, numCities*3);
