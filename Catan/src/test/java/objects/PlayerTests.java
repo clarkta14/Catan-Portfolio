@@ -464,6 +464,14 @@ public class PlayerTests {
 	}
 	
 	@Test 
+	public void testPlayerCanBuyCityMoreWheat() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 3);
+		player.addResource(TileType.ore, 3);
+		assertTrue(player.canBuyCity());
+	}
+	
+	@Test 
 	public void testPlayerCanNotBuyCityNoWheat() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 1);
