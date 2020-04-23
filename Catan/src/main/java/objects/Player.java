@@ -10,6 +10,7 @@ public class Player {
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
 	private int victoryPoints = 0;
 	public int numSettlements = 2;
+	public int numCities = 0;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -124,6 +125,9 @@ public class Player {
 	}
 
 	public boolean canBuyCity() {
+		if (numCities == 4) {
+			return false;
+		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
 }

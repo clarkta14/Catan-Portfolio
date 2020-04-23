@@ -486,11 +486,21 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
 	@Test 
 	public void testPlayerCanNotBuyCityNoOre() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 2);
 		player.addResource(TileType.ore, 2);
+		assertFalse(player.canBuyCity());
+	}
+	
+	@Test 
+	public void testPlayerCanNotBuyCityMaxNumber() {
+		Player player = new Player(Color.orange);
+		player.numCities = 4;
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
 
