@@ -510,7 +510,7 @@ public class PlayerTests {
 		player.numCities = 4;
 		player.addResource(TileType.wheat, 2);
 		player.addResource(TileType.ore, 3);
-		assertFalse(player.canBuyCity());
+		assertTrue(player.canBuyCity());
 	}
 	
 	@Test 
