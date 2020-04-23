@@ -503,6 +503,15 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
+	@Test 
+	public void testPlayerCanNotBuyCityMaxPlus1() {
+		Player player = new Player(Color.orange);
+		player.numCities = 5;
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 3);
+		assertFalse(player.canBuyCity());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

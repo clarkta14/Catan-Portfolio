@@ -125,7 +125,7 @@ public class Player {
 	}
 
 	public boolean canBuyCity() {
-		if (numCities == 4) {
+		if (numCities >= 4) {
 			return false;
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
