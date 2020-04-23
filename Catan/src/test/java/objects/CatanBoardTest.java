@@ -949,6 +949,29 @@ public class CatanBoardTest {
 		}
 	}
 	
+	@Test
+	public void testAddCityToTilesNotEnoughResources() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		currentPlayer.removeResource(TileType.wheat, 1);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
+		
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(1, currentPlayer.getResourceCount(TileType.wheat));
+		
+		for (Settlement s : settlements) {
+			assertFalse(s.isCity());
+		}
+	}
+	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
 		ArrayList<Tile> tiles = cb.getTiles();
 		ArrayList<Settlement> settlements = new ArrayList<Settlement>();
