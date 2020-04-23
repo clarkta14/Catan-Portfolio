@@ -455,11 +455,20 @@ public class PlayerTests {
 		assertEquals(player.numSettlements, 2);
 	}
 	
-	@Test void testPlayerCanBuySettlementEnoughResources() {
+	@Test 
+	public void testPlayerCanBuySettlementEnoughResources() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 2);
 		player.addResource(TileType.ore, 3);
 		assertTrue(player.canBuyCity());
+	}
+	
+	@Test 
+	public void testPlayerCanNotBuySettlementNoWheat() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 1);
+		player.addResource(TileType.ore, 3);
+		assertFalse(player.canBuyCity());
 	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {

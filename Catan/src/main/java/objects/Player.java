@@ -124,6 +124,6 @@ public class Player {
 	}
 
 	public boolean canBuyCity() {
-		return true;
+		return resources.get(TileType.wheat) == 2;
 	}
 }
