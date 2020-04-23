@@ -111,6 +111,8 @@ public class Player {
 				break;
 			case devolopment_card:
 				this.victoryPoints++;
+		default:
+			break;
 		}
 	}
 	

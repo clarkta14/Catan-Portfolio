@@ -215,61 +215,13 @@ public class OptionsPanel extends JPanel {
 	class TradeButtonListener extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tradePanel();
-		}
-	}
-
-	/*
-	class TradeWithBankListener extends AbstractAction {
-		@Override
-		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
-				placeInfoPanel("Select items for trade");
-				
-				TileType purchaseItem = null;
-				HashMap<TileType, Integer> payment = new HashMap<>();
-				payment.put(TileType.brick, 0);
-				payment.put(TileType.ore, 0);
-				payment.put(TileType.wheat, 0);
-				payment.put(TileType.wood, 0);
-				payment.put(TileType.wool, 0);
-				
-				
-				timer = new Timer(50, new ResetStateListener());
-				timer.start();
+				boardGUI.setState(GameStates.trade);
+				tradePanel();
 			}
-		}
-		
-		public void setupTrade() {
-			for (int i = 0; i < 5; i++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(i).getComponent()).removeAllItems();
-			}
-			for (int r = 0; r <= 3; r++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(0).getComponent()).addItem(new Integer(r));
-			}
-			for (int r = 0; r <= 3; r++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(1).getComponent()).addItem(new Integer(r));
-			}
-			for (int r = 0; r <= 3; r++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(2).getComponent()).addItem(new Integer(r));
-			}
-			for (int r = 0; r <= 3; r++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(3).getComponent()).addItem(new Integer(r));
-			}
-			for (int r = 0; r <= 3; r++) {
-				((JComboBox<Integer>) inputResourcesPanel.get(4).getComponent()).addItem(new Integer(r));
-			}
-		}
-		
-		public boolean makePurchase(HashMap<TileType, Integer> payment, TileType purchaseItem) {
-			if(playerController.getCurrentPlayer().canAffordTrade(payment)) {
-				catanBoard.tradeWithBank(payment, purchaseItem);
-				return true;
-			}
-			return false;
 		}
 	}
-	*/
+	
 	class ResetStateListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -328,92 +280,40 @@ public class OptionsPanel extends JPanel {
 	
 	public void tradePanel() {
 		this.tradePanel = new ArrayList<>();
-		
-		JButton wool = new JButton(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-				selectedResource = TileType.wool;
-				tradePaymentPanel();
-			}
-		});
-		wool.setText("wool");
-		tradePanel.add(new OptionsPanelComponent(wool, new Rectangle(4,6,6,2)));
-		
-		JButton wheat = new JButton(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-				selectedResource = TileType.wheat;
-				tradePaymentPanel();
-			}
-		});
-		wool.setText("wheat");
-		tradePanel.add(new OptionsPanelComponent(wheat, new Rectangle(4,8,6,2)));
-		
-		JButton wood = new JButton(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-				selectedResource = TileType.wood;
-				tradePaymentPanel();
-			}
-		});
-		wood.setText("wood");
-		tradePanel.add(new OptionsPanelComponent(wood, new Rectangle(4,10,6,2)));
-		
-		JButton ore = new JButton(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-				selectedResource = TileType.ore;
-				tradePaymentPanel();
-			}
-		});
-		ore.setText("ore");
-		tradePanel.add(new OptionsPanelComponent(ore, new Rectangle(4,12,6,2)));
-		
-		JButton brick = new JButton(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-				selectedResource = TileType.brick;
-				tradePaymentPanel();
-			}
-		});
-		brick.setText("brick");
-		tradePanel.add(new OptionsPanelComponent(brick, new Rectangle(4,14,6,2)));
-		
+		this.tradePanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.wool), new Rectangle(4,6,6,2)));
+		this.tradePanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.wheat), new Rectangle(4,8,6,2)));
+		this.tradePanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.wood), new Rectangle(4,10,6,2)));
+		this.tradePanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.ore), new Rectangle(4,12,6,2)));
+		this.tradePanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.brick), new Rectangle(4,14,6,2)));
 		setOnOptionsPanel(tradePanel);
+	}
+	
+	public JButton selectItemToTradeFor(TileType t) {
+		JButton resourceType = new JButton(new AbstractAction() {
+			public void actionPerformed(ActionEvent a) {
+				if(boardGUI.getState().equals(GameStates.trade)) {
+					selectedResource = t;
+					tradePaymentPanel();
+				}
+			}
+		});
+		resourceType.setText(t.name());
+		return resourceType;
 	}
 	
 	public void tradePaymentPanel() {
 		this.tradePaymentPanel = new ArrayList<>();
 		
-		JComboBox<Integer> brickCombo = new JComboBox<Integer>();
-		brickCombo.setAction(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-			}
-		});
-		this.tradePaymentPanel.add(new OptionsPanelComponent(brickCombo, new Rectangle(2,6,3,1)));
-		
-		JComboBox<Integer> woolCombo = new JComboBox<Integer>();
-		woolCombo.setAction(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-			}
-		});
-		this.tradePaymentPanel.add(new OptionsPanelComponent(woolCombo, new Rectangle(6,6,3,1)));
-
-		JComboBox<Integer> oreCombo = new JComboBox<Integer>();
-		oreCombo.setAction(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-			}
-		});
-		this.tradePaymentPanel.add(new OptionsPanelComponent(oreCombo, new Rectangle(10,6,3,1)));
-
-		JComboBox<Integer> wheatCombo = new JComboBox<Integer>();
-		wheatCombo.setAction(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-			}
-		});
-		this.tradePaymentPanel.add(new OptionsPanelComponent(wheatCombo, new Rectangle(4,10,3,1)));
-
-		JComboBox<Integer> woodCombo = new JComboBox<Integer>();
-		woodCombo.setAction(new AbstractAction() {
-			public void actionPerformed(ActionEvent a) {
-			}
-		});
-		this.tradePaymentPanel.add(new OptionsPanelComponent(woodCombo, new Rectangle(8,10,3,1)));
+		// Brick
+		this.tradePaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(), new Rectangle(2,6,3,1)));
+		// Wool
+		this.tradePaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(), new Rectangle(6,6,3,1)));
+		// Ore
+		this.tradePaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(), new Rectangle(10,6,3,1)));
+		// Wheat
+		this.tradePaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(), new Rectangle(4,10,3,1)));
+		// Wood
+		this.tradePaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(), new Rectangle(8,10,3,1)));
 		
 		JLabel brickLabel = new JLabel("Brick");
 		this.tradePaymentPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
@@ -424,13 +324,55 @@ public class OptionsPanel extends JPanel {
 		JLabel oreLabel = new JLabel("Ore");
 		this.tradePaymentPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
 
-		JLabel grainLabel = new JLabel("Grain");
-		this.tradePaymentPanel.add(new OptionsPanelComponent(grainLabel, new Rectangle(4,9,4,1)));
+		JLabel wheatLabel = new JLabel("Wheat");
+		this.tradePaymentPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
 
-		JLabel lumberLabel = new JLabel("Lumber");
-		this.tradePaymentPanel.add(new OptionsPanelComponent(lumberLabel, new Rectangle(8,9,4,1)));
+		JLabel woodLabel = new JLabel("Wood");
+		this.tradePaymentPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8,9,4,1)));
+		
+		JButton submitResources = new JButton(new TradeWithBankListener());
+		submitResources.setText("Submit");
+		this.tradePaymentPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3,15,9,2)));
+		
+		JLabel instuctionLabel = new JLabel("Select resources for trade payment");
+		this.tradePaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,3,15,1)));
 		
 		setOnOptionsPanel(tradePaymentPanel);
+	}
+	
+	class TradeWithBankListener extends AbstractAction {
+		@SuppressWarnings("unchecked")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.trade)) {
+								
+				HashMap<TileType, Integer> payment = new HashMap<>();
+				payment.put(TileType.brick, ((JComboBox<Integer>) tradePaymentPanel.get(0).getSwingComponent()).getSelectedIndex());
+				payment.put(TileType.wool, ((JComboBox<Integer>) tradePaymentPanel.get(1).getSwingComponent()).getSelectedIndex());
+				payment.put(TileType.ore, ((JComboBox<Integer>) tradePaymentPanel.get(2).getSwingComponent()).getSelectedIndex());
+				payment.put(TileType.wheat, ((JComboBox<Integer>) tradePaymentPanel.get(3).getSwingComponent()).getSelectedIndex());
+				payment.put(TileType.wood, ((JComboBox<Integer>) tradePaymentPanel.get(4).getSwingComponent()).getSelectedIndex());
+				payment.remove(selectedResource);
+				boolean success = catanBoard.tradeWithBank(payment, selectedResource);
+				if(success) {
+					boardGUI.getState().equals(GameStates.idle);
+					gameWindow.refreshPlayerStats();
+					setOnOptionsPanel(actionPanel);
+				}
+			}
+		}
+	}
+	
+	public JComboBox<Integer> makeDropDownResourceSelector() {
+		JComboBox<Integer> comboBox = new JComboBox<Integer>();
+		comboBox.setAction(new AbstractAction() {
+			public void actionPerformed(ActionEvent a) {
+			}
+		});
+		for(int i = 0; i <= 4; i++) {
+			comboBox.addItem(i);
+		}
+		return comboBox;
 	}
 	
 	public void setupPanel() {
