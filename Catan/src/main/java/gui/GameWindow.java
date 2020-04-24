@@ -27,7 +27,7 @@ public class GameWindow {
     }
 
     private void showGUI() {
-        JFrame frame = new JFrame("Catan");
+    	JFrame frame = new JFrame(Messages.getString("GameWindow.GAME_NAME")); //$NON-NLS-1$
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	
         Dimension dim = new Dimension(5,6);
