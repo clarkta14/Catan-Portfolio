@@ -33,15 +33,15 @@ public class SetupPrompt {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
-		JLabel label = new JLabel("How many players for this game?");
+		JLabel label = new JLabel(Messages.getString("SetupPrompt.0")); //$NON-NLS-1$
 		label.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JButton threePlayersButton = new JButton("3 Players");
+		JButton threePlayersButton = new JButton(Messages.getString("SetupPrompt.1")); //$NON-NLS-1$
 		threePlayersButton.addActionListener(e -> selectPlayersAction("3"));
 		threePlayersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JButton fourPlayersButton = new JButton("4 Players");
+		JButton fourPlayersButton = new JButton(Messages.getString("SetupPrompt.2")); //$NON-NLS-1$
 		fourPlayersButton.addActionListener(e -> selectPlayersAction("4"));
 		fourPlayersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
