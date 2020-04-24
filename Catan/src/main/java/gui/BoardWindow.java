@@ -16,6 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -134,13 +135,23 @@ public class BoardWindow extends JPanel {
 	private void drawSettlements(Tile tile, Graphics2D g2) {
 		HashMap<Integer, Settlement> settlementLoc = tile.getSettlements();
 		for (int corner : settlementLoc.keySet()) {
+			boolean isCity = settlementLoc.get(corner).isCity();
 			Point p = tile.getHexCorners().get(corner);
-			Shape circle = new Ellipse2D.Double((int) p.getX() - this.settlementSize,
-					(int) p.getY() - this.settlementSize, this.settlementSize * 2, this.settlementSize * 2);
-			g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
-			g2.fill(circle);
-			g2.setColor(Color.BLACK);
-			g2.draw(circle);
+			if (isCity) {
+				Shape square = new Rectangle2D.Double((int) p.getX() - this.settlementSize,
+						(int) p.getY() - this.settlementSize, this.settlementSize * 2, this.settlementSize * 2);
+				g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
+				g2.fill(square);
+				g2.setColor(Color.BLACK);
+				g2.draw(square);
+			} else {
+				Shape circle = new Ellipse2D.Double((int) p.getX() - this.settlementSize,
+						(int) p.getY() - this.settlementSize, this.settlementSize * 2, this.settlementSize * 2);
+				g2.setColor((Color) settlementLoc.get(corner).getOwner().getColor());
+				g2.fill(circle);
+				g2.setColor(Color.BLACK);
+				g2.draw(circle);
+			}
 		}
 	}
 
@@ -841,19 +852,23 @@ public class BoardWindow extends JPanel {
 
 		public void mouseClicked(MouseEvent e) {
 			if(state.equals(GameStates.drop_settlement) || state.equals(GameStates.drop_settlement_setup) ||
-					state.equals(GameStates.drop_settlement_setup_final)) {
-				boolean settlementPlaced = false;
+					state.equals(GameStates.drop_settlement_setup_final) || state.equals(GameStates.drop_city)) {
+				boolean structurePlaced = false;
 				Point p = new Point(e.getX(), e.getY());
 				if (p != null) {
 					ArrayList<ArrayList<Integer>> settlementLoc = getStructureLocation(p);
 					if (settlementLoc != null) {
 						ArrayList<Integer> tiles = settlementLoc.get(0);
 						ArrayList<Integer> corners = settlementLoc.get(1);
-	
-						settlementPlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
+						
+						if (state.equals(GameStates.drop_city)) {
+							structurePlaced = catanBoard.addCityToTiles(tiles, corners);
+						} else {
+							structurePlaced = catanBoard.addSettlementToTiles(tiles, corners, state);
+						}
 					}
 				}
-				if(settlementPlaced) {
+				if(structurePlaced) {
 					setState(GameStates.idle);
 					repaint();
 				}
