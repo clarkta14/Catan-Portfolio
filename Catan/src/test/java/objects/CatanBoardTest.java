@@ -175,8 +175,10 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -191,9 +193,12 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertFalse(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -208,8 +213,10 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
-		
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+
 		clearClicks();
 		
 		tileNums.add(1);
@@ -222,6 +229,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertFalse(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -236,7 +244,9 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		clearClicks();
 		
@@ -250,6 +260,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -259,7 +270,9 @@ public class CatanBoardTest {
 		tileNums.add(3);
 		cornerNums.add(0);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		clearClicks();
 		
@@ -268,6 +281,7 @@ public class CatanBoardTest {
 		
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -282,8 +296,10 @@ public class CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -322,8 +338,10 @@ public class CatanBoardTest {
 		currentPlayer.addResource(TileType.wool, 1);
 		currentPlayer.addResource(TileType.wheat, 1);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		
 		assertEquals(0, currentPlayer.getResourceCount(TileType.brick));
@@ -353,8 +371,10 @@ public class CatanBoardTest {
 		currentPlayer.addResource(TileType.wood, 1);
 		currentPlayer.addResource(TileType.wool, 1);
 		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
 		assertEquals(1,  currentPlayer.getResourceCount(TileType.brick));
 		assertEquals(1,  currentPlayer.getResourceCount(TileType.wood));
@@ -377,8 +397,10 @@ public class CatanBoardTest {
 		cornerNums.add(5);
 		
 		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
 		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 	}
 	
 	@Test
@@ -397,6 +419,27 @@ public class CatanBoardTest {
 		cb.distributeResources(cb.getTiles().get(4).getNumber());
 		if (cb.getTiles().get(4).getType() != TileType.desert)
 			assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(4).getType()) > 0);
+	}
+	
+	@Test
+	public void testDistributeResourcesCity() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		//Get a non-desert tile
+		Tile tile = cb.getTiles().get(0);
+		int tileNum = 0;
+		while (tile.getType() == TileType.desert) {
+			tileNum++;
+			tile = cb.getTiles().get(tileNum);
+		}
+		
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		Settlement settlement = cb.getTiles().get(tileNum).getSettlements().get(0);
+		settlement.upgradeToCity();
+	
+		cb.distributeResources(tile.getNumber());
+		assertEquals(2, pc.getCurrentPlayer().getResourceCount(tile.getType()));
 	}
 	
 	@Test
@@ -592,8 +635,9 @@ public class CatanBoardTest {
 		TileType TileType2 = cb.getTiles().get(2).getType();
 		if (TileType2 == TileType.desert) {
 			assertEquals(0,  currentPlayer.getResourceCount(TileType2));
+		} else {
+			assertEquals(1,  currentPlayer.getResourceCount(TileType2));
 		}
-		assertEquals(1,  currentPlayer.getResourceCount(TileType2));
 		
 	}
 	
@@ -778,6 +822,243 @@ public class CatanBoardTest {
 		assertFalse(result);
 	}
 	
+	@Test
+	public void testBuySettlementMaxNumberSettlements() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		Player player = pc.getCurrentPlayer();
+		addResourcesForSettlements(player, 4);
+		
+		assertEquals(player.numSettlements, 2);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 3);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 4);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 5);
+		cb.buySettlement();
+		assertEquals(player.numSettlements, 5);
+		
+		assertEquals(1, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+		assertEquals(1, player.getResourceCount(TileType.wool));
+		assertEquals(1, player.getResourceCount(TileType.wood));
+	}
+	
+	@Test
+	public void testBuyCityMaxNumberSettlements() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		Player player = pc.getCurrentPlayer();
+		player.numSettlements = 4;
+		addResourcesForCities(player, 5);
+		
+		assertEquals(player.numSettlements, 4);
+		assertEquals(player.numCities, 0);
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 3);
+		assertEquals(player.numCities, 1);
+		assertEquals(8, player.getResourceCount(TileType.wheat));
+		assertEquals(12, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 2);
+		assertEquals(player.numCities, 2);
+		assertEquals(6, player.getResourceCount(TileType.wheat));
+		assertEquals(9, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 1);
+		assertEquals(player.numCities, 3);
+		assertEquals(4, player.getResourceCount(TileType.wheat));
+		assertEquals(6, player.getResourceCount(TileType.ore));
+		assertTrue(cb.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		assertFalse(cb.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testAddCityToTilesValid() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertTrue(result);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertEquals(0, currentPlayer.getResourceCount(TileType.wheat));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.ore));
+		
+		ArrayList<Tile> tiles = cb.getTiles();
+		for (int i = 0; i < 3; i++) {
+			HashMap<Integer, Settlement> settlementMap = tiles.get(tileNums.get(i)).getSettlements();
+			Settlement city = settlementMap.get(cornerNums.get(i));
+			if (city == null) {
+				fail("City should be present");
+			}
+			assertTrue(city.isCity());
+		}
+	}
+	
+	@Test
+	public void testAddCityToTilesNotOnSettlement() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
+		
+		clearClicks();
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(4);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
+		
+		for (Settlement s : settlements) {
+			assertFalse(s.isCity());
+		}
+	}
+
+	@Test
+	public void testAddCityToTilesOnOtherPlayerSettlement() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		System.out.println(pc.getCurrentPlayerNum());
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		pc.nextPlayer();
+		System.out.println(pc.getCurrentPlayerNum());
+		pc.nextPlayer();
+		System.out.println(pc.getCurrentPlayerNum());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
+		
+		pc.nextPlayer();
+		pc.nextPlayer();
+		pc.nextPlayer();
+		assertEquals(pc.getCurrentPlayer(), currentPlayer);
+
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
+		for (Settlement s : settlements) {
+			assertFalse(s.isCity());
+		}
+	}
+	
+	@Test
+	public void testAddCityToTilesNotEnoughResources() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		currentPlayer.removeResource(TileType.wheat, 1);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
+		
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(1, currentPlayer.getResourceCount(TileType.wheat));
+		
+		for (Settlement s : settlements) {
+			assertFalse(s.isCity());
+		}
+	}
+	
+	@Test
+	public void testAddCityToTilesAlreadyCity() {
+		Player currentPlayer = basicSetupForAddCityTests();
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
+		
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertTrue(result);
+		addResourcesForCities(currentPlayer, 1);
+		result = cb.addCityToTiles(tileNums, cornerNums);
+		assertEquals(2, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		assertFalse(result);
+		assertEquals(1, currentPlayer.numCities);
+		
+		for (Settlement s : settlements) {
+			assertTrue(s.isCity());
+		}
+	}
+	
+	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
+		ArrayList<Tile> tiles = cb.getTiles();
+		ArrayList<Settlement> settlements = new ArrayList<Settlement>();
+		for (int i = 0; i < 3; i++) {
+			HashMap<Integer, Settlement> settlementMap = tiles.get(tileNums.get(i)).getSettlements();
+			Settlement settlement = settlementMap.get(cornerNums.get(i));
+			if (settlement == null) {
+				fail("Settlement should be present");
+			}
+			settlements.add(settlement);
+		}
+		return settlements;
+	}
+
+	private Player basicSetupForAddCityTests() {
+		basicSetupForAddSettlementTests();
+		Player currentPlayer = pc.getCurrentPlayer();
+		addResourcesForCities(currentPlayer, 1);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		return currentPlayer;
+	}
+	
+	private void addResourcesForCities(Player player, int numCities) {
+		player.addResource(TileType.wheat, numCities*2);
+		player.addResource(TileType.ore, numCities*3);
+	}
+	
+	private void addResourcesForSettlements(Player player, int numSettlements) {
+		player.addResource(TileType.brick, numSettlements);
+		player.addResource(TileType.wheat, numSettlements);
+		player.addResource(TileType.wool, numSettlements);
+		player.addResource(TileType.wood, numSettlements);
+	}
+
 	private void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);

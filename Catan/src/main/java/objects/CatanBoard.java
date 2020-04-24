@@ -133,21 +133,15 @@ public class CatanBoard {
 	}
 
 	public boolean addSettlementToTiles(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, GameStates gameState) {
-		Settlement newlyAddedSettlement = new Settlement(this.turnController.getCurrentPlayer());
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		Settlement newlyAddedSettlement = new Settlement(currentPlayer);
 		boolean settlementLocationIsValid = true;
-		for(int i = 0; i < selectedTiles.size(); i++) {
-			settlementLocationIsValid = settlementLocationIsValid &&
-					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
-    	}
+		settlementLocationIsValid = checkForValidSettlementPlacementDistanceRule(selectedTiles, corners, settlementLocationIsValid);
 		
 		if(!settlementLocationIsValid) return false;
 		
 		if(gameState != GameStates.drop_settlement_setup && gameState != GameStates.drop_settlement_setup_final) {
-			settlementLocationIsValid = false;
-			for(int i = 0; i < selectedTiles.size(); i++) {
-				settlementLocationIsValid = settlementLocationIsValid ||
-					this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), this.turnController.getCurrentPlayer());
-    		}
+			settlementLocationIsValid = checkForValidSettlementPlacementConnectedToRoad(selectedTiles, corners, currentPlayer);
 			if(!settlementLocationIsValid) {
 				return false;
 			} 
@@ -156,18 +150,38 @@ public class CatanBoard {
 			}
 		}
 		
-		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
-			Player currentPlayer = this.turnController.getCurrentPlayer();
-			for (int i = 0; i < selectedTiles.size(); i++) {
-				Tile currentTile = this.tiles.get(selectedTiles.get(i));
-				currentPlayer.addResource(currentTile.getType(), 1);
-			}
+			distributeSetupResources(selectedTiles, currentPlayer);
 		}
+		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
+	}
+
+	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
+		boolean settlementLocationIsValid = false;
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid ||
+				this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), currentPlayer);
+		}
+		return settlementLocationIsValid;
+	}
+
+	private boolean checkForValidSettlementPlacementDistanceRule(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, boolean settlementLocationIsValid) {
+		for(int i = 0; i < selectedTiles.size(); i++) {
+			settlementLocationIsValid = settlementLocationIsValid &&
+					this.tiles.get(selectedTiles.get(i)).checkValidSettlementPlacement(corners.get(i));
+    	}
+		return settlementLocationIsValid;
+	}
+
+	private void distributeSetupResources(ArrayList<Integer> selectedTiles, Player currentPlayer) {
+		for (int i = 0; i < selectedTiles.size(); i++) {
+			Tile currentTile = this.tiles.get(selectedTiles.get(i));
+			currentPlayer.addResource(currentTile.getType(), 1);
+		}
 	}
 
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
@@ -215,38 +229,46 @@ public class CatanBoard {
 			if(t.getNumber() == number) {
 				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
 				for(Settlement settlement : settlementsOnTile.values()) {
-					settlement.getOwner().addResource(t.getType(), 1);
+					if (settlement.isCity()) {
+						settlement.getOwner().addResource(t.getType(), 2);
+					} else {
+						settlement.getOwner().addResource(t.getType(), 1);
+					}
 				}
 			}
 		}
 	}
 
 	boolean buyRoad() {
-		if(this.turnController.getCurrentPlayer().canBuyRoad()) {
-			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if(currentPlayer.canBuyRoad()) {
+			currentPlayer.removeResource(TileType.brick, 1);
+			currentPlayer.removeResource(TileType.wood, 1);
 			return true;
 		}
 		return false;
 	}
 
 	boolean buySettlement() {
-		if(this.turnController.getCurrentPlayer().canBuySettlement()) {
-			this.turnController.getCurrentPlayer().removeResource(TileType.brick, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wood, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if(currentPlayer.canBuySettlement()) {
+			currentPlayer.removeResource(TileType.brick, 1);
+			currentPlayer.removeResource(TileType.wood, 1);
+			currentPlayer.removeResource(TileType.wool, 1);
+			currentPlayer.removeResource(TileType.wheat, 1);
+			currentPlayer.numSettlements++;
 			return true;
 		}
 		return false;
 	}
 
 	public boolean buyDevelopmentCard() {
-		if(this.turnController.getCurrentPlayer().canBuyDevelopmentCard()) {
-			this.turnController.getCurrentPlayer().removeResource(TileType.ore, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wool, 1);
-			this.turnController.getCurrentPlayer().removeResource(TileType.wheat, 1);
-			this.turnController.getCurrentPlayer().addDevelopmentCard(developmentCards.pop());
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if(currentPlayer.canBuyDevelopmentCard()) {
+			currentPlayer.removeResource(TileType.ore, 1);
+			currentPlayer.removeResource(TileType.wool, 1);
+			currentPlayer.removeResource(TileType.wheat, 1);
+			currentPlayer.addDevelopmentCard(developmentCards.pop());
 			return true;
 		}
 		return false;
@@ -261,6 +283,40 @@ public class CatanBoard {
 				this.turnController.getCurrentPlayer().removeResource(tt, payment.get(tt));
 			}
 			this.turnController.getCurrentPlayer().addResource(forThisType, 1);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean buyCity() {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if (currentPlayer.canBuyCity()) {
+			currentPlayer.removeResource(TileType.ore, 3);
+			currentPlayer.removeResource(TileType.wheat, 2);
+			currentPlayer.numSettlements--;
+			currentPlayer.numCities++;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean addCityToTiles(ArrayList<Integer> tileNums, ArrayList<Integer> corners) {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		ArrayList<Settlement> settlementsToConvert = new ArrayList<Settlement>();
+		boolean canPlace = true;
+		for (int i = 0; i < tileNums.size(); i++) {
+			Tile tile = this.tiles.get(tileNums.get(i));
+			Settlement settlement = tile.getSettlements().get(corners.get(i));
+			settlementsToConvert.add(settlement);
+			if (settlement == null || settlement.getOwner() != currentPlayer || settlement.isCity()) {
+				canPlace = false;
+			}
+		}
+		if (canPlace && buyCity()) {
+			currentPlayer.alterVictoryPoints(VictoryPoints.city);
+			for (Settlement s : settlementsToConvert) {
+				s.upgradeToCity();
+			}
 			return true;
 		}
 		return false;
