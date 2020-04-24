@@ -292,15 +292,15 @@ public class BoardWindow extends JPanel {
 
 	public ArrayList<String> getPortnames() {
 		ArrayList<String> ports = new ArrayList<>();
-		ports.add("Wheat 2:1");
-		ports.add("Ore 2:1");
-		ports.add("? 3:1");
-		ports.add("Wool 2:1");
-		ports.add("? 3:1");
-		ports.add("? 3:1");
-		ports.add("Bricks 2:1");
-		ports.add("Lumber 2:1");
-		ports.add("? 3:1");
+		ports.add(Messages.getString("BoardWindow.0")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.1")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.3")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.4")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.5")); //$NON-NLS-1$
+		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
 		return ports;
 	}
 
