@@ -78,8 +78,8 @@ Below can be found the list of game rules that the game will need to support to 
 
 
 *   Victory Points Calculation (interval, int [0, MAX_VALUE])
-    *   Player builds a settlement: Player.VP + 1 [9a90bc1 : CatanBoardTest.java]
-    *   Player builds a city: Player.VP + 1 [acd9342 : CatanBoardTest.java]
+    *   Player builds a settlement: Player.VP + 1 [9a90bc1 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9a90bc1)
+    *   Player builds a city: Player.VP + 1 [acd9342 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/acd9342)
     *   Player plays a VP devo card: Player.VP + 1
     *   Player receives Longest Road card: Player.VP + 2
     *   Player loses Longest Road card: Player.VP - 2
@@ -91,37 +91,37 @@ Below can be found the list of game rules that the game will need to support to 
 *   Settlements (build)
     *   Distances from other settlements/cities (boolean)
         *   Is &lt;0 away from another settlement/city: IllegalArgumentExcpetion
-        *   Is 0 away from another settlement/city (occupied): False [3b172d2 : CatanBoardTest.java]
-        *   Is 1 away from another settlement/city: False [28df728 : CatanBoardTest.java]
-        *   Is 2 away from another settlement/city: True [82a0b28 : CatanBoardTest.java]
-        *   Is 11 away from another settlement/city: True [9ac2872 : CatanBoardTest.java]
+        *   Is 0 away from another settlement/city (occupied): False [3b172d2 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/3b172d2)
+        *   Is 1 away from another settlement/city: False [28df728 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/28df728)
+        *   Is 2 away from another settlement/city: True [82a0b28 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/82a0b28)
+        *   Is 11 away from another settlement/city: True [9ac2872 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9ac2872)
         *   Is >11 away from another settlement/city: IllegalArgumentExcpetion
     *   Connections to roads (boolean)
         *   Is connected to a road that is owned by the current player: True
         *   Is not connected to a road: False
     *   Has necessary resources to build settlement (boolean)
-        *   Current player has at least 1 brick, 1 lumber, 1 grain, and 1 wool: True [18ccceb : CatanBoardTest.java]
-        *   Current player does not have the required resources: False [02dd93a : CatanBoardTest.java]
+        *   Current player has at least 1 brick, 1 lumber, 1 grain, and 1 wool: True [18ccceb : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/18ccceb)
+        *   Current player does not have the required resources: False [02dd93a : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/02dd93a)
 *   Cities (build)
     *   Has necessary resources (boolean)
-        *   Current player has at least 2 grain and 3 ore: True [1c57e33 : CatanBoardTest.java]
-        *   Current player does not have at least 2 grain and 3 ore: False [f7a7497 : CatanBoardTest.java]
+        *   Current player has at least 2 grain and 3 ore: True [1c57e33 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/1c57e33)
+        *   Current player does not have at least 2 grain and 3 ore: False [f7a7497 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/f7a7497)
     *   Has selected a settlement that will be upgraded to a city (boolean)
-        *   Current player has selected a settlement that they own: True [1c57e33 : CatanBoardTest.java]
-        *   Current player has selected a settlement that they do not own: False [0291f57 : CatanBoardTest.java]
-        *   Current player has not selected a settlement: False [acd9342 : CatanBoardTest.java]
+        *   Current player has selected a settlement that they own: True [1c57e33 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/1c57e33)
+        *   Current player has selected a settlement that they do not own: False [0291f57 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/0291f57)
+        *   Current player has not selected a settlement: False [acd9342 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/acd9342)
 *   Roads (build)
     *   Has necessary resources (boolean)
-        *   Current player has at least 1 brick, 1 lumber: True [78d26d2 : CatanBoardTest.java]
-        *   Current player does not have the required resources: False [c9a8c7c : CatanBoardTest.java]
+        *   Current player has at least 1 brick, 1 lumber: True [78d26d2 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/78d26d2)
+        *   Current player does not have the required resources: False [c9a8c7c : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/c9a8c7c)
     *   Space connected to a road, settlement, or city owned by current player (boolean)
-        *   Space connected to existing road, settlement, or city: True [4f44ed5 : CatanBoardTest.java]
-        *   Space not connected to existing road, settlement, or city: False [88184a8 : CatanBoardTest.java]
+        *   Space connected to existing road, settlement, or city: True [4f44ed5 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/4f44ed5)
+        *   Space not connected to existing road, settlement, or city: False [88184a8 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/88184a8)
         *   Space is occupied: False
         *   No space is selected: False
 *   Turns
     *   Player’s turn: (interval, int [0, numPlayers - 1])
-        *   Current player ends turn: (currentTurn + 1) % numPlayers [1855e2d : CatanBoardTest.java]
+        *   Current player ends turn: (currentTurn + 1) % numPlayers [1855e2d : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/1855e2d)
         *   Player’s turn set to -1: IllegalArgumentException
         *   Player’s turn set to numPlayers: IllegalArgumentException
 *   Longest Road
@@ -147,9 +147,9 @@ Below can be found the list of game rules that the game will need to support to 
         *   Player has played less than 3 Knight cards: False
         *   Player has played 3 Knight cards or more: True
 *   Development Card
-    *   User has exact resources to buy card (1 ore, 1 wool, 1 grain): True [e6146bd : CatanBoardTest.java]
+    *   User has exact resources to buy card (1 ore, 1 wool, 1 grain): True [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
     *   User has more resources to buy card: True
-    *   User has insufficient resources to buy card (in 1 or more categories): False [e6146bd : CatanBoardTest.java]
+    *   User has insufficient resources to buy card (in 1 or more categories): False [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
     *   User plays more than 1 development card per turn: False
     *   User plays card they purchased in same turn: False
     *   User plays 1 or 0 development cards not purchased in the same turn: True
@@ -220,9 +220,9 @@ Below can be found the list of game rules that the game will need to support to 
     *   4 resource cards of any type must be traded to the bank for a single resource card of the players choice. 
         *   Player attempts to make a trade (Boolean)
             *   Player did not pay 4 resource cards:
-                *   throw new IllegalArgumentException: Not enough resources provided for the trade [b08dee5 : CatanBoardTest.java]
-            *   Player traded 4 resource cards for 1 resource card from the bank (True) [6f18634 : CatanBoardTest.java]
-            *   Player traded 4 resource cards for a single card of the same resource type (False) [99df99d : CatanBoardTest.java]
+                *   throw new IllegalArgumentException: Not enough resources provided for the trade [b08dee5 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/b08dee5)
+            *   Player traded 4 resource cards for 1 resource card from the bank (True) [6f18634 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/6f18634)
+            *   Player traded 4 resource cards for a single card of the same resource type (False) [99df99d : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/99df99d)
     *   Trade amongst players:
         *   On a players turn he/she provides an offer to another player in the game:
             *   Trade offer has a resource card offered up for trade and a resource card traded for
@@ -235,5 +235,5 @@ Below can be found the list of game rules that the game will need to support to 
             *   Does the player have a settlement on the border of that harbor (Boolean)
         *   Trade:
             *   Based on harbor details required number of resources for trade are payed (True)
-            *   Based on harbor details required number of resources for trade are not payed (False) []
+            *   Based on harbor details required number of resources for trade are not payed (False)
             *   More resources are payed than what is required for trade (False)
