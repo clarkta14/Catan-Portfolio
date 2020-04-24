@@ -8,5 +8,6 @@ public enum GameStates {
 	drop_road, 
 	drop_road_setup,
 	trade,
+	drop_city,
 	idle
 }

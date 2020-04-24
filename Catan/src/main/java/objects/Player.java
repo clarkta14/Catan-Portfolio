@@ -9,6 +9,8 @@ public class Player {
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
 	private int victoryPoints = 0;
+	public int numSettlements = 2;
+	public int numCities = 0;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -57,7 +59,11 @@ public class Player {
 	}
 	
 	public boolean canBuySettlement() {
-		return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
+		if (this.numSettlements >= 5) {
+			return false;
+		} else {
+			return this.resources.get(TileType.brick) > 0 && this.resources.get(TileType.wood) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
+		}
 	}
 
 	public boolean canBuyDevelopmentCard() {
@@ -119,5 +125,12 @@ public class Player {
 	
 	public boolean isVictor() {
 		return this.victoryPoints >= 10;
+	}
+
+	public boolean canBuyCity() {
+		if (numCities >= 5 || numSettlements == 0) {
+			return false;
+		}
+		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
 }
