@@ -174,9 +174,9 @@ Below can be found the list of game rules that the game will need to support to 
             *   User places one road: False
             *   User places no roads: False
         *   Year of Plenty (2 total) (boolean)
-            *   User obtains two resources from the bank only: True
-            *   User obtains more than two resources: False
-            *   User obtains one or zero resources: False
+            *   User obtains two resources from the bank only: True #caa918d, #aa192fa
+            *   User obtains more than two resources: False #35bf30a
+            *   User obtains one or zero resources: False #35bf30a
         *   Victory Point Card (5 total) (integer)
             *   User victory point count increases by 1: Pass
             *   User victory point count increases by 0 or more than 1: Pass
