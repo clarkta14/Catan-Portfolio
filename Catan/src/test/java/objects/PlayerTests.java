@@ -265,6 +265,17 @@ public class PlayerTests {
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
 	}
+	
+	@Test
+	public void testAddDevelopmentCard_MonopolyDC() {
+		PlayersController pc = new PlayersController(3);
+		Player plyr = new Player(Color.orange);
+		plyr.addDevelopmentCard(new MonopolyCard(pc));
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+		assertTrue(plyr.developmentCards.get(DevelopmentCardType.monopoly_card).size() == 1);
+	}
 
 	@Test
 	public void testAddDevelopmentCard_ProgressDC() {
