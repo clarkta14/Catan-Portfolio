@@ -22,7 +22,9 @@ public class CatanBoard {
         	for(int i = 0; i < 14; i++) {
         		push(new KnightDevelopmentCard());
         	}
-			for(int i = 0; i < 6; i++) {
+			for(int i = 0; i < 2; i++) {
+				push(new MonopolyCard(turnController));
+				push(new YearOfPlentyCard(turnController));
 				push(new ProgressDevelopmentCard());    		
 			}
 			for(int i = 0; i < 5; i++) {
