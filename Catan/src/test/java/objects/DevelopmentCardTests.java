@@ -26,7 +26,8 @@ public class DevelopmentCardTests {
 	
 	@Test
 	public void testCreateMonopolyCard() {
-		DevelopmentCard monopolyCard = new MonopolyCard();
+		PlayersController pc = new PlayersController(3);
+		DevelopmentCard monopolyCard = new MonopolyCard(pc);
 		assertEquals( DevelopmentCardType.monopoly_card, monopolyCard.getDevelopmentCardType());
 	}
 }

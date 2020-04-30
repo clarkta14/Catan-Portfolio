@@ -2,6 +2,10 @@ package objects;
 
 public class MonopolyCard extends DevelopmentCard {
 
+	public MonopolyCard(PlayersController playerController) {
+		
+	}
+
 	@Override
 	public void playCard() {
 		
