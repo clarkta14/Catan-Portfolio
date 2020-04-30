@@ -2,6 +2,7 @@ package objects;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class DevelopmentCardTests {
@@ -29,5 +30,17 @@ public class DevelopmentCardTests {
 		PlayersController pc = new PlayersController(3);
 		DevelopmentCard monopolyCard = new MonopolyCard(pc);
 		assertEquals( DevelopmentCardType.monopoly_card, monopolyCard.getDevelopmentCardType());
+	}
+	
+	@Test
+	public void testPlayMonopolyCardWrongCall() {
+		PlayersController pc = new PlayersController(3);
+		DevelopmentCard monopolyCard = new MonopolyCard(pc);
+		try {
+			monopolyCard.playCard();
+			Assert.fail("Should throw UOE");
+		} catch (UnsupportedOperationException e) {
+			assertEquals("Monopoly card needs a resource type", e.getMessage());
+		}
 	}
 }
