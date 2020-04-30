@@ -73,6 +73,33 @@ public class DevelopmentCardTests {
 			assertEquals(2, p3.getResourceCount(type));
 		}
 	}
+	
+	@Test
+	public void testPlayMonopolyCardNoResources() {
+		PlayersController pc = new PlayersController(3);
+		MonopolyCard monopolyCard = new MonopolyCard(pc);
+		Player p1 = pc.getPlayer(0);
+		Player p2 = pc.getPlayer(1);
+		Player p3 = pc.getPlayer(2);
+
+		pc.nextPlayer();
+		monopolyCard.playCard(TileType.wool);
+
+		assertEquals(0, p1.getResourceCount(TileType.wool));
+		assertEquals(0, p2.getResourceCount(TileType.wool));
+		assertEquals(0, p3.getResourceCount(TileType.wool));
+
+		ArrayList<TileType> typesToCheck = new ArrayList<TileType>();
+		typesToCheck.add(TileType.wood);
+		typesToCheck.add(TileType.wheat);
+		typesToCheck.add(TileType.ore);
+		typesToCheck.add(TileType.brick);
+		for (TileType type : typesToCheck) {
+			assertEquals(0, p1.getResourceCount(type));
+			assertEquals(0, p2.getResourceCount(type));
+			assertEquals(0, p3.getResourceCount(type));
+		}
+	}
 
 	private void add2OfAllResourcesToAllPlayers(Player p1, Player p2, Player p3) {
 		p1.addResource(TileType.wool, 2);
