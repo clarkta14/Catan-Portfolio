@@ -132,6 +132,17 @@ public class DevelopmentCardTests {
 		assertEquals(1, p2.getResourceCount(TileType.brick));
 		assertEquals(1, p2.getResourceCount(TileType.wheat));
 	}
+	
+	@Test
+	public void testPlayYearOfPlentyCard2() {
+		PlayersController pc = new PlayersController(3);
+		YearOfPlentyCard yearOfPlentyCard = new YearOfPlentyCard(pc);
+		Player p1 = pc.getPlayer(0);
+
+		yearOfPlentyCard.playCard(TileType.wool, TileType.wool);
+
+		assertEquals(2, p1.getResourceCount(TileType.wool));
+	}
 
 	private void add2OfAllResourcesToAllPlayers(Player p1, Player p2, Player p3) {
 		p1.addResource(TileType.wool, 2);
