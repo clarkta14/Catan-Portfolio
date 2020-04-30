@@ -1,9 +1,10 @@
 package objects;
 
 public class YearOfPlentyCard extends DevelopmentCard {
+	private PlayersController playerController;
 
-	public YearOfPlentyCard(PlayersController pc) {
-		// TODO Auto-generated constructor stub
+	public YearOfPlentyCard(PlayersController playerController) {
+		this.playerController = playerController;
 	}
 
 	@Override
@@ -14,6 +15,13 @@ public class YearOfPlentyCard extends DevelopmentCard {
 	@Override
 	public DevelopmentCardType getDevelopmentCardType() {
 		return DevelopmentCardType.year_of_plenty_card;
+	}
+
+	public void playCard(TileType resource1, TileType resource2) {
+		Player currentPlayer = this.playerController.getCurrentPlayer();
+		
+		currentPlayer.addResource(resource1, 1);
+		currentPlayer.addResource(resource2, 1);
 	}
 
 }
