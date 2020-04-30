@@ -33,6 +33,13 @@ public class DevelopmentCardTests {
 		DevelopmentCard monopolyCard = new MonopolyCard(pc);
 		assertEquals(DevelopmentCardType.monopoly_card, monopolyCard.getDevelopmentCardType());
 	}
+	
+	@Test
+	public void testCreateYearOfPlentyCard() {
+		PlayersController pc = new PlayersController(3);
+		DevelopmentCard yearOfPlentyCard = new YearOfPlentyCard(pc);
+		assertEquals(DevelopmentCardType.year_of_plenty_card, yearOfPlentyCard.getDevelopmentCardType());
+	}
 
 	@Test
 	public void testPlayMonopolyCardWrongCall() {
