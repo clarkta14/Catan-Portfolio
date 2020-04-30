@@ -70,14 +70,11 @@ public class Player {
 		return this.resources.get(TileType.ore) > 0 && this.resources.get(TileType.wool) > 0 && this.resources.get(TileType.wheat) > 0;
 	}
 
-	public void addDevelopmentCard(DevelopmentCardType cardType) {
+	public void addDevelopmentCard(DevelopmentCard card) {
+		DevelopmentCardType cardType = card.getDevelopmentCardType();
 		Stack<DevelopmentCard> cards = this.developmentCards.get(cardType);
-		if(DevelopmentCardType.knight == cardType) {
-			cards.push(new KnightDevelopmentCard());
-		} else if(DevelopmentCardType.progress == cardType) {
-			cards.push(new ProgressDevelopmentCard());
-		} else if(DevelopmentCardType.victory_point == cardType) {
-			cards.push(new VictoryPointDevelopmentCard());
+		cards.push(card);
+		if(DevelopmentCardType.victory_point == cardType) {
 			alterVictoryPoints(VictoryPoints.devolopment_card);
 		}
 		this.developmentCards.replace(cardType, cards);

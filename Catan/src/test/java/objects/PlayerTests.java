@@ -260,7 +260,7 @@ public class PlayerTests {
 	@Test
 	public void testAddDevelopmentCard_KnightDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.knight);
+		plyr.addDevelopmentCard(new KnightDevelopmentCard());
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
@@ -269,7 +269,7 @@ public class PlayerTests {
 	@Test
 	public void testAddDevelopmentCard_ProgressDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.progress);
+		plyr.addDevelopmentCard(new ProgressDevelopmentCard());
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
@@ -278,7 +278,7 @@ public class PlayerTests {
 	@Test
 	public void testAddDevelopmentCard_VictoryPointDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
@@ -287,8 +287,8 @@ public class PlayerTests {
 	@Test
 	public void testRemoveDevelopmentCard_KnightDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.knight);
-		plyr.addDevelopmentCard(DevelopmentCardType.knight);
+		plyr.addDevelopmentCard(new KnightDevelopmentCard());
+		plyr.addDevelopmentCard(new KnightDevelopmentCard());
 		plyr.removeDevelopmentCard(DevelopmentCardType.knight);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
@@ -298,8 +298,8 @@ public class PlayerTests {
 	@Test
 	public void testRemoveDevelopmentCard_ProgressDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.progress);
-		plyr.addDevelopmentCard(DevelopmentCardType.progress);
+		plyr.addDevelopmentCard(new ProgressDevelopmentCard());
+		plyr.addDevelopmentCard(new ProgressDevelopmentCard());
 		plyr.removeDevelopmentCard(DevelopmentCardType.progress);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
@@ -309,8 +309,8 @@ public class PlayerTests {
 	@Test
 	public void testRemoveDevelopmentCard_VictoryPointDC() {
 		Player plyr = new Player(Color.orange);
-		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
-		plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+		plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
+		plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
 		plyr.removeDevelopmentCard(DevelopmentCardType.victory_point);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
@@ -428,7 +428,7 @@ public class PlayerTests {
 		Player plyr = new Player(Color.orange);
 		assertFalse(plyr.isVictor());
 		for(int i = 0; i < 10; i++) {
-			plyr.addDevelopmentCard(DevelopmentCardType.victory_point);
+			plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
 		}
 		assertTrue(plyr.isVictor());
 	}
