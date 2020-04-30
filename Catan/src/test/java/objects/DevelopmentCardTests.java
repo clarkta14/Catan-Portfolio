@@ -107,6 +107,18 @@ public class DevelopmentCardTests {
 			assertEquals(0, p3.getResourceCount(type));
 		}
 	}
+	
+	@Test
+	public void testPlayYearOfPlentyCardWrongCall() {
+		PlayersController pc = new PlayersController(3);
+		DevelopmentCard yearOfPlentyCard = new YearOfPlentyCard(pc);
+		try {
+			yearOfPlentyCard.playCard();
+			Assert.fail("Should throw UOE");
+		} catch (UnsupportedOperationException e) {
+			assertEquals("Year of Plenty card needs two resource types", e.getMessage());
+		}
+	}
 
 	private void add2OfAllResourcesToAllPlayers(Player p1, Player p2, Player p3) {
 		p1.addResource(TileType.wool, 2);

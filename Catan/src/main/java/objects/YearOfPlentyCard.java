@@ -8,8 +8,7 @@ public class YearOfPlentyCard extends DevelopmentCard {
 
 	@Override
 	public void playCard() {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Year of Plenty card needs two resource types");
 	}
 
 	@Override
