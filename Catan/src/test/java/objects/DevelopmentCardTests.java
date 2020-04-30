@@ -23,4 +23,10 @@ public class DevelopmentCardTests {
 		DevelopmentCard victoryPoint = new VictoryPointDevelopmentCard();
 		assertEquals(victoryPoint.getDevelopmentCardType(), DevelopmentCardType.victory_point);
 	}
+	
+	@Test
+	public void testCreateMonopolyCard() {
+		DevelopmentCard monopolyCard = new MonopolyCard();
+		assertEquals( DevelopmentCardType.monopoly_card, monopolyCard.getDevelopmentCardType());
+	}
 }
