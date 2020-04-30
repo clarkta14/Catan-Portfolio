@@ -121,7 +121,7 @@ public class DevelopmentCardTests {
 	}
 	
 	@Test
-	public void testPlayYearOfPlentyCard() {
+	public void testPlayYearOfPlentyCard1() {
 		PlayersController pc = new PlayersController(3);
 		YearOfPlentyCard yearOfPlentyCard = new YearOfPlentyCard(pc);
 		Player p2 = pc.getPlayer(1);
