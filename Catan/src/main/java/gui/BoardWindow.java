@@ -477,7 +477,7 @@ public class BoardWindow extends JPanel {
 				tile.add(1);
 				corner.add(0);
 				tile.add(0);
-				corner.add(3);
+				corner.add(4);
 			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
 					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
 				tile.add(0);
@@ -734,7 +734,7 @@ public class BoardWindow extends JPanel {
 			} else if (heightMargin + 15 * hexagonSide / 2 - this.settlementSize < y
 					&& y < heightMargin + 15 * hexagonSide / 2 + this.settlementSize) {
 				tile.add(7);
-				corner.add(0);
+				corner.add(1);
 			}
 		} else if (checkIfWithinColumn(x, 9)) {
 			if (heightMargin + 2 * hexagonSide - this.settlementSize < y
@@ -750,9 +750,9 @@ public class BoardWindow extends JPanel {
 			} else if (heightMargin + 5 * hexagonSide - this.settlementSize < y
 					&& y < heightMargin + 5 * hexagonSide + this.settlementSize) {
 				tile.add(16);
-				corner.add(3);
-				tile.add(12);
 				corner.add(0);
+				tile.add(12);
+				corner.add(2);
 			} else if (heightMargin + 6 * hexagonSide - this.settlementSize < y
 					&& y < heightMargin + 6 * hexagonSide + this.settlementSize) {
 				tile.add(12);
