@@ -19,6 +19,7 @@ import javax.swing.Timer;
 import lib.GraphPaperLayout;
 import objects.CatanBoard;
 import objects.DevelopmentCardType;
+import objects.MonopolyCard;
 import objects.Player;
 import objects.PlayersController;
 import objects.TileType;
@@ -174,12 +175,16 @@ public class OptionsPanel extends JPanel {
 		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
 		playYearOfPlentyCard.setText("Play Year Of Plenty Card");
 		actionPanel.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,16,6,2)));
+		
+		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+		monopolyCardButton.setText("Play Monopoly Card");
+		actionPanel.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,18,6,2)));
 
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText(Messages.getString("OptionsPanel.12")); //$NON-NLS-1$
-		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,18,6,2)));
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,20,6,2)));
 		
-		this.lastRolled = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(4, 20, 6, 2)); //$NON-NLS-1$
+		this.lastRolled = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(4, 22, 6, 2)); //$NON-NLS-1$
 		this.lastRolled.getSwingComponent().setFont(font);
 		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
 		actionPanel.add(this.lastRolled);
@@ -224,7 +229,9 @@ public class OptionsPanel extends JPanel {
 	
 	public void yearOfPlentyPanel(Player currentPlayer) {
 		ArrayList<OptionsPanelComponent> buttons = new ArrayList<>();
-		JLabel instuctionLabel = new JLabel("Select Desired Resource"); 
+		yearOfPlentyResource1 = null;
+		yearOfPlentyResource2 = null;
+		JLabel instuctionLabel = new JLabel("Select Desired Resources (two choices)"); 
 		buttons.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wool), new Rectangle(4,6,6,2)));
 		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wheat), new Rectangle(4,8,6,2)));
@@ -246,12 +253,49 @@ public class OptionsPanel extends JPanel {
 					if (yearOfPlentyResource1 != null && yearOfPlentyResource2 != null) {
 						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
 						card.playCard(yearOfPlentyResource1, yearOfPlentyResource2);
-						yearOfPlentyResource1 = null;
-						yearOfPlentyResource2 = null;
 						boardGUI.setState(GameStates.idle);
 						setOnOptionsPanel(actionPanel);
 						gameWindow.refreshPlayerStats();
 					}
+				}
+			}
+		});
+		resourceButton.setText(resourceType.name());
+		return resourceButton;
+	}
+	
+	class MonopolyCardButton extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Player currentPlayer = playerController.getCurrentPlayer();
+			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.monopoly_card) >= 1) {
+				boardGUI.setState(GameStates.play_card);
+				monopolyPanel(currentPlayer);
+			}
+		}
+	}
+	
+	public void monopolyPanel(Player currentPlayer) {
+		ArrayList<OptionsPanelComponent> buttons = new ArrayList<>();
+		JLabel instuctionLabel = new JLabel("Select Desired Resource"); 
+		buttons.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
+		buttons.add(new OptionsPanelComponent(monopolyButton(currentPlayer, TileType.wool), new Rectangle(4,6,6,2)));
+		buttons.add(new OptionsPanelComponent(monopolyButton(currentPlayer, TileType.wheat), new Rectangle(4,8,6,2)));
+		buttons.add(new OptionsPanelComponent(monopolyButton(currentPlayer, TileType.wood), new Rectangle(4,10,6,2)));
+		buttons.add(new OptionsPanelComponent(monopolyButton(currentPlayer, TileType.ore), new Rectangle(4,12,6,2)));
+		buttons.add(new OptionsPanelComponent(monopolyButton(currentPlayer, TileType.brick), new Rectangle(4,14,6,2)));
+		setOnOptionsPanel(buttons);
+	}
+	
+	public JButton monopolyButton(Player currentPlayer, TileType resourceType) {
+		JButton resourceButton = new JButton(new AbstractAction() {
+			public void actionPerformed(ActionEvent a) {
+				if(boardGUI.getState().equals(GameStates.play_card)) {
+					MonopolyCard card = (MonopolyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
+					card.playCard(resourceType);
+					boardGUI.setState(GameStates.idle);
+					setOnOptionsPanel(actionPanel);
+					gameWindow.refreshPlayerStats();
 				}
 			}
 		});
