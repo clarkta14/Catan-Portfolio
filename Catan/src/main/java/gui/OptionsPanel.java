@@ -33,8 +33,7 @@ public class OptionsPanel extends JPanel {
 	private PlayersController playerController;
 	private BoardWindow boardGUI;
 	private CatanBoard catanBoard;
-	private TileType yearOfPlentyResource1;
-	private TileType yearOfPlentyResource2;
+	private TileType yearOfPlentyResource;
 	private ArrayList<OptionsPanelComponent> setupPanel;
 	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
@@ -63,8 +62,7 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithPlayerPaymentPanel = new ArrayList<>();
 		this.acceptTradeWithPlayerPanel = new ArrayList<>();
 		this.selectedResource = null;
-		this.yearOfPlentyResource1 = null;
-		this.yearOfPlentyResource2 = null;
+		this.yearOfPlentyResource = null;
 		this.setLayout(new GraphPaperLayout(new Dimension(14, 24)));
 		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(1, 1, 12, 1)); //$NON-NLS-1$
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
@@ -229,8 +227,7 @@ public class OptionsPanel extends JPanel {
 	
 	public void yearOfPlentyPanel(Player currentPlayer) {
 		ArrayList<OptionsPanelComponent> buttons = new ArrayList<>();
-		yearOfPlentyResource1 = null;
-		yearOfPlentyResource2 = null;
+		yearOfPlentyResource = null;
 		JLabel instuctionLabel = new JLabel("Select Desired Resources (two choices)"); 
 		buttons.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wool), new Rectangle(4,6,6,2)));
@@ -245,14 +242,12 @@ public class OptionsPanel extends JPanel {
 		JButton resourceButton = new JButton(new AbstractAction() {
 			public void actionPerformed(ActionEvent a) {
 				if(boardGUI.getState().equals(GameStates.play_card)) {
-					if (yearOfPlentyResource1 == null) {
-						yearOfPlentyResource1 = resourceType;
-					} else if (yearOfPlentyResource2 == null) {
-						yearOfPlentyResource2 = resourceType;
+					if (yearOfPlentyResource == null) {
+						yearOfPlentyResource = resourceType;
 					}
-					if (yearOfPlentyResource1 != null && yearOfPlentyResource2 != null) {
+					if (yearOfPlentyResource != null) {
 						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
-						card.playCard(yearOfPlentyResource1, yearOfPlentyResource2);
+						card.playCard(yearOfPlentyResource, resourceType);
 						boardGUI.setState(GameStates.idle);
 						setOnOptionsPanel(actionPanel);
 						gameWindow.refreshPlayerStats();
