@@ -1,6 +1,10 @@
 
 **Settlers of Catan**
 
+**Mutations**
+
+[Here](https://docs.google.com/document/d/1RmSGyU0niUe0Z6ra4Vp2bjW37lNQ9MU6zigtQX2mL8U/edit) you can find a document that contains our PIT Mutation testing results and comments.
+
 **Definition of Done**
 
 Below can be found the list of game rules that the game will need to support to be considered done. Below this list we have compiled a list of test cases based on BVA analysis of the cases related to each of the sections in the game rule document. We will consider the project done when the test cases mentioned below all pass.
