@@ -12,21 +12,23 @@ import gui.GameStates;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
-    private Stack<DevelopmentCardType> developmentCards;
+    private Stack<DevelopmentCard> developmentCards;
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
     	this.turnController = turnController;
         this.tiles = new ArrayList<Tile>();
-        this.developmentCards = new Stack<DevelopmentCardType>() {{
+        this.developmentCards = new Stack<DevelopmentCard>() {{
         	for(int i = 0; i < 14; i++) {
-        		push(DevelopmentCardType.knight);
+        		push(new KnightDevelopmentCard());
         	}
-			for(int i = 0; i < 6; i++) {
-				push(DevelopmentCardType.progress);    		
+			for(int i = 0; i < 2; i++) {
+				push(new MonopolyCard(turnController));
+				push(new YearOfPlentyCard(turnController));
+				push(new ProgressDevelopmentCard());    		
 			}
 			for(int i = 0; i < 5; i++) {
-				push(DevelopmentCardType.victory_point);
+				push(new VictoryPointDevelopmentCard());
 			}
         }};
         Collections.shuffle(this.developmentCards);
