@@ -18,9 +18,11 @@ import javax.swing.Timer;
 
 import lib.GraphPaperLayout;
 import objects.CatanBoard;
+import objects.DevelopmentCardType;
 import objects.Player;
 import objects.PlayersController;
 import objects.TileType;
+import objects.YearOfPlentyCard;
 
 @SuppressWarnings("serial")
 public class OptionsPanel extends JPanel {
@@ -30,6 +32,8 @@ public class OptionsPanel extends JPanel {
 	private PlayersController playerController;
 	private BoardWindow boardGUI;
 	private CatanBoard catanBoard;
+	private TileType yearOfPlentyResource1;
+	private TileType yearOfPlentyResource2;
 	private ArrayList<OptionsPanelComponent> setupPanel;
 	private ArrayList<OptionsPanelComponent> actionPanel;
 	private ArrayList<OptionsPanelComponent> infoPanel;
@@ -58,6 +62,8 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithPlayerPaymentPanel = new ArrayList<>();
 		this.acceptTradeWithPlayerPanel = new ArrayList<>();
 		this.selectedResource = null;
+		this.yearOfPlentyResource1 = null;
+		this.yearOfPlentyResource2 = null;
 		this.setLayout(new GraphPaperLayout(new Dimension(14, 24)));
 		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(1, 1, 12, 1)); //$NON-NLS-1$
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
@@ -164,10 +170,14 @@ public class OptionsPanel extends JPanel {
 		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText(Messages.getString("OptionsPanel.11")); //$NON-NLS-1$
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,14,6,2)));
-		
+
+		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+		playYearOfPlentyCard.setText("Play Year Of Plenty Card");
+		actionPanel.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,16,6,2)));
+
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText(Messages.getString("OptionsPanel.12")); //$NON-NLS-1$
-		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,16,6,2)));
+		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,18,6,2)));
 		
 		this.lastRolled = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(4, 20, 6, 2)); //$NON-NLS-1$
 		this.lastRolled.getSwingComponent().setFont(font);
@@ -199,6 +209,54 @@ public class OptionsPanel extends JPanel {
 				gameWindow.refreshPlayerStats();
 			}
 		}
+	}
+	
+	class YearOfPlentyCardButton extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Player currentPlayer = playerController.getCurrentPlayer();
+			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) >= 1) {
+				boardGUI.setState(GameStates.play_card);
+				yearOfPlentyPanel(currentPlayer);
+			}
+		}
+	}
+	
+	public void yearOfPlentyPanel(Player currentPlayer) {
+		ArrayList<OptionsPanelComponent> buttons = new ArrayList<>();
+		JLabel instuctionLabel = new JLabel("Select Desired Resource"); 
+		buttons.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
+		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wool), new Rectangle(4,6,6,2)));
+		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wheat), new Rectangle(4,8,6,2)));
+		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.wood), new Rectangle(4,10,6,2)));
+		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.ore), new Rectangle(4,12,6,2)));
+		buttons.add(new OptionsPanelComponent(yearOfPlentyButton(currentPlayer, TileType.brick), new Rectangle(4,14,6,2)));
+		setOnOptionsPanel(buttons);
+	}
+	
+	public JButton yearOfPlentyButton(Player currentPlayer, TileType resourceType) {
+		JButton resourceButton = new JButton(new AbstractAction() {
+			public void actionPerformed(ActionEvent a) {
+				if(boardGUI.getState().equals(GameStates.play_card)) {
+					if (yearOfPlentyResource1 == null) {
+						yearOfPlentyResource1 = resourceType;
+					} else if (yearOfPlentyResource2 == null) {
+						yearOfPlentyResource2 = resourceType;
+					}
+					if (yearOfPlentyResource1 != null && yearOfPlentyResource2 != null) {
+						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
+						card.playCard(yearOfPlentyResource1, yearOfPlentyResource2);
+						yearOfPlentyResource1 = null;
+						yearOfPlentyResource2 = null;
+						boardGUI.setState(GameStates.idle);
+						setOnOptionsPanel(actionPanel);
+						gameWindow.refreshPlayerStats();
+					}
+				}
+			}
+		});
+		resourceButton.setText(resourceType.name());
+		return resourceButton;
 	}
 	
 	class PlaceSettlementListener extends AbstractAction {
@@ -280,7 +338,6 @@ public class OptionsPanel extends JPanel {
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
-				//TODO: roll the dice and allocate resources (beware 7)
 				int rolled = catanBoard.endTurnAndRoll();
 				setLastRolled(rolled);
 				gameWindow.refreshPlayerStats();
