@@ -169,14 +169,10 @@ public class OptionsPanel extends JPanel {
 		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText(Messages.getString("OptionsPanel.11")); //$NON-NLS-1$
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,14,6,2)));
-
-		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-		playYearOfPlentyCard.setText("Play Year Of Plenty Card");
-		actionPanel.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,16,6,2)));
 		
-		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-		monopolyCardButton.setText("Play Monopoly Card");
-		actionPanel.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,18,6,2)));
+		JButton playDevCardButton = new JButton(new PlayDevCardListener());
+		playDevCardButton.setText(Messages.getString("OptionsPanel.40")); //$NON-NLS-1$
+		actionPanel.add(new OptionsPanelComponent(playDevCardButton, new Rectangle(4,16,6,2)));
 
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText(Messages.getString("OptionsPanel.12")); //$NON-NLS-1$
@@ -186,6 +182,22 @@ public class OptionsPanel extends JPanel {
 		this.lastRolled.getSwingComponent().setFont(font);
 		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
 		actionPanel.add(this.lastRolled);
+	}
+	
+	private void developmentCardPanel() {
+		ArrayList<OptionsPanelComponent> devCardButtons = new ArrayList<>();
+		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+		playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+		devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,4,6,2)));
+		
+		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+		monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+		devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,6,6,2)));
+		
+		JButton cancelButton = new JButton(new CancelAction());
+		cancelButton.setText(Messages.getString("OptionsPanel.5"));
+		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,12,6,2)));
+		setOnOptionsPanel(devCardButtons);
 	}
 	
 	private ArrayList<OptionsPanelComponent> createVictoryPanel() {
@@ -210,6 +222,15 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && catanBoard.buyDevelopmentCard()) {
 				gameWindow.refreshPlayerStats();
+			}
+		}
+	}
+	
+	class PlayDevCardListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				developmentCardPanel();
 			}
 		}
 	}
