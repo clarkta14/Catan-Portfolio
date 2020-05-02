@@ -40,6 +40,13 @@ public class DevelopmentCardTests {
 		DevelopmentCard yearOfPlentyCard = new YearOfPlentyCard(pc);
 		assertEquals(DevelopmentCardType.year_of_plenty_card, yearOfPlentyCard.getDevelopmentCardType());
 	}
+	
+	@Test
+	public void testCreateRoadBuildingCard() {
+		PlayersController pc = new PlayersController(3);
+		DevelopmentCard roadBuildingCard = new RoadBuildingCard();
+		assertEquals(DevelopmentCardType.road_building_card, roadBuildingCard.getDevelopmentCardType());
+	}
 
 	@Test
 	public void testPlayMonopolyCardWrongCall() {
