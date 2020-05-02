@@ -25,7 +25,7 @@ public class CatanBoard {
 			for(int i = 0; i < 2; i++) {
 				push(new MonopolyCard(turnController));
 				push(new YearOfPlentyCard(turnController));
-				push(new ProgressDevelopmentCard());    		
+				push(new RoadBuildingCard());    		
 			}
 			for(int i = 0; i < 5; i++) {
 				push(new VictoryPointDevelopmentCard());
