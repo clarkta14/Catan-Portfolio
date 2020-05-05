@@ -155,6 +155,12 @@ public class PlayerTests {
 			// pass
 		}
 	}
+	
+	@Test
+	public void testRemoveDesertFromResource() {
+		Player player = new Player(Color.orange);
+		player.removeResource(TileType.desert, 1); //this should do nothing; return nothing. The fail throws an error
+	}
 
 	@Test
 	public void testCanBuyRoad_WithEnoughResources() {

@@ -45,6 +45,7 @@ public class Player {
 	}
 
 	public void removeResource(TileType type, int numberOfResource) {
+		if(type == TileType.desert) return;
 		if(numberOfResource < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -155,6 +156,8 @@ public class Player {
 		if(this.getTotalResourceCount() >= 8) {
 			return false;
 		}
+		
+		
 		
 		return true;
 	}
