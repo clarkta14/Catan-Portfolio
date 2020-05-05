@@ -544,6 +544,30 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void testPlayerTotalResourceCount0() {
+		Player player = new Player(Color.orange);
+		assertEquals(0, player.getTotalResourceCount());
+	}
+	
+	@Test
+	public void testPlayerTotalResourceCountOneType() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		assertEquals(2, player.getTotalResourceCount());
+	}
+	
+	@Test
+	public void testPlayerTotalResourceCountMixedTypes() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		assertEquals(8, player.getTotalResourceCount());
+	}
+	
+	@Test
 	public void testDiscardNoResources() {
 		Player player = new Player(Color.orange);
 		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
@@ -569,6 +593,7 @@ public class PlayerTests {
 		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
 		assertFalse(player.discardForRobber(resourcesToDiscard));
 	}
+	
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
