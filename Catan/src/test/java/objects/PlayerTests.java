@@ -574,6 +574,12 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void testHasSufficentResource1onEmpty() {
+		Player player = new Player(Color.orange);
+		assertFalse(player.hasSufficentResource(TileType.brick, 1));
+	}
+	
+	@Test
 	public void testDiscardNoResources() {
 		Player player = new Player(Color.orange);
 		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);

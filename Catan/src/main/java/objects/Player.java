@@ -112,6 +112,9 @@ public class Player {
 	}
 	
 	public boolean hasSufficentResource(TileType type, int hasAtLeast) {
+		if(this.resources.get(type) < hasAtLeast) {
+			return false;
+		}
 		return true;
 	}
 	
