@@ -872,6 +872,21 @@ public class BoardWindow extends JPanel {
 					setState(GameStates.idle);
 					repaint();
 				}
+			}else if(state.equals(GameStates.move_robber)) {
+				Point p = new Point(e.getX(), e.getY());
+				if(p != null) {
+					Tile clicked = null;
+					for(Tile t : catanBoard.getTiles()) {
+						if(t.getHexagon().contains(p)) {
+							clicked = t;
+						}
+					}
+					if(clicked != null) {
+						catanBoard.moveRobber(clicked);
+						setState(GameStates.idle);
+						repaint();
+					}
+				}
 			}
 		}
 

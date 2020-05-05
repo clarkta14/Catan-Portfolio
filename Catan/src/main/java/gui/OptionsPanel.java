@@ -432,6 +432,9 @@ public class OptionsPanel extends JPanel {
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
 				int rolled = catanBoard.endTurnAndRoll();
+				if(rolled == 7) {
+					boardGUI.setState(GameStates.move_robber);
+				}
 				setLastRolled(rolled);
 				gameWindow.refreshPlayerStats();
 			}
