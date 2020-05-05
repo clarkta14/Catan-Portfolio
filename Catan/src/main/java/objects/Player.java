@@ -162,7 +162,7 @@ public class Player {
 			totalToDiscard += i;
 		}
 		
-		if(totalToDiscard == this.getTotalResourceCount() / 2) {
+		if(totalToDiscard == Math.floor(this.getTotalResourceCount() / 2)) {
 			for(TileType resource: resourcesToDiscard.keySet()) {
 				this.removeResource(resource, resourcesToDiscard.get(resource));
 			}

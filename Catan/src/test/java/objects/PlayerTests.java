@@ -685,6 +685,19 @@ public class PlayerTests {
 		assertEquals(1, player.getResourceCount(TileType.wheat));
 	}
 	
+	@Test
+	public void testDiscardMixedResourceCorrectlyMixedTypesOdd() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(4,1,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+		assertEquals(4, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+	}
+	
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
