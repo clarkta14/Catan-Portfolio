@@ -152,7 +152,7 @@ public class Player {
 	}
 	
 	public boolean discardForRobber(HashMap<TileType, Integer> cardsToDiscard) {
-		if(this.getTotalResourceCount() == 8) {
+		if(this.getTotalResourceCount() >= 8) {
 			return false;
 		}
 		

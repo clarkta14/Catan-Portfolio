@@ -633,6 +633,18 @@ public class PlayerTests {
 		assertFalse(player.discardForRobber(resourcesToDiscard));
 	}
 	
+	@Test
+	public void testDiscardNoResourcesWhenShouldMixedTypesMoreThan8() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.brick, 2);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
