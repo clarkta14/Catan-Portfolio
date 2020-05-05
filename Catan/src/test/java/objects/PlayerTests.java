@@ -576,7 +576,28 @@ public class PlayerTests {
 	@Test
 	public void testHasSufficentResource1onEmpty() {
 		Player player = new Player(Color.orange);
-		assertFalse(player.hasSufficentResource(TileType.brick, 1));
+		assertFalse(player.hasSufficentResource(TileType.wheat, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource1on1() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.ore, 1);
+		assertTrue(player.hasSufficentResource(TileType.ore, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource1on2() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wood, 2);
+		assertTrue(player.hasSufficentResource(TileType.wood, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource2on1() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wool, 1);
+		assertFalse(player.hasSufficentResource(TileType.wool, 2));
 	}
 	
 	@Test
