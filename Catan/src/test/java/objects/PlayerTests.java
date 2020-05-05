@@ -542,6 +542,18 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
+	@Test
+	public void testPlayerDiscardNoResources() {
+		Player player = new Player(Color.orange);
+		HashMap<TileType, Integer> cardsToDiscard = new HashMap<>();
+		cardsToDiscard.put(TileType.brick, 0);
+		cardsToDiscard.put(TileType.wheat, 0);
+		cardsToDiscard.put(TileType.ore, 0);
+		cardsToDiscard.put(TileType.wood, 0);
+		cardsToDiscard.put(TileType.wool, 0);
+		assertTrue(player.discardForRobber(cardsToDiscard));
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

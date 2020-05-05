@@ -130,4 +130,8 @@ public class Player {
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
+	
+	public boolean discardForRobber(HashMap<TileType, Integer> cardsToDiscard) {
+		return true;
+	}
 }
