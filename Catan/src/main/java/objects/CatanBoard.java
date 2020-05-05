@@ -323,4 +323,24 @@ public class CatanBoard {
 		}
 		return false;
 	}
+
+	public boolean tradeWithPlayer(int i, HashMap<TileType, Integer> giveThese, HashMap<TileType, Integer> forThese) {
+		try {
+			Player toTradeWith = this.turnController.getPlayer(i);
+			if(turnController.getCurrentPlayer().canAffordTrade(giveThese) && toTradeWith.canAffordTrade(forThese)) {
+				for(TileType tt : giveThese.keySet()) {
+					this.turnController.getCurrentPlayer().removeResource(tt, giveThese.get(tt));
+					toTradeWith.addResource(tt, giveThese.get(tt));
+				}
+				for(TileType tt : forThese.keySet()) {
+					this.turnController.getCurrentPlayer().addResource(tt, forThese.get(tt));
+					toTradeWith.removeResource(tt, forThese.get(tt));
+				}
+				return true;
+			}
+			return false;
+		}catch(IndexOutOfBoundsException oobe) {
+			return false;
+		}
+	}
 }

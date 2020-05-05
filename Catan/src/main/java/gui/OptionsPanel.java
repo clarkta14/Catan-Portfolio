@@ -698,9 +698,7 @@ public class OptionsPanel extends JPanel {
 	
 	class TradeWithPlayerApprovedListener extends AbstractAction {
 		
-		@SuppressWarnings("unused")
 		private HashMap<TileType, Integer> cost;
-		@SuppressWarnings("unused")
 		private HashMap<TileType, Integer> payment;
 		
 		public TradeWithPlayerApprovedListener(HashMap<TileType, Integer> c, HashMap<TileType, Integer> p) {
@@ -711,8 +709,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.trade)) {		
-				//boolean success = catanBoard.tradeWithPlayer(cost, payment);
-				boolean success = true;
+				boolean success = catanBoard.tradeWithPlayer(selectedPlayer, payment, cost);
 				if(success) {
 					boardGUI.setState(GameStates.idle);
 					gameWindow.refreshPlayerStats();

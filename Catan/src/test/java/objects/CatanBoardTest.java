@@ -944,13 +944,10 @@ public class CatanBoardTest {
 	@Test
 	public void testAddCityToTilesOnOtherPlayerSettlement() {
 		Player currentPlayer = basicSetupForAddCityTests();
-		System.out.println(pc.getCurrentPlayerNum());
 		
 		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		pc.nextPlayer();
-		System.out.println(pc.getCurrentPlayerNum());
 		pc.nextPlayer();
-		System.out.println(pc.getCurrentPlayerNum());
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
 		ArrayList<Settlement> settlements = getSettlementsFromClickedTiles();
@@ -1016,6 +1013,154 @@ public class CatanBoardTest {
 		for (Settlement s : settlements) {
 			assertTrue(s.isCity());
 		}
+	}
+	
+	@Test
+	public void testTradeWithPlayer_SuccessfulTrade() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> giveThese = new HashMap<>();
+		giveThese.put(TileType.brick, 1);
+		giveThese.put(TileType.wool, 1);
+		giveThese.put(TileType.wheat, 1);
+		
+		pc.getPlayer(1).addResource(TileType.ore, 2);
+		pc.getPlayer(1).addResource(TileType.wool, 1);
+		pc.getPlayer(1).addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> forThese = new HashMap<>();
+		forThese.put(TileType.ore, 1);
+		
+		assertTrue(cb.tradeWithPlayer(1, giveThese, forThese));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.brick));
+		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.wool));
+		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.wheat));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testTradeWithPlayer_SuccessfulTradePaying0() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> giveThese = new HashMap<>();
+		
+		pc.getPlayer(1).addResource(TileType.ore, 2);
+		pc.getPlayer(1).addResource(TileType.wool, 1);
+		pc.getPlayer(1).addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> forThese = new HashMap<>();
+		forThese.put(TileType.ore, 1);
+		
+		assertTrue(cb.tradeWithPlayer(1, giveThese, forThese));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		
+		assertEquals(0,  pc.getPlayer(1).getResourceCount(TileType.brick));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testTradeWithPlayer_PlayerDoesNotHaveEnoughResourcesForBuying() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> giveThese = new HashMap<>();
+		giveThese.put(TileType.brick, 1);
+		giveThese.put(TileType.wool, 1);
+		giveThese.put(TileType.wheat, 1);
+		
+		pc.getPlayer(1).addResource(TileType.ore, 2);
+		pc.getPlayer(1).addResource(TileType.wool, 1);
+		pc.getPlayer(1).addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> forThese = new HashMap<>();
+		forThese.put(TileType.ore, 1);
+		
+		assertTrue(!cb.tradeWithPlayer(1, giveThese, forThese));
+		
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		
+		assertEquals(0,  pc.getPlayer(1).getResourceCount(TileType.brick));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
+		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testTradeWithPlayer_PlayerDoesNotHaveEnoughResourcesForSelling() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> giveThese = new HashMap<>();
+		giveThese.put(TileType.brick, 1);
+		giveThese.put(TileType.wool, 1);
+		giveThese.put(TileType.wheat, 1);
+		
+		pc.getPlayer(1).addResource(TileType.ore, 2);
+		pc.getPlayer(1).addResource(TileType.wool, 1);
+		pc.getPlayer(1).addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> forThese = new HashMap<>();
+		forThese.put(TileType.ore, 3);
+		
+		assertTrue(!cb.tradeWithPlayer(1, giveThese, forThese));
+		
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		
+		assertEquals(0,  pc.getPlayer(1).getResourceCount(TileType.brick));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
+		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testTradeWithPlayer_TradeWithNonExistantPlayer() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> giveThese = new HashMap<>();
+		giveThese.put(TileType.brick, 1);
+		giveThese.put(TileType.wool, 1);
+		giveThese.put(TileType.wheat, 1);
+		
+		pc.getPlayer(1).addResource(TileType.ore, 2);
+		pc.getPlayer(1).addResource(TileType.wool, 1);
+		pc.getPlayer(1).addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> forThese = new HashMap<>();
+		forThese.put(TileType.ore, 3);
+		
+		assertTrue(!cb.tradeWithPlayer(4, giveThese, forThese));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		assertEquals(1,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		
+		assertEquals(0,  pc.getPlayer(1).getResourceCount(TileType.brick));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
+		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
+		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
 	}
 	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
