@@ -620,6 +620,18 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void testDiscardNoResourcesWhen7() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 1);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
 	public void testDiscardNoResourcesWhenShouldSingleType() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 8);
