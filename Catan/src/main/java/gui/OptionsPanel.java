@@ -169,14 +169,10 @@ public class OptionsPanel extends JPanel {
 		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
 		buyDevCardButton.setText(Messages.getString("OptionsPanel.11")); //$NON-NLS-1$
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,14,6,2)));
-
-		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-		playYearOfPlentyCard.setText("Play Year Of Plenty Card");
-		actionPanel.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,16,6,2)));
 		
-		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-		monopolyCardButton.setText("Play Monopoly Card");
-		actionPanel.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,18,6,2)));
+		JButton playDevCardButton = new JButton(new PlayDevCardListener());
+		playDevCardButton.setText(Messages.getString("OptionsPanel.40")); //$NON-NLS-1$
+		actionPanel.add(new OptionsPanelComponent(playDevCardButton, new Rectangle(4,16,6,2)));
 
 		JButton endTurnButton = new JButton(new EndTurnListener());
 		endTurnButton.setText(Messages.getString("OptionsPanel.12")); //$NON-NLS-1$
@@ -186,6 +182,26 @@ public class OptionsPanel extends JPanel {
 		this.lastRolled.getSwingComponent().setFont(font);
 		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
 		actionPanel.add(this.lastRolled);
+	}
+	
+	private void developmentCardPanel() {
+		ArrayList<OptionsPanelComponent> devCardButtons = new ArrayList<>();
+		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+		playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+		devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,4,6,2)));
+		
+		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+		monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+		devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,6,6,2)));
+		
+		JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
+		roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
+		devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4,8,6,2)));
+		
+		JButton cancelButton = new JButton(new CancelAction());
+		cancelButton.setText(Messages.getString("OptionsPanel.5"));
+		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,12,6,2)));
+		setOnOptionsPanel(devCardButtons);
 	}
 	
 	private ArrayList<OptionsPanelComponent> createVictoryPanel() {
@@ -210,6 +226,48 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && catanBoard.buyDevelopmentCard()) {
 				gameWindow.refreshPlayerStats();
+			}
+		}
+	}
+	
+	class PlayDevCardListener extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				System.out.println("test");
+				timer.stop();
+				developmentCardPanel();
+			}
+		}
+	}
+	
+	class RoadBuildingCardButton extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Player currentPlayer = playerController.getCurrentPlayer();
+			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.road_building_card) >= 1) {
+				currentPlayer.removeDevelopmentCard(DevelopmentCardType.road_building_card);
+				placeInfoPanel(Messages.getString("OptionsPanel.42")); //$NON-NLS-1$
+				boardGUI.setState(GameStates.drop_road_card);
+				createTimer(new RoadBuildingCardFinal());
+			}
+		}
+
+	}
+	
+	private void createTimer(ActionListener action) {
+		timer.stop();
+		timer = new Timer(50, action);
+		timer.start();
+	}
+	
+	class RoadBuildingCardFinal extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.idle)) {
+				boardGUI.setState(GameStates.drop_road_card);
+				placeInfoPanel(Messages.getString("OptionsPanel.43")); //$NON-NLS-1$
+				createTimer(new ResetStateListener());
 			}
 		}
 	}
@@ -244,8 +302,7 @@ public class OptionsPanel extends JPanel {
 				if(boardGUI.getState().equals(GameStates.play_card)) {
 					if (yearOfPlentyResource == null) {
 						yearOfPlentyResource = resourceType;
-					}
-					if (yearOfPlentyResource != null) {
+					} else if (yearOfPlentyResource != null) {
 						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
 						card.playCard(yearOfPlentyResource, resourceType);
 						boardGUI.setState(GameStates.idle);
@@ -286,7 +343,7 @@ public class OptionsPanel extends JPanel {
 		JButton resourceButton = new JButton(new AbstractAction() {
 			public void actionPerformed(ActionEvent a) {
 				if(boardGUI.getState().equals(GameStates.play_card)) {
-					MonopolyCard card = (MonopolyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
+					MonopolyCard card = (MonopolyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.monopoly_card);
 					card.playCard(resourceType);
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
@@ -304,8 +361,7 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuySettlement()) {
 				placeInfoPanel(Messages.getString("OptionsPanel.15")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_settlement);
-				timer = new Timer(50, new ResetStateListener());
-				timer.start();
+				createTimer(new ResetStateListener());
 			}
 		}
 	}
@@ -316,8 +372,7 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyCity()) {
 				placeInfoPanel(Messages.getString("OptionsPanel.16")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_city);
-				timer = new Timer(50, new ResetStateListener());
-				timer.start();
+				createTimer(new ResetStateListener());
 			}
 		}
 	}
@@ -328,8 +383,7 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyRoad()) {
 				placeInfoPanel(Messages.getString("OptionsPanel.17")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_road);
-				timer = new Timer(50, new ResetStateListener());
-				timer.start();
+				createTimer(new ResetStateListener());
 			}
 		}
 	}
@@ -350,7 +404,6 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle)) {
 				boardGUI.setState(GameStates.trade);
 				playersPanelForTrade();
-				//tradeWithPlayerPanel();
 			}
 		}
 	}
@@ -365,6 +418,7 @@ public class OptionsPanel extends JPanel {
 				} else {
 					gameWindow.refreshPlayerStats();
 					setOnOptionsPanel(actionPanel);
+					System.out.println("reset");
 				}
 			}	
 		}	
@@ -644,9 +698,7 @@ public class OptionsPanel extends JPanel {
 	
 	class TradeWithPlayerApprovedListener extends AbstractAction {
 		
-		@SuppressWarnings("unused")
 		private HashMap<TileType, Integer> cost;
-		@SuppressWarnings("unused")
 		private HashMap<TileType, Integer> payment;
 		
 		public TradeWithPlayerApprovedListener(HashMap<TileType, Integer> c, HashMap<TileType, Integer> p) {
@@ -657,8 +709,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.trade)) {		
-				//boolean success = catanBoard.tradeWithPlayer(cost, payment);
-				boolean success = true;
+				boolean success = catanBoard.tradeWithPlayer(selectedPlayer, payment, cost);
 				if(success) {
 					boardGUI.setState(GameStates.idle);
 					gameWindow.refreshPlayerStats();
