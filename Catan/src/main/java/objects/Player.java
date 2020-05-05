@@ -132,6 +132,9 @@ public class Player {
 	}
 	
 	public boolean discardForRobber(HashMap<TileType, Integer> cardsToDiscard) {
+		if(this.resources.get(TileType.wheat) == 8) {
+			return false;
+		}
 		return true;
 	}
 }

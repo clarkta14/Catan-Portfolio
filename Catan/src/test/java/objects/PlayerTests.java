@@ -548,11 +548,24 @@ public class PlayerTests {
 		Player player = new Player(Color.orange);
 		HashMap<TileType, Integer> cardsToDiscard = new HashMap<>();
 		cardsToDiscard.put(TileType.brick, 0);
-		cardsToDiscard.put(TileType.wheat, 0);
 		cardsToDiscard.put(TileType.ore, 0);
+		cardsToDiscard.put(TileType.wheat, 0);
 		cardsToDiscard.put(TileType.wood, 0);
 		cardsToDiscard.put(TileType.wool, 0);
 		assertTrue(player.discardForRobber(cardsToDiscard));
+	}
+	
+	@Test
+	public void testPlayerDiscardNoResourcesWhenShould() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 8);
+		HashMap<TileType, Integer> cardsToDiscard = new HashMap<>();
+		cardsToDiscard.put(TileType.brick, 0);
+		cardsToDiscard.put(TileType.ore, 0);
+		cardsToDiscard.put(TileType.wheat, 0);
+		cardsToDiscard.put(TileType.wood, 0);
+		cardsToDiscard.put(TileType.wool, 0);
+		assertFalse(player.discardForRobber(cardsToDiscard));
 	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
