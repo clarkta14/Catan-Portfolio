@@ -580,6 +580,12 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void testHasSufficentResourceDesert() {
+		Player player = new Player(Color.orange);
+		player.hasSufficentResource(TileType.desert, 37); // don't care about desert as a resource
+	}
+	
+	@Test
 	public void testDiscardNoResources() {
 		Player player = new Player(Color.orange);
 		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);

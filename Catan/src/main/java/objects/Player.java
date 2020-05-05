@@ -112,6 +112,9 @@ public class Player {
 	}
 	
 	public boolean hasSufficentResource(TileType type, int hasAtLeast) {
+		if(type == TileType.desert) {
+			return true;
+		}
 		if(this.resources.get(type) < hasAtLeast) {
 			return false;
 		}
