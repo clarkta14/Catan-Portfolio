@@ -544,30 +544,42 @@ public class PlayerTests {
 	}
 	
 	@Test
-	public void testPlayerDiscardNoResources() {
+	public void testDiscardNoResources() {
 		Player player = new Player(Color.orange);
-		HashMap<TileType, Integer> cardsToDiscard = new HashMap<>();
-		cardsToDiscard.put(TileType.brick, 0);
-		cardsToDiscard.put(TileType.ore, 0);
-		cardsToDiscard.put(TileType.wheat, 0);
-		cardsToDiscard.put(TileType.wood, 0);
-		cardsToDiscard.put(TileType.wool, 0);
-		assertTrue(player.discardForRobber(cardsToDiscard));
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
 	}
 	
 	@Test
-	public void testPlayerDiscardNoResourcesWhenShould() {
+	public void testDiscardNoResourcesWhenShouldSingleType() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 8);
-		HashMap<TileType, Integer> cardsToDiscard = new HashMap<>();
-		cardsToDiscard.put(TileType.brick, 0);
-		cardsToDiscard.put(TileType.ore, 0);
-		cardsToDiscard.put(TileType.wheat, 0);
-		cardsToDiscard.put(TileType.wood, 0);
-		cardsToDiscard.put(TileType.wool, 0);
-		assertFalse(player.discardForRobber(cardsToDiscard));
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesWhenShouldMixedTypes() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
 	}
 
+	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
+		resourcesToDiscard.put(TileType.brick, brick);
+		resourcesToDiscard.put(TileType.ore, ore);
+		resourcesToDiscard.put(TileType.wheat, wheat);
+		resourcesToDiscard.put(TileType.wood, wood);
+		resourcesToDiscard.put(TileType.wool, wool);
+		return resourcesToDiscard;
+	}
+	
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResourceCount(type);

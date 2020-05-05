@@ -20,6 +20,7 @@ public class Player {
 				put(type, 0);
 			}
 		}};
+		this.resources.remove(TileType.desert);
 		this.developmentCards = new HashMap<DevelopmentCardType, Stack<DevelopmentCard>>() {{
 			for(DevelopmentCardType type : DevelopmentCardType.values()) {
 				Stack<DevelopmentCard> s = new Stack<>();
@@ -98,7 +99,16 @@ public class Player {
 	}
 	
 	public int getResourceCount(TileType type) {
+		if(type == TileType.desert) return 0;
 		return this.resources.get(type);
+	}
+	
+	public int getTotalResourceCount() {
+		int total = 0;
+		for (Integer i: this.resources.values()) {
+			total += i;
+		}
+		return total;
 	}
 	
 	public int getNumberOfVictoryPoints() {
@@ -132,9 +142,10 @@ public class Player {
 	}
 	
 	public boolean discardForRobber(HashMap<TileType, Integer> cardsToDiscard) {
-		if(this.resources.get(TileType.wheat) == 8) {
+		if(this.getTotalResourceCount() == 8) {
 			return false;
 		}
+		
 		return true;
 	}
 }
