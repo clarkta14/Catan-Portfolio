@@ -111,6 +111,10 @@ public class Player {
 		return total;
 	}
 	
+	public boolean hasSufficentResource(TileType type, int hasAtLeast) {
+		return true;
+	}
+	
 	public int getNumberOfVictoryPoints() {
 		return this.victoryPoints;
 	}
