@@ -157,11 +157,15 @@ public class Player {
 			return true;
 		}
 		
-		for(TileType resource: resourcesToDiscard.keySet()) {
-			this.removeResource(resource, resourcesToDiscard.get(resource));
+		int totalToDiscard = 0;
+		for(int i: resourcesToDiscard.values()) {
+			totalToDiscard += i;
 		}
 		
-		if(resourcesToDiscard.get(TileType.wheat) == 4) {
+		if(totalToDiscard == this.getTotalResourceCount() / 2) {
+			for(TileType resource: resourcesToDiscard.keySet()) {
+				this.removeResource(resource, resourcesToDiscard.get(resource));
+			}
 			return true;
 		}
 		
