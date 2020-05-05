@@ -443,6 +443,31 @@ public class CatanBoardTest {
 	}
 	
 	@Test
+	public void testDistributeResources_Robber() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		int robber = -1;
+		for(Tile t : cb.getTiles()) {
+			if(t.isRobber()) {
+				robber = cb.getTiles().indexOf(t);
+			}
+		}
+		
+		//Adding settlements for players at specified locations
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		int notRobber = 5;
+		if(notRobber == robber) {
+			notRobber = 4;
+		}
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(notRobber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		cb.distributeResources(cb.getTiles().get(robber).getNumber());
+		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) == 0);
+		cb.distributeResources(cb.getTiles().get(notRobber).getNumber());
+		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) > 0);
+	}
+	
+	@Test
 	public void testBuyRoad_WithEnoughResources() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
