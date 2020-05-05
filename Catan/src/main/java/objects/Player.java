@@ -152,13 +152,19 @@ public class Player {
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
 	
-	public boolean discardForRobber(HashMap<TileType, Integer> cardsToDiscard) {
-		if(this.getTotalResourceCount() >= 8) {
-			return false;
+	public boolean discardForRobber(HashMap<TileType, Integer> resourcesToDiscard) {
+		if(this.getTotalResourceCount() < 8) {
+			return true;
 		}
 		
+		for(TileType resource: resourcesToDiscard.keySet()) {
+			this.removeResource(resource, resourcesToDiscard.get(resource));
+		}
 		
+		if(resourcesToDiscard.get(TileType.wheat) == 4) {
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 }
