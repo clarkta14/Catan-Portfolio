@@ -761,6 +761,15 @@ public class PlayerTests {
 		assertEquals(1, player.getResourceCount(TileType.wood));
 		assertEquals(1, player.getResourceCount(TileType.wool));
 	}
+	
+	@Test
+	public void testDiscardDesertOnly() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
+		resourcesToDiscard.put(TileType.desert, 4);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
