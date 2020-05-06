@@ -157,6 +157,11 @@ public class Player {
 			return true;
 		}
 		
+		for(TileType resource: resourcesToDiscard.keySet()) {
+			if (!this.hasSufficentResource(resource, resourcesToDiscard.get(resource)))
+				return false;
+		}
+		
 		int totalToDiscard = 0;
 		for(int i: resourcesToDiscard.values()) {
 			totalToDiscard += i;
@@ -164,11 +169,7 @@ public class Player {
 		
 		if(totalToDiscard == Math.floor(this.getTotalResourceCount() / 2)) {
 			for(TileType resource: resourcesToDiscard.keySet()) {
-				try {
-					this.removeResource(resource, resourcesToDiscard.get(resource));
-				} catch (Exception e) {
-					return false;
-				}
+				this.removeResource(resource, resourcesToDiscard.get(resource));
 			}
 			return true;
 		}

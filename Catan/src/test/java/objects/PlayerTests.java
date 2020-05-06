@@ -734,6 +734,16 @@ public class PlayerTests {
 		assertEquals(0, player.getResourceCount(TileType.ore));
 	}
 	
+	@Test
+	public void testDiscardMixedResourcesMoreThanHas() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(1,3,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+		assertEquals(8, player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.ore));
+	}
+	
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
