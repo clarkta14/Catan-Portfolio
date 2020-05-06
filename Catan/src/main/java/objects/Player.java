@@ -153,6 +153,8 @@ public class Player {
 	}
 	
 	public boolean discardForRobber(HashMap<TileType, Integer> resourcesToDiscard) {
+		resourcesToDiscard.remove(TileType.desert);
+		
 		if(this.getTotalResourceCount() < 8) {
 			return true;
 		}
