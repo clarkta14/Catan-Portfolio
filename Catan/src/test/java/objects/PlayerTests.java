@@ -609,7 +609,7 @@ public class PlayerTests {
 	@Test
 	public void testHasSufficentResourceDesert() {
 		Player player = new Player(Color.orange);
-		player.hasSufficentResource(TileType.desert, 37); // don't care about desert as a resource
+		assertTrue(player.hasSufficentResource(TileType.desert, 37));
 	}
 	
 	@Test
