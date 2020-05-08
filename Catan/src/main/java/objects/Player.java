@@ -132,6 +132,10 @@ public class Player {
 	}
 	
 	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {
-		throw new IndexOutOfBoundsException();
+		if (opposingPlayer.getResourceCount(resource) == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		opposingPlayer.removeResource(resource, 1);
+		this.addResource(resource, 1);
 	}
 }

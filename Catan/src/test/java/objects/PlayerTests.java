@@ -555,6 +555,19 @@ public class PlayerTests {
 			// testPasses
 		}
 	}
+	
+	@Test
+	public void testStealFromPlayerWithOneResource() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 1);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(0, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
