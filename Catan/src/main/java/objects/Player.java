@@ -130,4 +130,8 @@ public class Player {
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
+	
+	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {
+		throw new IndexOutOfBoundsException();
+	}
 }

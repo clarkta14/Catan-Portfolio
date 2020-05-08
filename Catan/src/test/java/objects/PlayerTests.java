@@ -542,6 +542,19 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
+	@Test
+	public void testStealFromPlayerWithNoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		try {
+			player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+			// testPasses
+		}
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
