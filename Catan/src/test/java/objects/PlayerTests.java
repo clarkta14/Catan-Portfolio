@@ -568,6 +568,19 @@ public class PlayerTests {
 		assertEquals(0, opposingPlayer.getResourceCount(TileType.brick));	
 		assertEquals(1, player.getResourceCount(TileType.brick));		
 	}
+	
+	@Test
+	public void testStealFromPlayerWithTwoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 2);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(1, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
