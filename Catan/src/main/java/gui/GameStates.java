@@ -12,5 +12,6 @@ public enum GameStates {
 	idle, 
 	play_card, 
 	drop_road_card, 
-	move_robber
+	move_robber, 
+	steal
 }

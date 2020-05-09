@@ -362,4 +362,8 @@ public class CatanBoard {
 		}
 		return playersWithSettlements;
 	}
+
+	public ArrayList<Player> getPlayersWithSettlementOnRobberTile() {
+		return getPlayersWithSettlementOnTile(this.tiles.get(robber));
+	}
 }

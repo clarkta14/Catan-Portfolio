@@ -883,7 +883,7 @@ public class BoardWindow extends JPanel {
 					}
 					if(clicked != null) {
 						catanBoard.moveRobber(clicked);
-						setState(GameStates.idle);
+						setState(GameStates.steal);
 						repaint();
 					}
 				}
