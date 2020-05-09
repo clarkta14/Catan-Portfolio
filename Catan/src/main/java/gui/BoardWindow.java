@@ -881,7 +881,7 @@ public class BoardWindow extends JPanel {
 							clicked = t;
 						}
 					}
-					if(clicked != null) {
+					if(clicked != null && !clicked.isRobber()) {
 						catanBoard.moveRobber(clicked);
 						setState(GameStates.steal);
 						repaint();
