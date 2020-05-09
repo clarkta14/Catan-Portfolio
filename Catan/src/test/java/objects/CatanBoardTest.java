@@ -1187,6 +1187,63 @@ public class CatanBoardTest {
 		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
 		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
 	}
+
+	@Test
+	public void testGetPlayersWithSettlementOnTile_SinglePlayer() {
+		basicSetupForAddSettlementTests();
+		tileNums.add(0);
+		cornerNums.add(3);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(tileNums.get(0)));
+		assertEquals(1, playersWithSettlementsOnTile.size());
+		assertEquals(pc.getCurrentPlayer(), playersWithSettlementsOnTile.get(0));
+	}
+	
+	@Test
+	public void testGetPlayersWithSettlementOnTile_MultiplePlayersOnSameTile() {
+		basicSetupForAddSettlementTests();
+		ArrayList<Integer> tiles = new ArrayList<Integer>();
+		ArrayList<Integer> cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(3);
+		boolean result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		Player plyr1 = pc.getCurrentPlayer();
+		pc.nextPlayer();
+		tiles = new ArrayList<Integer>();
+		cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(6);
+		result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(0));
+		assertEquals(2, playersWithSettlementsOnTile.size());
+		assertEquals(plyr1, playersWithSettlementsOnTile.get(0));
+		assertEquals(pc.getCurrentPlayer(), playersWithSettlementsOnTile.get(1));
+	}
+	
+	@Test
+	public void testGetPlayersWithSettlementOnTile_NoSettlementsOnTile() {
+		basicSetupForAddSettlementTests();
+		ArrayList<Integer> tiles = new ArrayList<Integer>();
+		ArrayList<Integer> cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(3);
+		boolean result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		pc.nextPlayer();
+		tiles = new ArrayList<Integer>();
+		cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(6);
+		result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(1));
+		assertEquals(0, playersWithSettlementsOnTile.size());
+	}
 	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
 		ArrayList<Tile> tiles = cb.getTiles();

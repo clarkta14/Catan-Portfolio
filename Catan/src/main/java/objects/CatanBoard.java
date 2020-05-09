@@ -129,7 +129,6 @@ public class CatanBoard {
 	
 	public void settlementLocationClick(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
 		addSettlementToTiles(tiles, corners, gameState);	
-
 	}
 	
 	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
@@ -352,5 +351,15 @@ public class CatanBoard {
 		this.tiles.get(robber).setRobber(false);
 		this.robber = this.tiles.indexOf(clicked);
 		this.tiles.get(this.tiles.indexOf(clicked)).setRobber(true);
+	}
+	
+	public ArrayList<Player> getPlayersWithSettlementOnTile(Tile t){
+		ArrayList<Player> playersWithSettlements = new ArrayList<>();
+		for(Settlement s : t.getSettlements().values()) {
+			if(!playersWithSettlements.contains(s.getOwner())) {
+				playersWithSettlements.add(s.getOwner());
+			}
+		}
+		return playersWithSettlements;
 	}
 }
