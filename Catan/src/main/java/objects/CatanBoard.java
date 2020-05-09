@@ -366,4 +366,15 @@ public class CatanBoard {
 	public ArrayList<Player> getPlayersWithSettlementOnRobberTile() {
 		return getPlayersWithSettlementOnTile(this.tiles.get(robber));
 	}
+	
+	public void stealRandomResourceFromOpposingPlayer(Player currentPlayer, Player opposingPlayer) {
+		while(opposingPlayer.hasAnyResources()) {
+			try {
+				int randomInteger = new Random().nextInt(TileType.values().length);
+				TileType randomResource = TileType.values()[randomInteger];
+				currentPlayer.stealResourceFromOpposingPlayer(randomResource, opposingPlayer);
+				break;
+			} catch (IndexOutOfBoundsException e) { }
+		}
+	}
 }

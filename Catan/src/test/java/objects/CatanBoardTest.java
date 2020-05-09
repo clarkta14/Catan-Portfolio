@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Stack;
 
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -1243,6 +1245,65 @@ public class CatanBoardTest {
 		
 		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(1));
 		assertEquals(0, playersWithSettlementsOnTile.size());
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithNoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithOneResource() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		pc.getPlayer(1).addResource(TileType.brick, 1);
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithTwoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		pc.getPlayer(1).addResource(TileType.brick, 2);
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(1, pc.getPlayer(1).getResourceCount(TileType.brick));
 	}
 	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {

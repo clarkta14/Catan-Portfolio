@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 public class Player {
@@ -88,6 +89,13 @@ public class Player {
 		return this.developmentCards.get(cardType).size();
 	}
 	
+	public boolean hasAnyResources() {
+		for(Entry<TileType, Integer> resourceSet: resources.entrySet()) {
+	        if (resourceSet.getValue() != 0) return true;
+	    }
+		return false;
+	}
+	
 	public boolean canAffordTrade(HashMap<TileType, Integer> payment) { 
 		for(TileType tt : payment.keySet()) {
 			if(this.resources.get(tt) < payment.get(tt)) {
@@ -129,5 +137,13 @@ public class Player {
 			return false;
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
+	}
+	
+	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {
+		if (opposingPlayer.getResourceCount(resource) == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		opposingPlayer.removeResource(resource, 1);
+		this.addResource(resource, 1);
 	}
 }

@@ -542,6 +542,45 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
+	@Test
+	public void testStealFromPlayerWithNoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		try {
+			player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+			// testPasses
+		}
+	}
+	
+	@Test
+	public void testStealFromPlayerWithOneResource() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 1);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(0, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
+	}
+	
+	@Test
+	public void testStealFromPlayerWithTwoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 2);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(1, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
