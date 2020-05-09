@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 public class Player {
@@ -86,6 +87,13 @@ public class Player {
 	
 	public int getDevelopmentCardCount(DevelopmentCardType cardType) {
 		return this.developmentCards.get(cardType).size();
+	}
+	
+	public boolean hasAnyResources() {
+		for(Entry<TileType, Integer> resourceSet: resources.entrySet()) {
+	        if (resourceSet.getValue() != 0) return true;
+	    }
+		return false;
 	}
 	
 	public boolean canAffordTrade(HashMap<TileType, Integer> payment) { 

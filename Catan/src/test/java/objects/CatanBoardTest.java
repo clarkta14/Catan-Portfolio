@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Stack;
 
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -1161,6 +1163,25 @@ public class CatanBoardTest {
 		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
 		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
 		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithNoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
 	}
 	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
