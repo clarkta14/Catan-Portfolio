@@ -1184,6 +1184,26 @@ public class CatanBoardTest {
 		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
 	}
 	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithOneResource() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		pc.getPlayer(1).addResource(TileType.brick, 1);
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
+	}
+	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {
 		ArrayList<Tile> tiles = cb.getTiles();
 		ArrayList<Settlement> settlements = new ArrayList<Settlement>();
