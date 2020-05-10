@@ -13,6 +13,9 @@ public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
     private Stack<DevelopmentCard> developmentCards;
+    private ArrayList<PortType> portTypes;
+    private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
+	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
@@ -31,11 +34,25 @@ public class CatanBoard {
 				push(new VictoryPointDevelopmentCard());
 			}
         }};
+        createAndShufflePortTypes();
         Collections.shuffle(this.developmentCards);
         shuffleTiles();
     }
     
-    private void shuffleTiles() {
+    private void createAndShufflePortTypes() {
+    	this.portTypes = new ArrayList<PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypes.add(PortType.three);
+    	}
+    	portTypes.add(PortType.brick);
+    	portTypes.add(PortType.wool);
+    	portTypes.add(PortType.wood);
+    	portTypes.add(PortType.ore);
+    	portTypes.add(PortType.wheat);
+    	Collections.shuffle(portTypes);		
+	}
+
+	private void shuffleTiles() {
         // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
@@ -154,12 +171,24 @@ public class CatanBoard {
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+			checkForAndAddPort(selectedTiles.get(i), corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
 			distributeSetupResources(selectedTiles, currentPlayer);
 		}
 		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
+	}
+
+	private void checkForAndAddPort(int tileNum, int cornerNum, Settlement settlement) {
+		for (int i = 0; i < portTiles.length; i++) {
+			for (int j = 0; j < portCorners[i].length; j++) {
+				if (portTiles[i] == tileNum && portCorners[i][j] == cornerNum) {
+					settlement.portType = portTypes.get(i);
+				}
+			}
+		}
+		
 	}
 
 	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {

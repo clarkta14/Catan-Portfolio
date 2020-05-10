@@ -6,34 +6,89 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import gui.GameStates;
+
 public class CatanBoard_PortsTest {
 	private PlayersController pc;
 	private CatanBoard cb;
-	private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
-	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
+	private int[] portTiles = new int[] { 0, 1, 6, 11, 15, 17, 16, 12, 3 };
+	private int[][] portCorners = new int[][] { { 0, 5 }, { 4, 5 }, { 4, 5 }, { 3, 4 }, { 2, 3 }, { 2, 3 }, { 1, 2 },
+			{ 0, 1 }, { 0, 1 } };
 
 	@Test
 	public void testTileLocationsArePorts() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		ArrayList<Tile> tiles = cb.getTiles();
-		
-		checkTileLocationsArePorts(tiles);
+		testTileLocationsArePortsHalf(0);
+		testTileLocationsArePortsHalf(1);
 	}
 
-	private void checkTileLocationsArePorts(ArrayList<Tile> tiles) {
-		Tile tile;
+	private void testTileLocationsArePortsHalf(int cornerNum) {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+
+		ArrayList<Tile> tiles = cb.getTiles();
+		addSettlementsToPorts(tiles, cornerNum);
+
+		checkTileLocationsArePorts(tiles, cornerNum);
+	}
+
+	@Test
+	public void testTileLocationsArePortsCorrectType() {
+		testTileLocationsArePortsCorrectTypeHalf(0);
+		testTileLocationsArePortsCorrectTypeHalf(1);
+	}
+
+	private void testTileLocationsArePortsCorrectTypeHalf(int cornerNum) {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+
+		int woolPorts = 1;
+		int brickPorts = 1;
+		int orePorts = 1;
+		int woodPorts = 1;
+		int wheatPorts = 1;
+		int threePorts = 4;
+
+		ArrayList<Tile> tiles = cb.getTiles();
+		addSettlementsToPorts(tiles, cornerNum);
+
+		assertEquals(woolPorts, getNumberOfPortType(tiles, PortType.wool, cornerNum));
+		assertEquals(brickPorts, getNumberOfPortType(tiles, PortType.brick, cornerNum));
+		assertEquals(orePorts, getNumberOfPortType(tiles, PortType.ore, cornerNum));
+		assertEquals(woodPorts, getNumberOfPortType(tiles, PortType.wood, cornerNum));
+		assertEquals(wheatPorts, getNumberOfPortType(tiles, PortType.wheat, cornerNum));
+		assertEquals(threePorts, getNumberOfPortType(tiles, PortType.three, cornerNum));
+	}
+
+	private void checkTileLocationsArePorts(ArrayList<Tile> tiles, int cornerNum) {
 		for (int i = 0; i < portTiles.length; i++) {
-			tile = tiles.get(portTiles[i]);
-			for (int j = 0; j < 2; j++) {
-				Settlement port = new Settlement(pc.getCurrentPlayer());
-				tile.addSettlement(portCorners[i][j], port);
-				assertFalse(port.portType == null);
-				assertFalse(port.portType == PortType.none);
+			Tile tile = tiles.get(portTiles[i]);
+			Settlement port = tile.getSettlements().get(portCorners[i][cornerNum]);
+			assertFalse(port.portType == null);
+			assertFalse(port.portType == PortType.none);
+		}
+
+	}
+
+	private void addSettlementsToPorts(ArrayList<Tile> tiles, int cornerNum) {
+		for (int i = 0; i < portTiles.length; i++) {
+			ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+			selectedTiles.add(portTiles[i]);
+			ArrayList<Integer> corners = new ArrayList<Integer>();
+			corners.add(portCorners[i][cornerNum]);
+			System.out.println(cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup));
+		}
+	}
+
+	private int getNumberOfPortType(ArrayList<Tile> tiles, PortType type, int cornerNum) {
+		int count = 0;
+		for (int i = 0; i < portTiles.length; i++) {
+			Tile tile = tiles.get(portTiles[i]);
+			Settlement port = tile.getSettlements().get(portCorners[i][cornerNum]);
+			if (port.portType == type) {
+				count++;
 			}
 		}
-		
+		return count;
 	}
 
 }
