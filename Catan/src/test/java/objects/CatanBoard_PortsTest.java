@@ -3,6 +3,7 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -58,6 +59,28 @@ public class CatanBoard_PortsTest {
 		assertEquals(wheatPorts, getNumberOfPortType(tiles, PortType.wheat, cornerNum));
 		assertEquals(threePorts, getNumberOfPortType(tiles, PortType.three, cornerNum));
 	}
+	
+	@Test
+	public void tradeWithBank3to1Port() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		cb.portTypes.add(0, PortType.three);
+		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+		selectedTiles.add(portTiles[0]);
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		corners.add(portCorners[0][0]);
+		cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		currentPlayer.addResource(TileType.brick, 3);
+		HashMap<TileType, Integer> payment = new HashMap<TileType, Integer>();
+		payment.put(TileType.brick, 3);
+		
+		assertTrue(cb.tradeWithBank(payment, TileType.ore));
+		assertEquals(1, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.brick));
+	}
 
 	private void checkTileLocationsArePorts(ArrayList<Tile> tiles, int cornerNum) {
 		for (int i = 0; i < portTiles.length; i++) {
@@ -75,7 +98,7 @@ public class CatanBoard_PortsTest {
 			selectedTiles.add(portTiles[i]);
 			ArrayList<Integer> corners = new ArrayList<Integer>();
 			corners.add(portCorners[i][cornerNum]);
-			System.out.println(cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup));
+			cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup);
 		}
 	}
 

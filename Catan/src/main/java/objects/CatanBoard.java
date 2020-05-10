@@ -185,6 +185,7 @@ public class CatanBoard {
 			for (int j = 0; j < portCorners[i].length; j++) {
 				if (portTiles[i] == tileNum && portCorners[i][j] == cornerNum) {
 					settlement.portType = portTypes.get(i);
+					this.turnController.getCurrentPlayer().addTrade(portTypes.get(i));
 				}
 			}
 		}
@@ -307,7 +308,9 @@ public class CatanBoard {
 	
 	public boolean tradeWithBank(HashMap<TileType, Integer> payment, TileType forThisType) {
 		if(!payment.keySet().contains(forThisType) && this.turnController.getCurrentPlayer().canAffordTrade(payment)) {
-			if(payment.values().stream().mapToInt(a -> a).sum() != 4) {
+			Player currentPlayer = this.turnController.getCurrentPlayer();
+			boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three) && payment.values().stream().mapToInt(a -> a).sum() == 3;
+			if(payment.values().stream().mapToInt(a -> a).sum() != 4 && !canThreeTrade) {
 				return false;
 			}
 			for(TileType tt : payment.keySet()) {
