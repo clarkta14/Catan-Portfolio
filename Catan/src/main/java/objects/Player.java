@@ -9,7 +9,7 @@ public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
-	public ArrayList<PortType> validTrades = new ArrayList<PortType>();
+	private ArrayList<PortType> validTrades = new ArrayList<PortType>();
 	private int victoryPoints = 0;
 	public int numSettlements = 2;
 	public int numCities = 0;
@@ -133,12 +133,14 @@ public class Player {
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
 	}
 
-	public void addTrade(PortType three) {
-		
+	public void addTrade(PortType tradeType) {
+		if (!this.validTrades.contains(tradeType)) {
+			this.validTrades.add(tradeType);
+		}
 		
 	}
 
 	public boolean canPortTrade(PortType tradeType) {
-		return true;
+		return this.validTrades.contains(tradeType);
 	}
 }
