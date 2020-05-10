@@ -378,6 +378,9 @@ public class CatanBoard {
 
 	public boolean portTrade(TileType payment, TileType wants) {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if (currentPlayer.getResourceCount(payment) < 2) {
+			return false;
+		}
 		currentPlayer.removeResource(payment, 2);
 		currentPlayer.addResource(wants, 1);
 		return true;
