@@ -138,7 +138,7 @@ public class Player {
 		
 	}
 
-	public boolean canThreeToOneTrade() {
+	public boolean canPortTrade(PortType tradeType) {
 		return true;
 	}
 }

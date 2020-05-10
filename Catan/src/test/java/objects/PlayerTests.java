@@ -547,7 +547,14 @@ public class PlayerTests {
 	public void addTradeThreeToOneTest() {
 		Player player = new Player(Color.orange);
 		player.addTrade(PortType.three);
-		assertTrue(player.canThreeToOneTrade());
+		assertTrue(player.canPortTrade(PortType.three));
+	}
+	
+	@Test
+	public void addTradeBrickTrade() {
+		Player player = new Player(Color.orange);
+		player.addTrade(PortType.brick);
+		assertTrue(player.canPortTrade(PortType.brick));
 	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
