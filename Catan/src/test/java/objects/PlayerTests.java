@@ -542,6 +542,13 @@ public class PlayerTests {
 		player.addResource(TileType.ore, 3);
 		assertFalse(player.canBuyCity());
 	}
+	
+	@Test
+	public void addTradeThreeToOneTest() {
+		Player player = new Player(Color.orange);
+		player.addTrade(PortType.three);
+		assertTrue(player.canThreeToOneTrade());
+	}
 
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);

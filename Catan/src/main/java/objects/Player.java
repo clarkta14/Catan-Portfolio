@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -8,6 +9,7 @@ public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
+	public ArrayList<PortType> validTrades = new ArrayList<PortType>();
 	private int victoryPoints = 0;
 	public int numSettlements = 2;
 	public int numCities = 0;
@@ -129,5 +131,14 @@ public class Player {
 			return false;
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
+	}
+
+	public void addTrade(PortType three) {
+		
+		
+	}
+
+	public boolean canThreeToOneTrade() {
+		return true;
 	}
 }
