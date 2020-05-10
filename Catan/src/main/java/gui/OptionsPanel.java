@@ -788,8 +788,7 @@ public class OptionsPanel extends JPanel {
 			public void actionPerformed(ActionEvent a) {
 				if(boardGUI.getState().equals(GameStates.steal)) {
 					selectedPlayer = playerNum - 1;
-					System.out.println("Player to steal from " + selectedPlayer);
-					//steal from player selectedPlayer
+					catanBoard.stealRandomResourceFromOpposingPlayer(playerController.getCurrentPlayer(), playerController.getPlayer(selectedPlayer));
 					finishStealing(numRolled);
 				}
 			}
