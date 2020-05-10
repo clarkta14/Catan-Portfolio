@@ -107,7 +107,7 @@ public class CatanBoard_PortsTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		cb.portTypes.add(0, PortType.brick);
+		cb.portTypes.add(0, PortType.wheat);
 		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
 		selectedTiles.add(portTiles[0]);
 		ArrayList<Integer> corners = new ArrayList<Integer>();
@@ -117,9 +117,29 @@ public class CatanBoard_PortsTest {
 		Player currentPlayer = pc.getCurrentPlayer();
 		currentPlayer.addResource(TileType.wheat, 1);
 				
-		assertFalse(cb.portTrade(TileType.wheat, TileType.ore));
-		assertEquals(0, currentPlayer.getResourceCount(TileType.ore));
+		assertFalse(cb.portTrade(TileType.wheat, TileType.wool));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.wool));
 		assertEquals(1, currentPlayer.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void tradeWithOrePortWrongPortType() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		cb.portTypes.add(0, PortType.wool);
+		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+		selectedTiles.add(portTiles[0]);
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		corners.add(portCorners[0][0]);
+		cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		currentPlayer.addResource(TileType.ore, 2);
+				
+		assertFalse(cb.portTrade(TileType.ore, TileType.wood));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.wood));
+		assertEquals(2, currentPlayer.getResourceCount(TileType.ore));
 	}
 
 	private void checkTileLocationsArePorts(ArrayList<Tile> tiles, int cornerNum) {

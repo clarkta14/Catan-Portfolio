@@ -14,6 +14,7 @@ public class CatanBoard {
     private PlayersController turnController;
     private Stack<DevelopmentCard> developmentCards;
     public ArrayList<PortType> portTypes;
+    private HashMap<TileType, PortType> resourceToPorts;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     
@@ -41,6 +42,7 @@ public class CatanBoard {
     
     private void createAndShufflePortTypes() {
     	this.portTypes = new ArrayList<PortType>();
+    	this.resourceToPorts = new HashMap<TileType, PortType>();
     	for (int i = 0; i < 4; i++) {
     		portTypes.add(PortType.three);
     	}
@@ -49,6 +51,12 @@ public class CatanBoard {
     	portTypes.add(PortType.wood);
     	portTypes.add(PortType.ore);
     	portTypes.add(PortType.wheat);
+    	
+    	resourceToPorts.put(TileType.brick, PortType.brick);
+    	resourceToPorts.put(TileType.wool, PortType.wool);
+    	resourceToPorts.put(TileType.wood, PortType.wood);
+    	resourceToPorts.put(TileType.ore, PortType.ore);
+    	resourceToPorts.put(TileType.wheat, PortType.wheat);
     	Collections.shuffle(portTypes);		
 	}
 
@@ -378,7 +386,7 @@ public class CatanBoard {
 
 	public boolean portTrade(TileType payment, TileType wants) {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if (currentPlayer.getResourceCount(payment) < 2) {
+		if (!currentPlayer.canPortTrade(this.resourceToPorts.get(payment)) || currentPlayer.getResourceCount(payment) < 2) {
 			return false;
 		}
 		currentPlayer.removeResource(payment, 2);
