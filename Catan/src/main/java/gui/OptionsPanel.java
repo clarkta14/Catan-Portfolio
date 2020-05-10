@@ -192,21 +192,36 @@ public class OptionsPanel extends JPanel {
 	
 	private void developmentCardPanel() {
 		ArrayList<OptionsPanelComponent> devCardButtons = new ArrayList<>();
-		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-		playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,4,6,2)));
+		int spacing = 0;
 		
-		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-		monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,6,6,2)));
-		
-		JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
-		roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4,8,6,2)));
+		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) > 0) {
+			JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+			playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+			devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4, 4 + spacing ,6,2)));
+			spacing+=2;
+		}
+		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.monopoly_card) > 0) {
+			JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+			monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+			devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+			spacing+=2;
+		}
+		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.road_building_card) > 0) {
+			JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
+			roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
+			devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+			spacing+=2;
+		}
+		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.knight) > 0) {
+			JButton knightCardButton = new JButton(new KnightCardButton());
+			knightCardButton.setText(Messages.getString("OptionsPanel.46")); //$NON-NLS-1$
+			devCardButtons.add(new OptionsPanelComponent(knightCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+			spacing+=2;
+		}
 		
 		JButton cancelButton = new JButton(new CancelAction());
 		cancelButton.setText(Messages.getString("OptionsPanel.5"));
-		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,12,6,2)));
+		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,14,6,2)));
 		setOnOptionsPanel(devCardButtons);
 	}
 	
@@ -240,7 +255,6 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
-				System.out.println("test");
 				timer.stop();
 				developmentCardPanel();
 			}
@@ -256,6 +270,20 @@ public class OptionsPanel extends JPanel {
 				placeInfoPanel(Messages.getString("OptionsPanel.42")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_road_card);
 				createTimer(new RoadBuildingCardFinal());
+			}
+		}
+
+	}
+	
+	class KnightCardButton extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Player currentPlayer = playerController.getCurrentPlayer();
+			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.knight) >= 1) {
+				currentPlayer.removeDevelopmentCard(DevelopmentCardType.knight);
+				setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+				boardGUI.setState(GameStates.move_robber);
+				createTimer(new MoveToStealPhaseStateListener(-1));
 			}
 		}
 
@@ -424,7 +452,6 @@ public class OptionsPanel extends JPanel {
 				} else {
 					gameWindow.refreshPlayerStats();
 					setOnOptionsPanel(actionPanel);
-					System.out.println("reset");
 				}
 			}	
 		}	
@@ -462,7 +489,9 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.steal)) {
 				ArrayList<Player> playersWithSettlementsOnTile = catanBoard.getPlayersWithSettlementOnRobberTile();
 				if(playersWithSettlementsOnTile.size() < 1 || (playersWithSettlementsOnTile.size() == 1 && playersWithSettlementsOnTile.get(0) == playerController.getCurrentPlayer())) {
-					setLastRolled(numRolled);
+					if(numRolled != -1) {
+						setLastRolled(numRolled);
+					}
 					gameWindow.refreshPlayerStats();
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
@@ -798,7 +827,9 @@ public class OptionsPanel extends JPanel {
 	}
 	
 	protected void finishStealing(int numRolled) {
-		setLastRolled(numRolled);
+		if(numRolled != -1) {
+			setLastRolled(numRolled);
+		}
 		gameWindow.refreshPlayerStats();
 		boardGUI.setState(GameStates.idle);
 		setOnOptionsPanel(actionPanel);
