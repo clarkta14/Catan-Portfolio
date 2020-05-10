@@ -375,4 +375,11 @@ public class CatanBoard {
 			return false;
 		}
 	}
+
+	public boolean portTrade(TileType payment, TileType wants) {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		currentPlayer.removeResource(payment, 2);
+		currentPlayer.addResource(wants, 1);
+		return true;
+	}
 }
