@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 public class Player {
@@ -20,6 +21,7 @@ public class Player {
 				put(type, 0);
 			}
 		}};
+		this.resources.remove(TileType.desert);
 		this.developmentCards = new HashMap<DevelopmentCardType, Stack<DevelopmentCard>>() {{
 			for(DevelopmentCardType type : DevelopmentCardType.values()) {
 				Stack<DevelopmentCard> s = new Stack<>();
@@ -44,6 +46,7 @@ public class Player {
 	}
 
 	public void removeResource(TileType type, int numberOfResource) {
+		if(type == TileType.desert) return;
 		if(numberOfResource < 0) {
 			throw new IllegalArgumentException();
 		}
@@ -88,6 +91,13 @@ public class Player {
 		return this.developmentCards.get(cardType).size();
 	}
 	
+	public boolean hasAnyResources() {
+		for(Entry<TileType, Integer> resourceSet: resources.entrySet()) {
+	        if (resourceSet.getValue() != 0) return true;
+	    }
+		return false;
+	}
+	
 	public boolean canAffordTrade(HashMap<TileType, Integer> payment) { 
 		for(TileType tt : payment.keySet()) {
 			if(this.resources.get(tt) < payment.get(tt)) {
@@ -98,7 +108,26 @@ public class Player {
 	}
 	
 	public int getResourceCount(TileType type) {
+		if(type == TileType.desert) return 0;
 		return this.resources.get(type);
+	}
+	
+	public int getTotalResourceCount() {
+		int total = 0;
+		for (Integer i: this.resources.values()) {
+			total += i;
+		}
+		return total;
+	}
+	
+	public boolean hasSufficentResource(TileType type, int hasAtLeast) {
+		if(type == TileType.desert) {
+			return true;
+		}
+		if(this.resources.get(type) < hasAtLeast) {
+			return false;
+		}
+		return true;
 	}
 	
 	public int getNumberOfVictoryPoints() {
@@ -129,5 +158,40 @@ public class Player {
 			return false;
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
+	}
+	
+	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {
+		if (opposingPlayer.getResourceCount(resource) == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+		opposingPlayer.removeResource(resource, 1);
+		this.addResource(resource, 1);
+	}
+	
+	public boolean discardForRobber(HashMap<TileType, Integer> resourcesToDiscard) {
+		resourcesToDiscard.remove(TileType.desert);
+		
+		if(this.getTotalResourceCount() < 8) {
+			return true;
+		}
+		
+		for(TileType resource: resourcesToDiscard.keySet()) {
+			if (!this.hasSufficentResource(resource, resourcesToDiscard.get(resource)))
+				return false;
+		}
+		
+		int totalToDiscard = 0;
+		for(int i: resourcesToDiscard.values()) {
+			totalToDiscard += i;
+		}
+		
+		if(totalToDiscard == Math.floor(this.getTotalResourceCount() / 2)) {
+			for(TileType resource: resourcesToDiscard.keySet()) {
+				this.removeResource(resource, resourcesToDiscard.get(resource));
+			}
+			return true;
+		}
+		
+		return false;
 	}
 }

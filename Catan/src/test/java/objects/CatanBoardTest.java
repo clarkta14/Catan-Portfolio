@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Stack;
 
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -440,6 +442,32 @@ public class CatanBoardTest {
 	
 		cb.distributeResources(tile.getNumber());
 		assertEquals(2, pc.getCurrentPlayer().getResourceCount(tile.getType()));
+	}
+	
+	@Test
+	public void testDistributeResources_Robber() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		int robber = -1;
+		for(Tile t : cb.getTiles()) {
+			if(t.isRobber()) {
+				robber = cb.getTiles().indexOf(t);
+			}
+		}
+		
+		//Adding settlements for players at specified locations
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		int notRobber = 5;
+		if(notRobber == robber) {
+			notRobber = 4;
+		}
+		
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(notRobber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
+		cb.distributeResources(cb.getTiles().get(robber).getNumber());
+		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) == 0);
+		cb.distributeResources(cb.getTiles().get(notRobber).getNumber());
+		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(notRobber).getType()) > 0);
 	}
 	
 	@Test
@@ -1161,6 +1189,122 @@ public class CatanBoardTest {
 		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wool));
 		assertEquals(1,  pc.getPlayer(1).getResourceCount(TileType.wheat));
 		assertEquals(2,  pc.getPlayer(1).getResourceCount(TileType.ore));
+	}
+
+	@Test
+	public void testGetPlayersWithSettlementOnTile_SinglePlayer() {
+		basicSetupForAddSettlementTests();
+		tileNums.add(0);
+		cornerNums.add(3);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(tileNums.get(0)));
+		assertEquals(1, playersWithSettlementsOnTile.size());
+		assertEquals(pc.getCurrentPlayer(), playersWithSettlementsOnTile.get(0));
+	}
+	
+	@Test
+	public void testGetPlayersWithSettlementOnTile_MultiplePlayersOnSameTile() {
+		basicSetupForAddSettlementTests();
+		ArrayList<Integer> tiles = new ArrayList<Integer>();
+		ArrayList<Integer> cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(3);
+		boolean result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		Player plyr1 = pc.getCurrentPlayer();
+		pc.nextPlayer();
+		tiles = new ArrayList<Integer>();
+		cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(6);
+		result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(0));
+		assertEquals(2, playersWithSettlementsOnTile.size());
+		assertEquals(plyr1, playersWithSettlementsOnTile.get(0));
+		assertEquals(pc.getCurrentPlayer(), playersWithSettlementsOnTile.get(1));
+	}
+	
+	@Test
+	public void testGetPlayersWithSettlementOnTile_NoSettlementsOnTile() {
+		basicSetupForAddSettlementTests();
+		ArrayList<Integer> tiles = new ArrayList<Integer>();
+		ArrayList<Integer> cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(3);
+		boolean result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		pc.nextPlayer();
+		tiles = new ArrayList<Integer>();
+		cornersOnTiles = new ArrayList<Integer>();
+		tiles.add(0);
+		cornersOnTiles.add(6);
+		result = cb.addSettlementToTiles(tiles, cornersOnTiles, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		
+		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(1));
+		assertEquals(0, playersWithSettlementsOnTile.size());
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithNoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithOneResource() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		pc.getPlayer(1).addResource(TileType.brick, 1);
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(0, pc.getPlayer(1).getResourceCount(TileType.brick));
+	}
+	
+	@Test
+	public void testStealRandomResourceFromOpposingPlayerWithTwoResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Random random = EasyMock.mock(Random.class);
+		
+		EasyMock.expect(random.nextInt(TileType.values().length)).andStubReturn(TileType.brick.ordinal());
+		
+		EasyMock.replay(random);
+		
+		pc.getPlayer(1).addResource(TileType.brick, 2);
+		cb.stealRandomResourceFromOpposingPlayer(pc.getCurrentPlayer(), pc.getPlayer(1));
+		
+		EasyMock.verify(random);
+		
+		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.brick));
+		assertEquals(1, pc.getPlayer(1).getResourceCount(TileType.brick));
 	}
 	
 	private ArrayList<Settlement> getSettlementsFromClickedTiles() {

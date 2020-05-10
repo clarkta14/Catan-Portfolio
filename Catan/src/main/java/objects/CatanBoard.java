@@ -13,6 +13,7 @@ public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
     private Stack<DevelopmentCard> developmentCards;
+    private int robber;
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
@@ -119,6 +120,7 @@ public class CatanBoard {
     	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
     	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
     	Collections.swap(this.tiles, tileIndexToSwapWith, 18);
+    	this.robber = tileIndexToSwapWith;
     }
     
 	public ArrayList<Tile> getTiles() {
@@ -127,7 +129,6 @@ public class CatanBoard {
 	
 	public void settlementLocationClick(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
 		addSettlementToTiles(tiles, corners, gameState);	
-
 	}
 	
 	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
@@ -222,13 +223,15 @@ public class CatanBoard {
 	public int endTurnAndRoll() {
 		Random random = new Random();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
-		distributeResources(rolled);
+		if(rolled != 7) {
+			distributeResources(rolled);
+		}
 		return rolled;
 	}
 
 	public void distributeResources(int number) {
 		for (Tile t : this.tiles) {
-			if(t.getNumber() == number) {
+			if(t.getNumber() == number && !t.isRobber()) {
 				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
 				for(Settlement settlement : settlementsOnTile.values()) {
 					if (settlement.isCity()) {
@@ -341,6 +344,37 @@ public class CatanBoard {
 			return false;
 		}catch(IndexOutOfBoundsException oobe) {
 			return false;
+		}
+	}
+
+	public void moveRobber(Tile clicked) {
+		this.tiles.get(robber).setRobber(false);
+		this.robber = this.tiles.indexOf(clicked);
+		this.tiles.get(this.tiles.indexOf(clicked)).setRobber(true);
+	}
+	
+	public ArrayList<Player> getPlayersWithSettlementOnTile(Tile t){
+		ArrayList<Player> playersWithSettlements = new ArrayList<>();
+		for(Settlement s : t.getSettlements().values()) {
+			if(!playersWithSettlements.contains(s.getOwner())) {
+				playersWithSettlements.add(s.getOwner());
+			}
+		}
+		return playersWithSettlements;
+	}
+
+	public ArrayList<Player> getPlayersWithSettlementOnRobberTile() {
+		return getPlayersWithSettlementOnTile(this.tiles.get(robber));
+	}
+	
+	public void stealRandomResourceFromOpposingPlayer(Player currentPlayer, Player opposingPlayer) {
+		while(opposingPlayer.hasAnyResources()) {
+			try {
+				int randomInteger = new Random().nextInt(TileType.values().length);
+				TileType randomResource = TileType.values()[randomInteger];
+				currentPlayer.stealResourceFromOpposingPlayer(randomResource, opposingPlayer);
+				break;
+			} catch (IndexOutOfBoundsException e) { }
 		}
 	}
 }
