@@ -461,12 +461,13 @@ public class CatanBoardTest {
 		if(notRobber == robber) {
 			notRobber = 4;
 		}
+		
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(notRobber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
 		cb.distributeResources(cb.getTiles().get(robber).getNumber());
 		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) == 0);
 		cb.distributeResources(cb.getTiles().get(notRobber).getNumber());
-		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(5).getType()) > 0);
+		assertTrue(pc.getCurrentPlayer().getResourceCount(cb.getTiles().get(notRobber).getType()) > 0);
 	}
 	
 	@Test
