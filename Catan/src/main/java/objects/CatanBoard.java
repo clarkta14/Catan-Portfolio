@@ -14,7 +14,7 @@ public class CatanBoard {
     private PlayersController turnController;
     private Stack<DevelopmentCard> developmentCards;
     public ArrayList<PortType> portTypes;
-    private HashMap<TileType, PortType> resourceToPorts;
+    public HashMap<TileType, PortType> resourceToPorts;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     

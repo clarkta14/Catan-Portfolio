@@ -293,7 +293,13 @@ public class BoardWindow extends JPanel {
 
 	public ArrayList<String> getPortnames() {
 		ArrayList<String> ports = new ArrayList<>();
-		for (PortType type : catanBoard.portTypes) {
+		int index = 3;
+		for (int i = 0; i < catanBoard.portTypes.size(); i ++) {
+			index++;
+			if (index == catanBoard.portTypes.size()) {
+				index -= catanBoard.portTypes.size();
+			}
+			PortType type = catanBoard.portTypes.get(index);
 			if (type == PortType.brick) {
 				ports.add(Messages.getString("BoardWindow.4")); //$NON-NLS-1$
 			} else if (type == PortType.wheat) {
