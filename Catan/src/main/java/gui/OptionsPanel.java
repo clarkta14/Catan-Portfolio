@@ -499,35 +499,36 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		Player currentPlayer = playerController.getCurrentPlayer();
 		boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
-		JLabel instructionLabel2;
-		if (canThreeTrade) {
-			instructionLabel2 = new JLabel(Messages.getString("OptionsPanel.44")); //$NON-NLS-1$
-		} else {
-			instructionLabel2 = new JLabel(Messages.getString("OptionsPanel.22")); //$NON-NLS-1$
-		}
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instructionLabel2, new Rectangle(2,3,6,2)));
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wool, canThreeTrade), new Rectangle(4,6,6,2)));
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wheat, canThreeTrade), new Rectangle(4,8,6,2)));
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wood, canThreeTrade), new Rectangle(4,10,6,2)));
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.ore, canThreeTrade), new Rectangle(4,12,6,2)));
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.brick, canThreeTrade), new Rectangle(4,14,6,2)));
+		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wool), new Rectangle(4,6,6,2)));
+		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wheat), new Rectangle(4,8,6,2)));
+		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wood), new Rectangle(4,10,6,2)));
+		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.ore), new Rectangle(4,12,6,2)));
+		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.brick), new Rectangle(4,14,6,2)));
 		JButton cancelButton = new JButton(new CancelAction());
 		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
 		tradeWithBankPaymentPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,17,6,2)));
 		setOnOptionsPanel(tradeWithBankPaymentPanel);
 	}
 	
-	public JButton selectItemAsPayment(TileType t, boolean canThreeTrade) {
+	public JButton selectItemAsPayment(TileType t) {
 		JButton resourceType = new JButton(new AbstractAction() {
 			public void actionPerformed(ActionEvent a) {
 				if(boardGUI.getState().equals(GameStates.trade)) {
 					HashMap<TileType, Integer> payment = new HashMap<>();
-					if (canThreeTrade) {
-						payment.put(t, 3);
+					Player currentPlayer = playerController.getCurrentPlayer();
+					boolean success = false;
+					boolean canTwoTrade = currentPlayer.canPortTrade(catanBoard.resourceToPorts.get(t));
+					if (canTwoTrade) {
+						success = catanBoard.portTrade(t, selectedResource);
 					} else {
-						payment.put(t, 4);
+						boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
+						if (canThreeTrade) {
+							payment.put(t, 3);
+						} else {
+							payment.put(t, 4);
+						}
+						success = catanBoard.tradeWithBank(payment, selectedResource);
 					}
-					boolean success = catanBoard.tradeWithBank(payment, selectedResource);
 					if(success) {
 						boardGUI.setState(GameStates.idle);
 						gameWindow.refreshPlayerStats();
