@@ -478,7 +478,6 @@ public class OptionsPanel extends JPanel {
 	}
 	
 	private void discardForRobber(int playerNum) {
-		
 		gameWindow.refreshPlayerStats();
 		
 		if (playerNum >= playerController.getTotalNumOfPlayers()) {
@@ -497,9 +496,15 @@ public class OptionsPanel extends JPanel {
 		}
 		
 		setCurrentPlayer(p, playerNum);
-			
+
+		setOnOptionsPanel(createDiscardPanel(playerNum));
+	}
+	
+	public ArrayList<OptionsPanelComponent> createDiscardPanel(int playerNum) {
+		Player p = this.playerController.getPlayer(playerNum);
+		
 		this.discardPanel = new ArrayList<>();
-			
+		
 		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.brick), new Rectangle(2,6,3,1)));
 		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wool), new Rectangle(6,6,3,1)));
 		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.ore), new Rectangle(10,6,3,1)));
@@ -527,12 +532,11 @@ public class OptionsPanel extends JPanel {
 
 		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.47")); //$NON-NLS-1$
 		this.discardPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2, 3, 18, 1)));
-
-		setOnOptionsPanel(this.discardPanel);
+		
+		return this.discardPanel;
 	}
 	
 	class DiscardConfirmListener extends AbstractAction {
-		
 		int playerNum;
 		
 		public DiscardConfirmListener (int playerNum) {
@@ -550,9 +554,8 @@ public class OptionsPanel extends JPanel {
 				toDiscard.put(TileType.ore, ((JComboBox<Integer>) discardPanel.get(2).getSwingComponent()).getSelectedIndex());
 				toDiscard.put(TileType.wheat, ((JComboBox<Integer>) discardPanel.get(3).getSwingComponent()).getSelectedIndex());
 				toDiscard.put(TileType.wood, ((JComboBox<Integer>) discardPanel.get(4).getSwingComponent()).getSelectedIndex());
-			
-				boolean successfulDiscard = p.discardForRobber(toDiscard);
-				if(successfulDiscard) {
+				
+				if(p.discardForRobber(toDiscard)) {
 					discardForRobber(playerNum+1);
 				}
 			}
