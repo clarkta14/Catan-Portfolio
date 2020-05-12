@@ -5,7 +5,7 @@ public class ProgressDevelopmentCard extends DevelopmentCard{
 	private DevelopmentCardType developmentCardType = DevelopmentCardType.progress;
 	
 	@Override
-	public void playCard() {
+	public void playCard(TileType... resources) {
 		System.out.print("Playing Progress Card");
 	}
 

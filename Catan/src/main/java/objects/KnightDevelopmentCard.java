@@ -5,7 +5,7 @@ public class KnightDevelopmentCard extends DevelopmentCard{
 	private DevelopmentCardType developmentCardType = DevelopmentCardType.knight;
 
 	@Override
-	public void playCard() {
+	public void playCard(TileType... resources) {
 		System.out.print("Playing Knight Card");
 	}
 
