@@ -666,6 +666,14 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void testDiscardShouldEmptyHash() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();;
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
 	public void testDiscardNoResourcesWhen7() {
 		Player player = new Player(Color.orange);
 		player.addResource(TileType.wheat, 2);
