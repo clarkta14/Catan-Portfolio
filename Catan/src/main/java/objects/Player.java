@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Stack;
 
+import victorypoints.DevelopmentCardPoints;
+import victorypoints.VictoryPoints;
+
 public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
@@ -79,7 +82,7 @@ public class Player {
 		Stack<DevelopmentCard> cards = this.developmentCards.get(cardType);
 		cards.push(card);
 		if(DevelopmentCardType.victory_point == cardType) {
-			alterVictoryPoints(VictoryPoints.devolopment_card);
+			alterVictoryPoints(new DevelopmentCardPoints());
 		}
 		this.developmentCards.replace(cardType, cards);
 	}
@@ -136,24 +139,7 @@ public class Player {
 	}
 	
 	public void alterVictoryPoints(VictoryPoints reason) {
-		switch (reason) {
-			case settlement:
-				this.victoryPoints++;
-				break;
-			case city:
-				this.victoryPoints++;
-				break;
-			case devolopment_card:
-				this.victoryPoints++;
-			case largest_army_add:
-				this.victoryPoints += 2;
-				break;
-			case largest_army_remove:
-				this.victoryPoints -= 2;
-				break;
-		default:
-			break;
-		}
+		this.victoryPoints += reason.victoryPointIncrement();
 	}
 	
 	public boolean isVictor() {

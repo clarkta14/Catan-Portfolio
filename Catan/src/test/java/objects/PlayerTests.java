@@ -7,6 +7,10 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import victorypoints.CityPoints;
+import victorypoints.DevelopmentCardPoints;
+import victorypoints.SettlementPoints;
+
 public class PlayerTests {
 
 	@Test
@@ -385,7 +389,7 @@ public class PlayerTests {
 	@Test
 	public void testAlterVPSettlement() {
 		Player plyr = new Player(Color.orange);
-		plyr.alterVictoryPoints(VictoryPoints.settlement);
+		plyr.alterVictoryPoints(new SettlementPoints());
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
@@ -393,7 +397,7 @@ public class PlayerTests {
 	@Test
 	public void testAlterVPCity() {
 		Player plyr = new Player(Color.orange);
-		plyr.alterVictoryPoints(VictoryPoints.city);
+		plyr.alterVictoryPoints(new CityPoints());
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
@@ -401,7 +405,7 @@ public class PlayerTests {
 	@Test
 	public void testAlterVPDevoCard() {
 		Player plyr = new Player(Color.orange);
-		plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
+		plyr.alterVictoryPoints(new DevelopmentCardPoints());
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(1, vp);
 	}
@@ -409,9 +413,9 @@ public class PlayerTests {
 	@Test
 	public void testAlterVPMultiple() {
 		Player plyr = new Player(Color.orange);
-		plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
-		plyr.alterVictoryPoints(VictoryPoints.city);
-		plyr.alterVictoryPoints(VictoryPoints.settlement);
+		plyr.alterVictoryPoints(new DevelopmentCardPoints());
+		plyr.alterVictoryPoints(new CityPoints());
+		plyr.alterVictoryPoints(new SettlementPoints());
 		int vp = plyr.getNumberOfVictoryPoints();
 		assertEquals(3, vp);
 	}
@@ -420,7 +424,7 @@ public class PlayerTests {
 	public void testIsVictor10VP() {
 		Player plyr = new Player(Color.orange);
 		for (int i = 0; i < 10; i++) {
-			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
+			plyr.alterVictoryPoints(new DevelopmentCardPoints());
 		}
 		assertTrue(plyr.isVictor());
 	}
@@ -435,7 +439,7 @@ public class PlayerTests {
 	public void testIsVictor11VP() {
 		Player plyr = new Player(Color.orange);
 		for (int i = 0; i < 11; i++) {
-			plyr.alterVictoryPoints(VictoryPoints.devolopment_card);
+			plyr.alterVictoryPoints(new DevelopmentCardPoints());
 		}
 		assertTrue(plyr.isVictor());
 	}
