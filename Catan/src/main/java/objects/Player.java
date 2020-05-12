@@ -12,6 +12,7 @@ public class Player {
 	private int victoryPoints = 0;
 	public int numSettlements = 2;
 	public int numCities = 0;
+	public int knightsPlayed = 0;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -144,6 +145,12 @@ public class Player {
 				break;
 			case devolopment_card:
 				this.victoryPoints++;
+			case largest_army_add:
+				this.victoryPoints += 2;
+				break;
+			case largest_army_remove:
+				this.victoryPoints -= 2;
+				break;
 		default:
 			break;
 		}

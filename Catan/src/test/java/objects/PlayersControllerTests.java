@@ -1,8 +1,6 @@
 package objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -137,5 +135,16 @@ public class PlayersControllerTests {
 	public void testGetTotalNumberOfPlayers() {
 		PlayersController pc = new PlayersController(4);
 		assertEquals(4, pc.getTotalNumOfPlayers());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysLTThreeKnightCards() throws Exception {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		pc.determineLargestArmy(playerOne);
+		
+		assertEquals(0, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(0, playerOne.getNumberOfVictoryPoints());
 	}
 }

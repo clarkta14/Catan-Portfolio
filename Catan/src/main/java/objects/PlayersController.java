@@ -10,6 +10,7 @@ public class PlayersController {
 	private boolean backwardsSetup;
 	private int currentPlayer;
 	private int totalNumOfPlayers;
+	private Player playerWithLargestArmy;
 
 	public PlayersController(int numOfPlayers) {
     	this.players = createPlayers(numOfPlayers);
@@ -17,6 +18,7 @@ public class PlayersController {
         this.backwardsSetup = false;
         this.currentPlayer = 0;
         this.totalNumOfPlayers = numOfPlayers;
+        this.playerWithLargestArmy = null;
 	}
 
 	private ArrayList<Player> createPlayers(int num) {
@@ -78,5 +80,27 @@ public class PlayersController {
 	
 	public int getTotalNumOfPlayers() {
 		return this.totalNumOfPlayers;
+	}
+	
+	public void determineLargestArmy(Player chosenPlayer) {
+		if (chosenPlayer.knightsPlayed >= 3) {
+			if (playerWithLargestArmy == null) {
+				addLargestArmyCardToPlayer(chosenPlayer);
+			} else if (chosenPlayer.knightsPlayed > playerWithLargestArmy.knightsPlayed) {
+				removeLargestArmyCardFromPreviousCardOwner();
+				addLargestArmyCardToPlayer(chosenPlayer);
+			}
+		}
+	}
+
+	private void removeLargestArmyCardFromPreviousCardOwner() {
+		playerWithLargestArmy.removeDevelopmentCard(DevelopmentCardType.largest_army_card);
+		playerWithLargestArmy.alterVictoryPoints(VictoryPoints.largest_army_remove);
+	}
+
+	private void addLargestArmyCardToPlayer(Player chosenPlayer) {
+		chosenPlayer.addDevelopmentCard(new LargestArmyDevelopmentCard());
+		chosenPlayer.alterVictoryPoints(VictoryPoints.largest_army_add);
+		playerWithLargestArmy = chosenPlayer;
 	}
 }

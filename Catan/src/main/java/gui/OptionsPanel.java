@@ -281,12 +281,13 @@ public class OptionsPanel extends JPanel {
 			Player currentPlayer = playerController.getCurrentPlayer();
 			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.knight) >= 1) {
 				currentPlayer.removeDevelopmentCard(DevelopmentCardType.knight);
+				currentPlayer.knightsPlayed++;
+				playerController.determineLargestArmy(currentPlayer);
 				setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
 				boardGUI.setState(GameStates.move_robber);
 				createTimer(new MoveToStealPhaseStateListener(-1));
 			}
 		}
-
 	}
 	
 	private void createTimer(ActionListener action) {
