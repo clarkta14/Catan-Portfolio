@@ -86,7 +86,7 @@ public class PlayersController {
 		if (chosenPlayer.knightsPlayed >= 3) {
 			if (playerWithLargestArmy == null) {
 				addLargestArmyCardToPlayer(chosenPlayer);
-			} else if (chosenPlayer.knightsPlayed > playerWithLargestArmy.knightsPlayed) {
+			} else if (!chosenPlayer.equals(playerWithLargestArmy) && chosenPlayer.knightsPlayed > playerWithLargestArmy.knightsPlayed) {
 				removeLargestArmyCardFromPreviousCardOwner();
 				addLargestArmyCardToPlayer(chosenPlayer);
 			}
@@ -102,5 +102,9 @@ public class PlayersController {
 		chosenPlayer.addDevelopmentCard(new LargestArmyDevelopmentCard());
 		chosenPlayer.alterVictoryPoints(VictoryPoints.largest_army_add);
 		playerWithLargestArmy = chosenPlayer;
+	}
+	
+	public int getNumKnightsOfLargestArmy() {
+		return (playerWithLargestArmy == null) ? 0 : playerWithLargestArmy.knightsPlayed;
 	}
 }
