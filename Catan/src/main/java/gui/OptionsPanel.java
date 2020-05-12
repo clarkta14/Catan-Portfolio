@@ -45,6 +45,7 @@ public class OptionsPanel extends JPanel {
 	private ArrayList<OptionsPanelComponent> acceptTradeWithPlayerPanel;
 	private ArrayList<OptionsPanelComponent> stealFromPlayerPanel;
 	private ArrayList<OptionsPanelComponent> moveRobberInfoPanel;
+	private ArrayList<OptionsPanelComponent> discardPanel;
 	private Timer timer;
 	private OptionsPanelComponent lastRolled;
 	private TileType selectedResource;
@@ -466,12 +467,93 @@ public class OptionsPanel extends JPanel {
 				
 				int rolled = catanBoard.endTurnAndRoll();
 				if(rolled == 7) {
-					setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
-					boardGUI.setState(GameStates.move_robber);
-					createTimer(new MoveToStealPhaseStateListener(rolled));
+					boardGUI.setState(GameStates.discard_robber);
+					discardForRobber(0);
 				} else {
 					setLastRolled(rolled);
 					gameWindow.refreshPlayerStats();
+				}
+			}
+		}
+	}
+	
+	private void discardForRobber(int playerNum) {
+		
+		gameWindow.refreshPlayerStats();
+		
+		if (playerNum >= playerController.getTotalNumOfPlayers()) {
+			setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
+			setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+			boardGUI.setState(GameStates.move_robber);
+			createTimer(new MoveToStealPhaseStateListener(7));
+			return;
+		}
+		
+		Player p = this.playerController.getPlayer(playerNum);
+		
+		if (p.discardForRobber(new HashMap<TileType, Integer>())) {
+			discardForRobber(playerNum+1);
+			return;
+		}
+		
+		setCurrentPlayer(p, playerNum);
+			
+		this.discardPanel = new ArrayList<>();
+			
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.brick), new Rectangle(2,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wool), new Rectangle(6,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.ore), new Rectangle(10,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wheat), new Rectangle(4,10,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wood), new Rectangle(8,10,3,1)));
+			
+		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
+			
+		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(woolLabel, new Rectangle(6,5,4,1)));
+			
+		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
+			
+		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
+			
+		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8, 9, 4, 1)));
+
+		JButton submitResources = new JButton(new DiscardConfirmListener(playerNum));
+		submitResources.setText(Messages.getString("OptionsPanel.29")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3, 15, 9, 2)));
+
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.47")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2, 3, 18, 1)));
+
+		setOnOptionsPanel(this.discardPanel);
+	}
+	
+	class DiscardConfirmListener extends AbstractAction {
+		
+		int playerNum;
+		
+		public DiscardConfirmListener (int playerNum) {
+			this.playerNum = playerNum;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.discard_robber)) {
+				Player p = playerController.getPlayer(this.playerNum);
+				HashMap<TileType, Integer> toDiscard = new HashMap<>();
+				toDiscard.put(TileType.brick, ((JComboBox<Integer>) discardPanel.get(0).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wool, ((JComboBox<Integer>) discardPanel.get(1).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.ore, ((JComboBox<Integer>) discardPanel.get(2).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wheat, ((JComboBox<Integer>) discardPanel.get(3).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wood, ((JComboBox<Integer>) discardPanel.get(4).getSwingComponent()).getSelectedIndex());
+			
+				boolean successfulDiscard = p.discardForRobber(toDiscard);
+				if(successfulDiscard) {
+					discardForRobber(playerNum+1);
 				}
 			}
 		}
