@@ -147,4 +147,16 @@ public class PlayersControllerTests {
 		assertEquals(0, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
 		assertEquals(0, playerOne.getNumberOfVictoryPoints());
 	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysThreeKnightCards() throws Exception {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		playerOne.knightsPlayed += 3;
+		pc.determineLargestArmy(playerOne);
+		
+		assertEquals(1, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerOne.getNumberOfVictoryPoints());
+	}
 }
