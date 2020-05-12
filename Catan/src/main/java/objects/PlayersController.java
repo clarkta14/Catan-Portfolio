@@ -4,9 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import victorypoints.LoseLargestArmyPoints;
-import victorypoints.WinLargestArmyPoints;
-
 public class PlayersController {
 	private ArrayList<Player> players;
 	private boolean initialSetup;
@@ -99,12 +96,12 @@ public class PlayersController {
 
 	private void removeLargestArmyCardFromPreviousCardOwner() {
 		playerWithLargestArmy.removeDevelopmentCard(DevelopmentCardType.largest_army_card);
-		playerWithLargestArmy.alterVictoryPoints(new LoseLargestArmyPoints());
+		playerWithLargestArmy.alterVictoryPoints(VictoryPoints.largest_army_remove);
 	}
 
 	private void addLargestArmyCardToPlayer(Player chosenPlayer) {
 		chosenPlayer.addDevelopmentCard(new LargestArmyDevelopmentCard());
-		chosenPlayer.alterVictoryPoints(new WinLargestArmyPoints());
+		chosenPlayer.alterVictoryPoints(VictoryPoints.largest_army_add);
 		playerWithLargestArmy = chosenPlayer;
 	}
 

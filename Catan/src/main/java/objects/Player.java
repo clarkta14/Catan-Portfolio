@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Stack;
 
-import victorypoints.DevelopmentCardPoints;
-import victorypoints.VictoryPoints;
-
 public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
@@ -82,7 +79,7 @@ public class Player {
 		Stack<DevelopmentCard> cards = this.developmentCards.get(cardType);
 		cards.push(card);
 		if(DevelopmentCardType.victory_point == cardType) {
-			alterVictoryPoints(new DevelopmentCardPoints());
+			alterVictoryPoints(VictoryPoints.devolopment_card);
 		}
 		this.developmentCards.replace(cardType, cards);
 	}
@@ -139,7 +136,7 @@ public class Player {
 	}
 	
 	public void alterVictoryPoints(VictoryPoints reason) {
-		this.victoryPoints += reason.victoryPointIncrement();
+		this.victoryPoints += reason.getNumVal();
 	}
 	
 	public boolean isVictor() {

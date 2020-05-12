@@ -8,8 +8,6 @@ import java.util.Random;
 import java.util.Stack;
 
 import gui.GameStates;
-import victorypoints.CityPoints;
-import victorypoints.SettlementPoints;
 
 public class CatanBoard {
     private ArrayList<Tile> tiles;
@@ -161,7 +159,7 @@ public class CatanBoard {
 		if (gameState == GameStates.drop_settlement_setup_final) {
 			distributeSetupResources(selectedTiles, currentPlayer);
 		}
-		currentPlayer.alterVictoryPoints(new SettlementPoints());
+		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
 	}
 
@@ -320,7 +318,7 @@ public class CatanBoard {
 			}
 		}
 		if (canPlace && buyCity()) {
-			currentPlayer.alterVictoryPoints(new CityPoints());
+			currentPlayer.alterVictoryPoints(VictoryPoints.city);
 			for (Settlement s : settlementsToConvert) {
 				s.upgradeToCity();
 			}
