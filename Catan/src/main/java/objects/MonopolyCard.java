@@ -9,6 +9,10 @@ public class MonopolyCard extends DevelopmentCard {
 
 	@Override
 	public void playCard(TileType... resources) {
+		if (resources.length < 1) {
+			throw new UnsupportedOperationException("Monopoly card needs a resource type");
+		}
+		
 		int totalPlayers = playerController.getTotalNumOfPlayers();
 		int currentPlayerNum = playerController.getCurrentPlayerNum();
 		Player currentPlayer = playerController.getCurrentPlayer();

@@ -9,6 +9,10 @@ public class YearOfPlentyCard extends DevelopmentCard {
 
 	@Override
 	public void playCard(TileType... resources) {
+		if (resources.length < 2) {
+			throw new UnsupportedOperationException("Year of Plenty card needs two resource types");
+		}
+		
 		Player currentPlayer = this.playerController.getCurrentPlayer();
 		
 		currentPlayer.addResource(resources[0], 1);
