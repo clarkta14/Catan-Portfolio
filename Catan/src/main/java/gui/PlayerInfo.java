@@ -43,8 +43,6 @@ public class PlayerInfo extends JPanel {
 			playerPanel.add(resourcesLabel);
 			displayPlayerResources(playerPanel, player);
 			
-			// TODO: when implemented, create label for victory points
-			
 			JLabel devCardsLabel = new JLabel(Messages.getString("PlayerInfo.2")); //$NON-NLS-1$
 			devCardsLabel.setFont(new Font("Ariel", Font.BOLD, 14));
 			devCardsLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -54,14 +52,13 @@ public class PlayerInfo extends JPanel {
 			
 			playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
 			add(playerPanel);
-			
 		}
 	}
 
 	private void displayPlayerResources(JPanel playerPanel, Player player) {
 		for(TileType type : TileType.values()) {
 			if(type != TileType.desert) {
-				JLabel resourceLabel = new JLabel(type.name() + Messages.getString("PlayerInfo.3") + player.getResourceCount(type)); //$NON-NLS-1$
+				JLabel resourceLabel = new JLabel(type.getTileTypeText() + Messages.getString("PlayerInfo.3") + player.getResourceCount(type)); //$NON-NLS-1$
 				playerPanel.add(resourceLabel);
 			}
 		}
