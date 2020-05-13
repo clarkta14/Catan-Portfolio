@@ -84,14 +84,14 @@ Below can be found the list of game rules that the game will need to support to 
 *   Victory Points Calculation (interval, int [0, MAX_VALUE])
     *   Player builds a settlement: Player.VP + 1 [9a90bc1 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9a90bc1)
     *   Player builds a city: Player.VP + 1 [acd9342 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/acd9342)
-    *   Player plays a VP devo card: Player.VP + 1
-    *   Player receives Longest Road card: Player.VP + 2
-    *   Player loses Longest Road card: Player.VP - 2
+    *   Player gets a VP devo card: Player.VP + 1 Done
+    *   Player receives Longest Road card: Player.VP + 2 
+    *   Player loses Longest Road card: Player.VP - 2 
     *   Player receives Largest Army card: Player.VP + 2
     *   Player loses Largest Army card: Player.VP - 2
 *   Victory Condition Calculation (boolean)
-    *   No player has 10 or more VP: False
-    *   Any player has 10 or more VP: True
+    *   No player has 10 or more VP: False Done
+    *   Any player has 10 or more VP: True Done
 *   Settlements (build)
     *   Distances from other settlements/cities (boolean)
         *   Is &lt;0 away from another settlement/city: IllegalArgumentExcpetion
@@ -101,7 +101,7 @@ Below can be found the list of game rules that the game will need to support to 
         *   Is 11 away from another settlement/city: True [9ac2872 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9ac2872)
         *   Is >11 away from another settlement/city: IllegalArgumentExcpetion
     *   Connections to roads (boolean)
-        *   Is connected to a road that is owned by the current player: True
+        *   Is connected to a road that is owned by the current player: True 
         *   Is not connected to a road: False
     *   Has necessary resources to build settlement (boolean)
         *   Current player has at least 1 brick, 1 lumber, 1 grain, and 1 wool: True [18ccceb : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/18ccceb)
@@ -121,13 +121,11 @@ Below can be found the list of game rules that the game will need to support to 
     *   Space connected to a road, settlement, or city owned by current player (boolean)
         *   Space connected to existing road, settlement, or city: True [4f44ed5 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/4f44ed5)
         *   Space not connected to existing road, settlement, or city: False [88184a8 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/88184a8)
-        *   Space is occupied: False
-        *   No space is selected: False
+        *   Space is occupied: False Done
+        *   No space is selected: False Done
 *   Turns
     *   Player’s turn: (interval, int [0, numPlayers - 1])
         *   Current player ends turn: (currentTurn + 1) % numPlayers [1855e2d : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/1855e2d)
-        *   Player’s turn set to -1: IllegalArgumentException
-        *   Player’s turn set to numPlayers: IllegalArgumentException
 *   Longest Road
     *   Has maximum number of roads on board (boolean)
         *   Current player has less than 15 roads on board: False
@@ -152,75 +150,67 @@ Below can be found the list of game rules that the game will need to support to 
         *   Player has played 3 Knight cards or more: True
 *   Development Card
     *   User has exact resources to buy card (1 ore, 1 wool, 1 grain): True [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
-    *   User has more resources to buy card: True
+    *   User has more resources to buy card: True Done
     *   User has insufficient resources to buy card (in 1 or more categories): False [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
-    *   User plays more than 1 development card per turn: False
-    *   User plays card they purchased in same turn: False
+    *   **User plays more than 1 development card per turn: False**
+    *   **User plays card they purchased in same turn: False**
     *   User plays 1 or 0 development cards not purchased in the same turn: True
     *   User plays obtained card:
         *   Knight (14 total) (boolean)
             *   Move the robber to a different hex
-                *   Robber is moved to same hex/not moved: False
-                *   Robber is moved to any other space: True
+                *   Robber is moved to same hex/not moved: False Done
+                *   Robber is moved to any other space: True Done
             *   Steal one random resource from one player that owns a city or settlement that is on that hex.
-                *   User takes resource from player that does not own a city or settlement on the hex: False
-                *   User takes more than one resource: Exception
-                *   User takes resources from more than one player: Exception
-                *   User is able to choose resource that is taken: Exception
+                *   User takes resource from player that does not own a city or settlement on the hex: False Done
+                *   User takes more than one resource: Exception Done
+                *   User takes resources from more than one player: Exception Done
+                *   User is able to choose resource that is taken: Exception Done
         *   Monopoly (2 total) (boolean)
             *   User must choose 1 resource type
-                *   User does not choose resource type: False
-                *   User chooses more than one resource type: Exception
-                *   User chooses 1 resource type and resources are taken from other players: True
-                *   User chooses 1 resource type and resources are not taken from other players: False
+                *   User does not choose resource type: False Done
+                *   User chooses more than one resource type: Exception Done
+                *   User chooses 1 resource type and resources are taken from other players: True Done
+                *   User chooses 1 resource type and resources are not taken from other players: False Done
         *   Road Building (2 total) (boolean)
-            *   User places two roads (see road section): True
-            *   User places one road: False
-            *   User places no roads: False
+            *   User places two roads (see road section): True Done
+            *   User places one road: True Done
+            *   User places no roads: True Done
         *   Year of Plenty (2 total) (boolean)
             *   User obtains two resources from the bank only: True #caa918d, #aa192fa
             *   User obtains more than two resources: False #35bf30a
             *   User obtains one or zero resources: False #35bf30a
         *   Victory Point Card (5 total) (integer)
-            *   User victory point count increases by 1: Pass
-            *   User victory point count increases by 0 or more than 1: Pass
-            *   User victory point decreases: Pass
-            *   See Victory point calculation
+            *   User victory point count increases by 1: Pass Done
+            *   User victory point count increases by 0 or more than 1: False Done
+            *   User victory point decreases: False Done
     *   Card is discarded after use, meaning it cannot be used again for the entire game.
-        *   Card Remains in play: Exception
+        *   Card Remains in play: Exception Done
 *   Results of Rolling
     *   On a roll that is not seven
         *   Resource payout:
-            *   Settlements around hex tiles with the rolled number (Array)
-            *   Players who own settlements around the hex tiles with the rolled number (Array)
-            *   Players with settlements around hex tiles with rolled number are payed resource card (check count) (Integer)
-                *   Player has no resources of type and is payed with a single resource of the type
-                *   Player has 
-        *   
+            *   Players with settlements around hex tiles with rolled number are payed resource card (check count) (Integer) Done
     *   On a roll that is seven
         *   Card Discard:
             *   For each player:
-                *   If player has more than 7 resource cards
+                *   **If player has more than 7 resource cards**
                     *   Discard half rounded down (Integer)
                         *   Number of cards in hand is 7
                         *   Number of cards in hand is 8
                         *   Number of cards in hand is 6
         *   Move the robber
             *   Player that rolled 7 gets to move the robber (Boolean and position object):
-                *   Robber is placed on the tile it was on already
-                *   Robber is moved to tile that it was not on
+                *   Robber is placed on the tile it was on already Done
+                *   Robber is moved to tile that it was not on Done
             *   Robber is placed on new tile
-                *   Settlements on tile (Array)
-                *   Players who own that settlement (Array)
                 *   Player who moved robber gets to steal a single resource card from players who have settlements on the tile
-                    *   Player who rolled seven tries to steal resource card from player who does not have any resource cards
-                    *   Player who rolled seven tries to steal resource card from player who has one single resource cards
-                    *   Player who rolled seven tries to steal resource card from player who has 2 resource cards
+                    *   Player who rolled seven tries to steal resource card from player who does not have any resource cards Done
+                    *   Player who rolled seven tries to steal resource card from player who has one single resource cards Done
+                    *   Player who rolled seven tries to steal resource card from player who has 2 resource cards Done
 *   Trade
     *   No player can attempt to make trades unless it is their turn
         *   Can a player make a trade (Boolean): 
-            *   If it is their turn: True
-            *   If it isn't their turn: False
+            *   If it is their turn: True Done
+            *   If it isn't their turn: False Done
     *   4 resource cards of any type must be traded to the bank for a single resource card of the players choice. 
         *   Player attempts to make a trade (Boolean)
             *   Player did not pay 4 resource cards:
@@ -229,15 +219,15 @@ Below can be found the list of game rules that the game will need to support to 
             *   Player traded 4 resource cards for a single card of the same resource type (False) [99df99d : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/99df99d)
     *   Trade amongst players:
         *   On a players turn he/she provides an offer to another player in the game:
-            *   Trade offer has a resource card offered up for trade and a resource card traded for
-            *   Trade offer has no resource cards offered and a resource card traded for
-            *   Trade offer has the same resource card offered as the one being traded for
-            *   Trade offer has a resource card offered but no resource cards traded for
-            *   Trade offer has multiple resource cards offered for multiple resource cards
+            *   Trade offer has a resource card offered up for trade and a resource card traded for Done
+            *   Trade offer has no resource cards offered and a resource card traded for Done
+            *   Trade offer has the same resource card offered as the one being traded for Done
+            *   Trade offer has a resource card offered but no resource cards traded for Done
+            *   Trade offer has multiple resource cards offered for multiple resource cards Done
     *   Maritime Trade:
         *   Prereq for trade:
-            *   Does the player have a settlement on the border of that harbor (Boolean)
+            *   Does the player have a settlement on the border of that harbor (Boolean) Done
         *   Trade:
-            *   Based on harbor details required number of resources for trade are payed (True)
-            *   Based on harbor details required number of resources for trade are not payed (False)
-            *   More resources are payed than what is required for trade (False)
+            *   Based on harbor details required number of resources for trade are payed (True) Done
+            *   Based on harbor details required number of resources for trade are not payed (False) Done
+            *   More resources are payed than what is required for trade (False) Done

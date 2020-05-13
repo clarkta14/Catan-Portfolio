@@ -13,6 +13,10 @@ public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
     private Stack<DevelopmentCard> developmentCards;
+    public ArrayList<PortType> portTypes;
+    public HashMap<TileType, PortType> resourceToPorts;
+    private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
+	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     private int robber;
     
     @SuppressWarnings("serial")
@@ -32,11 +36,32 @@ public class CatanBoard {
 				push(new VictoryPointDevelopmentCard());
 			}
         }};
+        createAndShufflePortTypes();
         Collections.shuffle(this.developmentCards);
         shuffleTiles();
     }
     
-    private void shuffleTiles() {
+    private void createAndShufflePortTypes() {
+    	this.portTypes = new ArrayList<PortType>();
+    	this.resourceToPorts = new HashMap<TileType, PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypes.add(PortType.three);
+    	}
+    	portTypes.add(PortType.brick);
+    	portTypes.add(PortType.wool);
+    	portTypes.add(PortType.wood);
+    	portTypes.add(PortType.ore);
+    	portTypes.add(PortType.wheat);
+    	
+    	resourceToPorts.put(TileType.brick, PortType.brick);
+    	resourceToPorts.put(TileType.wool, PortType.wool);
+    	resourceToPorts.put(TileType.wood, PortType.wood);
+    	resourceToPorts.put(TileType.ore, PortType.ore);
+    	resourceToPorts.put(TileType.wheat, PortType.wheat);
+    	Collections.shuffle(portTypes);		
+	}
+
+	private void shuffleTiles() {
         // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
@@ -155,12 +180,25 @@ public class CatanBoard {
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+			checkForAndAddPort(selectedTiles.get(i), corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
 			distributeSetupResources(selectedTiles, currentPlayer);
 		}
 		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
+	}
+
+	private void checkForAndAddPort(int tileNum, int cornerNum, Settlement settlement) {
+		for (int i = 0; i < portTiles.length; i++) {
+			for (int j = 0; j < portCorners[i].length; j++) {
+				if (portTiles[i] == tileNum && portCorners[i][j] == cornerNum) {
+					settlement.portType = portTypes.get(i);
+					this.turnController.getCurrentPlayer().addTrade(portTypes.get(i));
+				}
+			}
+		}
+		
 	}
 
 	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
@@ -281,7 +319,9 @@ public class CatanBoard {
 	
 	public boolean tradeWithBank(HashMap<TileType, Integer> payment, TileType forThisType) {
 		if(!payment.keySet().contains(forThisType) && this.turnController.getCurrentPlayer().canAffordTrade(payment)) {
-			if(payment.values().stream().mapToInt(a -> a).sum() != 4) {
+			Player currentPlayer = this.turnController.getCurrentPlayer();
+			boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three) && payment.values().stream().mapToInt(a -> a).sum() == 3;
+			if(payment.values().stream().mapToInt(a -> a).sum() != 4 && !canThreeTrade) {
 				return false;
 			}
 			for(TileType tt : payment.keySet()) {
@@ -347,6 +387,16 @@ public class CatanBoard {
 		}
 	}
 
+	public boolean portTrade(TileType payment, TileType wants) {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if (!currentPlayer.canPortTrade(this.resourceToPorts.get(payment)) || currentPlayer.getResourceCount(payment) < 2) {
+			return false;
+		}
+		currentPlayer.removeResource(payment, 2);
+		currentPlayer.addResource(wants, 1);
+		return true;
+	}
+	
 	public void moveRobber(Tile clicked) {
 		this.tiles.get(robber).setRobber(false);
 		this.robber = this.tiles.indexOf(clicked);

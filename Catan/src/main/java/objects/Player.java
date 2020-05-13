@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -9,9 +10,11 @@ public class Player {
 	private Color color;
 	private HashMap<TileType, Integer> resources;
 	protected HashMap<DevelopmentCardType, Stack<DevelopmentCard>> developmentCards;
+	private ArrayList<PortType> validTrades = new ArrayList<PortType>();
 	private int victoryPoints = 0;
 	public int numSettlements = 2;
 	public int numCities = 0;
+	public int knightsPlayed = 0;
 		
 	@SuppressWarnings("serial")
 	public Player(Color color) {
@@ -135,18 +138,7 @@ public class Player {
 	}
 	
 	public void alterVictoryPoints(VictoryPoints reason) {
-		switch (reason) {
-			case settlement:
-				this.victoryPoints++;
-				break;
-			case city:
-				this.victoryPoints++;
-				break;
-			case devolopment_card:
-				this.victoryPoints++;
-		default:
-			break;
-		}
+		this.victoryPoints += reason.getNumVal();
 	}
 	
 	public boolean isVictor() {
@@ -158,6 +150,17 @@ public class Player {
 			return false;
 		}
 		return resources.get(TileType.wheat) >= 2 && resources.get(TileType.ore) >= 3;
+	}
+
+	public void addTrade(PortType tradeType) {
+		if (!this.validTrades.contains(tradeType)) {
+			this.validTrades.add(tradeType);
+		}
+		
+	}
+
+	public boolean canPortTrade(PortType tradeType) {
+		return this.validTrades.contains(tradeType);
 	}
 	
 	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {

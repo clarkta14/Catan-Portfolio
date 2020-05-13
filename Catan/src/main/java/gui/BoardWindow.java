@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import objects.CatanBoard;
+import objects.PortType;
 import objects.Road;
 import objects.Settlement;
 import objects.Tile;
@@ -292,15 +293,27 @@ public class BoardWindow extends JPanel {
 
 	public ArrayList<String> getPortnames() {
 		ArrayList<String> ports = new ArrayList<>();
-		ports.add(Messages.getString("BoardWindow.0")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.1")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.3")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.4")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.5")); //$NON-NLS-1$
-		ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+		int index = 3;
+		for (int i = 0; i < catanBoard.portTypes.size(); i ++) {
+			index++;
+			if (index == catanBoard.portTypes.size()) {
+				index -= catanBoard.portTypes.size();
+			}
+			PortType type = catanBoard.portTypes.get(index);
+			if (type == PortType.brick) {
+				ports.add(Messages.getString("BoardWindow.4")); //$NON-NLS-1$
+			} else if (type == PortType.wheat) {
+				ports.add(Messages.getString("BoardWindow.0")); //$NON-NLS-1$
+			} else if (type == PortType.ore) {
+				ports.add(Messages.getString("BoardWindow.1")); //$NON-NLS-1$
+			} else if (type == PortType.three) {
+				ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+			} else if (type == PortType.wool) {
+				ports.add(Messages.getString("BoardWindow.3")); //$NON-NLS-1$
+			} else {
+				ports.add(Messages.getString("BoardWindow.5")); //$NON-NLS-1$
+			}
+		}
 		return ports;
 	}
 

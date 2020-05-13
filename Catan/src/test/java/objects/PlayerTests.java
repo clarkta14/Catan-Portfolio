@@ -550,6 +550,26 @@ public class PlayerTests {
 	}
 	
 	@Test
+	public void addTradeThreeToOneTest() {
+		Player player = new Player(Color.orange);
+		player.addTrade(PortType.three);
+		assertTrue(player.canPortTrade(PortType.three));
+	}
+	
+	@Test
+	public void addTradeBrickTrade() {
+		Player player = new Player(Color.orange);
+		player.addTrade(PortType.brick);
+		assertTrue(player.canPortTrade(PortType.brick));
+	}
+	
+	@Test
+	public void addTradeBadTrade() {
+		Player player = new Player(Color.orange);
+		player.addTrade(PortType.brick);
+		assertFalse(player.canPortTrade(PortType.wheat));
+	}
+	
 	public void testStealFromPlayerWithNoResources() {
 		Player player = new Player(Color.red);
 		Player opposingPlayer = new Player(Color.blue);
@@ -656,6 +676,29 @@ public class PlayerTests {
 		Player player = new Player(Color.orange);
 		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
 		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesEmptyHash() {
+		Player player = new Player(Color.orange);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();;
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscard7ResourcesEmptyHash() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 7);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();;
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardShouldEmptyHash() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();;
+		assertFalse(player.discardForRobber(resourcesToDiscard));
 	}
 	
 	@Test
