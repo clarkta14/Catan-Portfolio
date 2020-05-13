@@ -66,7 +66,7 @@ public class PlayerInfo extends JPanel {
 
 	private void displayPlayerDevelopmentCards(JPanel playerPanel, Player player) {
 		for(DevelopmentCardType type : DevelopmentCardType.values()) {
-			JLabel devCardLabel = new JLabel(type.name() + Messages.getString("PlayerInfo.3") + player.getDevelopmentCardCount(type)); //$NON-NLS-1$
+			JLabel devCardLabel = new JLabel(type.getDevCardTypeText() + Messages.getString("PlayerInfo.3") + player.getDevelopmentCardCount(type)); //$NON-NLS-1$
 			playerPanel.add(devCardLabel);
 		}
 	}
