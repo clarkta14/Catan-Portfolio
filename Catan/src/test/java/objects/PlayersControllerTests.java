@@ -1,8 +1,6 @@
 package objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -137,5 +135,124 @@ public class PlayersControllerTests {
 	public void testGetTotalNumberOfPlayers() {
 		PlayersController pc = new PlayersController(4);
 		assertEquals(4, pc.getTotalNumOfPlayers());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysLTThreeKnightCards() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+
+		playerOne.knightsPlayed++;
+		pc.determineLargestArmy(playerOne);
+		
+		assertEquals(0, pc.getNumKnightsOfLargestArmy());
+		assertEquals(0, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(0, playerOne.getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysThreeKnightCards() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		for (int i = 0; i < 3; i++) {
+			playerOne.knightsPlayed++;
+			pc.determineLargestArmy(playerOne);
+		}
+
+		assertEquals(3, pc.getNumKnightsOfLargestArmy());
+		assertEquals(1, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerOne.getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysGTThreeKnightCards() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		for (int i = 0; i < 6; i++) {
+			playerOne.knightsPlayed++;
+			pc.determineLargestArmy(playerOne);
+		}
+
+		assertEquals(6, pc.getNumKnightsOfLargestArmy());
+		assertEquals(1, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerOne.getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysKnightCardsLTLargestArmy() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		for (int i = 0; i < 3; i++) {
+			playerOne.knightsPlayed++;
+			pc.determineLargestArmy(playerOne);
+		}
+		
+		pc.nextPlayer();
+		
+		Player playerTwo = pc.getCurrentPlayer();
+
+		playerTwo.knightsPlayed++;
+		pc.determineLargestArmy(playerTwo);
+
+		assertEquals(3, pc.getNumKnightsOfLargestArmy());
+		assertEquals(1, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerOne.getNumberOfVictoryPoints());
+		assertEquals(0, playerTwo.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(0, playerTwo.getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysKnightCardsEqualLargestArmy() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		for (int i = 0; i < 3; i++) {
+			playerOne.knightsPlayed++;
+			pc.determineLargestArmy(playerOne);
+		}
+		
+		pc.nextPlayer();
+		
+		Player playerTwo = pc.getCurrentPlayer();
+
+		for (int i = 0; i < 3; i++) {
+			playerTwo.knightsPlayed++;
+			pc.determineLargestArmy(playerTwo);
+		}
+
+		assertEquals(3, pc.getNumKnightsOfLargestArmy());
+		assertEquals(1, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerOne.getNumberOfVictoryPoints());
+		assertEquals(0, playerTwo.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(0, playerTwo.getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testDetermineLargestArmy_PlayerPlaysKnightCardsGTLargestArmy() {
+		PlayersController pc = new PlayersController(3);
+		Player playerOne = pc.getCurrentPlayer();
+		
+		for (int i = 0; i < 3; i++) {
+			playerOne.knightsPlayed++;
+			pc.determineLargestArmy(playerOne);
+		}
+		
+		pc.nextPlayer();
+		
+		Player playerTwo = pc.getCurrentPlayer();
+
+		for (int i = 0; i < 4; i++) {
+			playerTwo.knightsPlayed++;
+			pc.determineLargestArmy(playerTwo);
+		}
+
+		assertEquals(4, pc.getNumKnightsOfLargestArmy());
+		assertEquals(0, playerOne.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(0, playerOne.getNumberOfVictoryPoints());
+		assertEquals(1, playerTwo.getDevelopmentCardCount(DevelopmentCardType.largest_army_card));
+		assertEquals(2, playerTwo.getNumberOfVictoryPoints());
 	}
 }

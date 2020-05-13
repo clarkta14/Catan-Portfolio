@@ -8,20 +8,20 @@ public class YearOfPlentyCard extends DevelopmentCard {
 	}
 
 	@Override
-	public void playCard() {
-		throw new UnsupportedOperationException("Year of Plenty card needs two resource types");
+	public void playCard(TileType... resources) {
+		if (resources.length < 2) {
+			throw new UnsupportedOperationException("Year of Plenty card needs two resource types");
+		}
+		
+		Player currentPlayer = this.playerController.getCurrentPlayer();
+		
+		currentPlayer.addResource(resources[0], 1);
+		currentPlayer.addResource(resources[1], 1);
 	}
 
 	@Override
 	public DevelopmentCardType getDevelopmentCardType() {
 		return DevelopmentCardType.year_of_plenty_card;
-	}
-
-	public void playCard(TileType resource1, TileType resource2) {
-		Player currentPlayer = this.playerController.getCurrentPlayer();
-		
-		currentPlayer.addResource(resource1, 1);
-		currentPlayer.addResource(resource2, 1);
 	}
 
 }

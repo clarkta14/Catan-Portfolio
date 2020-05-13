@@ -155,6 +155,12 @@ public class PlayerTests {
 			// pass
 		}
 	}
+	
+	@Test
+	public void testRemoveDesertFromResource() {
+		Player player = new Player(Color.orange);
+		player.removeResource(TileType.desert, 1); //this should do nothing; return nothing. The fail throws an error
+	}
 
 	@Test
 	public void testCanBuyRoad_WithEnoughResources() {
@@ -562,8 +568,276 @@ public class PlayerTests {
 		Player player = new Player(Color.orange);
 		player.addTrade(PortType.brick);
 		assertFalse(player.canPortTrade(PortType.wheat));
+	public void testStealFromPlayerWithNoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		try {
+			player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+			fail();
+		} catch (IndexOutOfBoundsException e) {
+			// testPasses
+		}
+	}
+	
+	@Test
+	public void testStealFromPlayerWithOneResource() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 1);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(0, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
+	}
+	
+	@Test
+	public void testStealFromPlayerWithTwoResources() {
+		Player player = new Player(Color.red);
+		Player opposingPlayer = new Player(Color.blue);
+		
+		opposingPlayer.addResource(TileType.brick, 2);
+		
+		player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
+		
+		assertEquals(1, opposingPlayer.getResourceCount(TileType.brick));	
+		assertEquals(1, player.getResourceCount(TileType.brick));		
 	}
 
+	@Test
+	public void testPlayerTotalResourceCount0() {
+		Player player = new Player(Color.orange);
+		assertEquals(0, player.getTotalResourceCount());
+	}
+	
+	@Test
+	public void testPlayerTotalResourceCountOneType() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		assertEquals(2, player.getTotalResourceCount());
+	}
+	
+	@Test
+	public void testPlayerTotalResourceCountMixedTypes() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		assertEquals(8, player.getTotalResourceCount());
+	}
+	
+	@Test
+	public void testHasSufficentResource0onEmpty() {
+		Player player = new Player(Color.orange);
+		assertTrue(player.hasSufficentResource(TileType.brick, 0));
+	}
+	
+	@Test
+	public void testHasSufficentResource1onEmpty() {
+		Player player = new Player(Color.orange);
+		assertFalse(player.hasSufficentResource(TileType.wheat, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource1on1() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.ore, 1);
+		assertTrue(player.hasSufficentResource(TileType.ore, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource1on2() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wood, 2);
+		assertTrue(player.hasSufficentResource(TileType.wood, 1));
+	}
+	
+	@Test
+	public void testHasSufficentResource2on1() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wool, 1);
+		assertFalse(player.hasSufficentResource(TileType.wool, 2));
+	}
+	
+	@Test
+	public void testHasSufficentResourceDesert() {
+		Player player = new Player(Color.orange);
+		assertTrue(player.hasSufficentResource(TileType.desert, 37));
+	}
+	
+	@Test
+	public void testDiscardNoResources() {
+		Player player = new Player(Color.orange);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesWhen7() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 1);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesWhenShouldSingleType() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesWhenShouldMixedTypes() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardNoResourcesWhenShouldMixedTypesMoreThan8() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.brick, 2);
+		player.addResource(TileType.wool, 2);
+		player.addResource(TileType.wood, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+	
+	@Test
+	public void testDiscardResourcesCorrectlyOneTypeEven() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.wheat, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,0,4,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+		assertEquals(4, player.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testDiscardOneResourceCorrectlyMixedTypesEven() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		player.addResource(TileType.ore, 1);
+		player.addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(5,0,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+		assertEquals(3, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testDiscardMixedResourceCorrectlyMixedTypesOdd() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(4,1,0,0,0);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+		assertEquals(4, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testDiscardMixedResourceMoreThanNeeded() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(4,1,1,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+		assertEquals(8, player.getResourceCount(TileType.brick));
+		assertEquals(2, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testDiscardMixedResourceLessThanNeeded() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.wheat, 1);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(2,1,1,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+		assertEquals(8, player.getResourceCount(TileType.brick));
+		assertEquals(2, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+	}
+	
+	@Test
+	public void testDiscardOneResourceMoreThanHas() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(0,4,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+		assertEquals(8, player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testDiscardMixedResourcesMoreThanHas() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(1,3,0,0,0);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+		assertEquals(8, player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.ore));
+	}
+	
+	@Test
+	public void testDiscardCorrectlyWithDesert() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 2);
+		player.addResource(TileType.ore, 2);
+		player.addResource(TileType.wheat, 2);
+		player.addResource(TileType.wood, 2);
+		player.addResource(TileType.wool, 2);
+		HashMap<TileType, Integer> resourcesToDiscard = resourcesToDiscard(1,1,1,1,1);
+		resourcesToDiscard.put(TileType.desert, 1);
+		assertTrue(player.discardForRobber(resourcesToDiscard));
+		assertEquals(1, player.getResourceCount(TileType.brick));
+		assertEquals(1, player.getResourceCount(TileType.ore));
+		assertEquals(1, player.getResourceCount(TileType.wheat));
+		assertEquals(1, player.getResourceCount(TileType.wood));
+		assertEquals(1, player.getResourceCount(TileType.wool));
+	}
+	
+	@Test
+	public void testDiscardDesertOnly() {
+		Player player = new Player(Color.orange);
+		player.addResource(TileType.brick, 8);
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
+		resourcesToDiscard.put(TileType.desert, 4);
+		assertFalse(player.discardForRobber(resourcesToDiscard));
+	}
+
+	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
+		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
+		resourcesToDiscard.put(TileType.brick, brick);
+		resourcesToDiscard.put(TileType.ore, ore);
+		resourcesToDiscard.put(TileType.wheat, wheat);
+		resourcesToDiscard.put(TileType.wood, wood);
+		resourcesToDiscard.put(TileType.wool, wool);
+		return resourcesToDiscard;
+	}
+	
 	private int addAndGetResourceForPlayer(Player player, TileType type, int numberOfResource) {
 		player.addResource(type, numberOfResource);
 		return player.getResourceCount(type);
