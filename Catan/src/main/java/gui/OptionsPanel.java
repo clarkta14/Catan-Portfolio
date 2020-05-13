@@ -646,8 +646,8 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithBankPaymentPanel = new ArrayList<>();
 		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.21")); //$NON-NLS-1$
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
-		Player currentPlayer = playerController.getCurrentPlayer();
-		boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
+		//Player currentPlayer = playerController.getCurrentPlayer();
+		//boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wool), new Rectangle(4,6,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wheat), new Rectangle(4,8,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wood), new Rectangle(4,10,6,2)));

@@ -43,6 +43,7 @@ public class DevelopmentCardTests {
 	
 	@Test
 	public void testCreateRoadBuildingCard() {
+		@SuppressWarnings("unused")
 		PlayersController pc = new PlayersController(3);
 		DevelopmentCard roadBuildingCard = new RoadBuildingCard();
 		assertEquals(DevelopmentCardType.road_building_card, roadBuildingCard.getDevelopmentCardType());

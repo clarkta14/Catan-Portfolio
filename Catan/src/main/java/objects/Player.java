@@ -161,6 +161,7 @@ public class Player {
 
 	public boolean canPortTrade(PortType tradeType) {
 		return this.validTrades.contains(tradeType);
+	}
 	
 	public void stealResourceFromOpposingPlayer(TileType resource, Player opposingPlayer) {
 		if (opposingPlayer.getResourceCount(resource) == 0) {

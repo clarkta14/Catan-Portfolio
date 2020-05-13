@@ -395,6 +395,8 @@ public class CatanBoard {
 		currentPlayer.removeResource(payment, 2);
 		currentPlayer.addResource(wants, 1);
 		return true;
+	}
+	
 	public void moveRobber(Tile clicked) {
 		this.tiles.get(robber).setRobber(false);
 		this.robber = this.tiles.indexOf(clicked);

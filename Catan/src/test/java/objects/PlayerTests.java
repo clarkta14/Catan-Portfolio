@@ -568,6 +568,8 @@ public class PlayerTests {
 		Player player = new Player(Color.orange);
 		player.addTrade(PortType.brick);
 		assertFalse(player.canPortTrade(PortType.wheat));
+	}
+	
 	public void testStealFromPlayerWithNoResources() {
 		Player player = new Player(Color.red);
 		Player opposingPlayer = new Player(Color.blue);
