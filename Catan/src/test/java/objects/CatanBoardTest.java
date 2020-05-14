@@ -747,6 +747,32 @@ public class CatanBoardTest {
 	}
 	
 	@Test
+	public void testBuyDevelopmentCard_WithEnoughResourcesSameTurn() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		pc.getCurrentPlayer().addResource(TileType.ore, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		
+		assertTrue(cb.buyDevelopmentCard());
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
+		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
+		int totalDevCards = 0;
+		for(Stack<DevelopmentCard> devCardStack : pc.getCurrentPlayer().developmentCards.values()) {
+			totalDevCards += devCardStack.size();
+		}
+		assertTrue(totalDevCards == 0);
+		
+		cb.endTurnAndRoll();
+		totalDevCards = 0;
+		for(Stack<DevelopmentCard> devCardStack : pc.getCurrentPlayer().developmentCards.values()) {
+			totalDevCards += devCardStack.size();
+		}
+		assertTrue(totalDevCards == 1);
+	}
+	
+	@Test
 	public void testTradeWithBank_4DifferentResourcesAsPayment() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
