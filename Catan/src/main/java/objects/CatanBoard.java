@@ -12,7 +12,7 @@ import gui.GameStates;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
-    private Stack<DevelopmentCard> developmentCards;
+    protected Stack<DevelopmentCard> developmentCards;
     public ArrayList<PortType> portTypes;
     public HashMap<TileType, PortType> resourceToPorts;
     private LongestRoad longestRoadHelper;
@@ -20,12 +20,14 @@ public class CatanBoard {
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     private int robber;
 	private int curLongestRoadLength = -1;
+	private ArrayList<DevelopmentCard> developmentCardsBoughtThisTurn;
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
     	this.turnController = turnController;
     	this.longestRoadHelper = new LongestRoad(turnController.getTotalNumOfPlayers());
         this.tiles = new ArrayList<Tile>();
+        this.developmentCardsBoughtThisTurn = new ArrayList<DevelopmentCard>();
         this.developmentCards = new Stack<DevelopmentCard>() {{
         	for(int i = 0; i < 14; i++) {
         		push(new KnightDevelopmentCard());
@@ -267,12 +269,22 @@ public class CatanBoard {
 	}
 	
 	public int endTurnAndRoll() {
+		this.distributeDevelopmentCards();
 		Random random = new Random();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
 		if(rolled != 7) {
 			distributeResources(rolled);
 		}
+		distributeDevelopmentCards();
 		return rolled;
+	}
+
+	private void distributeDevelopmentCards() {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		for (DevelopmentCard card : this.developmentCardsBoughtThisTurn) {
+			currentPlayer.addDevelopmentCard(card);
+		}
+		this.developmentCardsBoughtThisTurn.clear();
 	}
 
 	public void distributeResources(int number) {
@@ -319,7 +331,12 @@ public class CatanBoard {
 			currentPlayer.removeResource(TileType.ore, 1);
 			currentPlayer.removeResource(TileType.wool, 1);
 			currentPlayer.removeResource(TileType.wheat, 1);
-			currentPlayer.addDevelopmentCard(developmentCards.pop());
+			DevelopmentCard boughtCard = developmentCards.pop();
+			if (boughtCard.getDevelopmentCardType() == DevelopmentCardType.victory_point) {
+				currentPlayer.addDevelopmentCard(boughtCard);
+			} else {
+				this.developmentCardsBoughtThisTurn.add(boughtCard);
+			}
 			return true;
 		}
 		return false;
