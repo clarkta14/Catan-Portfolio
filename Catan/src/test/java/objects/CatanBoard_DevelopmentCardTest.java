@@ -2,14 +2,12 @@ package objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Stack;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
+public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 
 	@BeforeEach
 	public void developmentCardSetup() {

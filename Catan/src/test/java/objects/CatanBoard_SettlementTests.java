@@ -3,20 +3,16 @@ package objects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import gui.GameStates;
 
-class CatanBoard_SettlementTests extends CatanBoardTest {
+public class CatanBoard_SettlementTests extends CatanBoardTest {
 	
 	@BeforeEach
 	private void basicSetupForAddSettlementTests() {

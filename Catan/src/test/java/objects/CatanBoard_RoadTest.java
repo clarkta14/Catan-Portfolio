@@ -12,12 +12,14 @@ import org.junit.jupiter.api.Test;
 
 import gui.GameStates;
 
-class CatanBoard_RoadTest extends CatanBoardTest {
+public class CatanBoard_RoadTest extends CatanBoardTest {
 	
 	@BeforeEach
 	public void basicSetupRoad() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
+		tileToCorners.clear();
+		tileToRoadOrientation.clear();
 	}
 
 	@Test
@@ -89,6 +91,132 @@ class CatanBoard_RoadTest extends CatanBoardTest {
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertFalse(result);
+	}
+	
+	@Test
+	public void testLongestRoadVictoryPoints_continuous5() {
+		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
+		addResourcesForRoad(pc.getCurrentPlayer(), 5);
+
+		// Place Settlement
+		addPlayerClickNums(4, 0);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
+		
+		// Try to Place Road
+		addPlayerDragNums(4, 0, 5);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 5, 4);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 4, 3);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 3, 2);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 2, 1);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		assertEquals(3, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testLongestRoadVictoryPoints_continuous5_2Players() {
+		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
+		addResourcesForRoad(pc.getCurrentPlayer(), 5);
+
+		// Place Settlement
+		addPlayerClickNums(4, 0);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
+		
+		// Try to Place Road
+		addPlayerDragNums(4, 0, 5);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 5, 4);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 4, 3);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 3, 2);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 2, 1);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		assertEquals(3, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		//Player 2
+		pc.nextPlayer();
+		
+		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
+		addResourcesForRoad(pc.getCurrentPlayer(), 6);
+
+		// Place Settlement
+		addPlayerClickNums(13, 0);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(13, 0, pc.getCurrentPlayerNum());
+		
+		// Try to Place Road
+		addPlayerDragNums(13, 0, 5);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(13, 5, 4);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(13, 4, 3);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(13, 3, 2);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(13, 2, 1);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		addPlayerDragNums(13, 1, 0);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		assertEquals(3, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		assertEquals(1, pc.getPlayer(pc.getCurrentPlayerNum() - 1 ).getNumberOfVictoryPoints());
 	}
 
 }

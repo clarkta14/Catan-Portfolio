@@ -3,13 +3,7 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Stack;
-
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -285,6 +279,11 @@ public class CatanBoardTest {
 			return 2;
 		}
 		return -1;
+	}
+	
+	public void addResourcesForRoad(Player player, int numOfRoads) {
+		player.addResource(TileType.brick, numOfRoads);
+		player.addResource(TileType.wood, numOfRoads);
 	}
 
 }

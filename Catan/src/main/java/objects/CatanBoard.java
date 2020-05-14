@@ -15,17 +15,14 @@ public class CatanBoard {
     protected Stack<DevelopmentCard> developmentCards;
     public ArrayList<PortType> portTypes;
     public HashMap<TileType, PortType> resourceToPorts;
-    private LongestRoad longestRoadHelper;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
     private int robber;
-	private int curLongestRoadLength = -1;
 	private ArrayList<DevelopmentCard> developmentCardsBoughtThisTurn;
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
     	this.turnController = turnController;
-    	this.longestRoadHelper = new LongestRoad(turnController.getTotalNumOfPlayers());
         this.tiles = new ArrayList<Tile>();
         this.developmentCardsBoughtThisTurn = new ArrayList<DevelopmentCard>();
         this.developmentCards = new Stack<DevelopmentCard>() {{
@@ -248,11 +245,7 @@ public class CatanBoard {
 					return false;
 			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
-			this.longestRoadHelper.addRoadForPlayer(this.turnController.getCurrentPlayerNum(), (int) tilesToCorners.keySet().toArray()[0], tilesToCorners.get(tilesToCorners.keySet().toArray()[0]));
-			int curPlayerLongestRoad = this.longestRoadHelper.getLongestRoadForPlayer(this.turnController.getCurrentPlayerNum());
-			if(curPlayerLongestRoad >= 5 && curPlayerLongestRoad > this.curLongestRoadLength) {
-				System.out.println("New Longest Road!!");
-			}
+			this.turnController.addRoadForLongestRoad((int) tilesToCorners.keySet().toArray()[0], tilesToCorners.get(tilesToCorners.keySet().toArray()[0]));
 			return true;
 		} else {
 			return false;

@@ -68,6 +68,8 @@ public class LongestRoad {
 			newPathList.add(newPath);
 			this.roads.put(playerNum, newPathList);
 		}
+		
+		System.out.println("Player " + playerNum + " -> " + this.roads.get(playerNum));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,12 +100,12 @@ public class LongestRoad {
 						newPath.addLast(elementFromSecondPath);
 					}
 				}
-				ArrayList<LinkedList<Integer>> newPathList = this.roads.get(playerNum);
+				ArrayList<LinkedList<Integer>> newPathList = (ArrayList<LinkedList<Integer>>) this.roads.get(playerNum).clone();
 				if(!moreThanOneDuplicates(newPath)) {
 					newPathList.add(newPath);
+					this.roads.put(playerNum, newPathList);
+					break;
 				}
-				this.roads.put(playerNum, newPathList);
-				break;
 			}
 		}
 	}
