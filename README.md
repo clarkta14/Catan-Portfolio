@@ -85,24 +85,22 @@ Below can be found the list of game rules that the game will need to support to 
     *   Player builds a settlement: Player.VP + 1 [9a90bc1 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9a90bc1)
     *   Player builds a city: Player.VP + 1 [acd9342 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/acd9342)
     *   Player gets a VP devo card: Player.VP + 1 Done
-    *   Player receives Longest Road card: Player.VP + 2 
-    *   Player loses Longest Road card: Player.VP - 2 
-    *   Player receives Largest Army card: Player.VP + 2
-    *   Player loses Largest Army card: Player.VP - 2
+    *   Player receives Longest Road card: Player.VP + 2 Done
+    *   Player loses Longest Road card: Player.VP - 2 Done
+    *   Player receives Largest Army card: Player.VP + 2 Done
+    *   Player loses Largest Army card: Player.VP - 2 Done
 *   Victory Condition Calculation (boolean)
     *   No player has 10 or more VP: False Done
     *   Any player has 10 or more VP: True Done
 *   Settlements (build)
     *   Distances from other settlements/cities (boolean)
-        *   Is &lt;0 away from another settlement/city: IllegalArgumentExcpetion
         *   Is 0 away from another settlement/city (occupied): False [3b172d2 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/3b172d2)
         *   Is 1 away from another settlement/city: False [28df728 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/28df728)
         *   Is 2 away from another settlement/city: True [82a0b28 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/82a0b28)
         *   Is 11 away from another settlement/city: True [9ac2872 : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/9ac2872)
-        *   Is >11 away from another settlement/city: IllegalArgumentExcpetion
     *   Connections to roads (boolean)
-        *   Is connected to a road that is owned by the current player: True 
-        *   Is not connected to a road: False
+        *   Is connected to a road that is owned by the current player: True Done
+        *   Is not connected to a road: False Done
     *   Has necessary resources to build settlement (boolean)
         *   Current player has at least 1 brick, 1 lumber, 1 grain, and 1 wool: True [18ccceb : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/18ccceb)
         *   Current player does not have the required resources: False [02dd93a : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/02dd93a)
@@ -142,19 +140,19 @@ Below can be found the list of game rules that the game will need to support to 
         *   Continuous road consists of 5 roads or more: True
 *   Largest Army
     *   Has a larger number of Knight cards played than another player with the "Largest Army" card (boolean):
-        *   Player with the "Largest Army" card does not exist: True
-        *   Current Player's number of Knight cards played is less than or equal to the number of Knight cards played by the player with the "Largest Army" card: False
-        *   Current Player's number of Knight cards played is greater than the number of Knight cards played by the player with the "Largest Army" card: True
+        *   Player with the "Largest Army" card does not exist: True Done
+        *   Current Player's number of Knight cards played is less than or equal to the number of Knight cards played by the player with the "Largest Army" card: False Done
+        *   Current Player's number of Knight cards played is greater than the number of Knight cards played by the player with the "Largest Army" card: True Done
     *   Has necessary number of Knight cards played (boolean):
-        *   Player has played less than 3 Knight cards: False
-        *   Player has played 3 Knight cards or more: True
+        *   Player has played less than 3 Knight cards: False Done
+        *   Player has played 3 Knight cards or more: True Done
 *   Development Card
     *   User has exact resources to buy card (1 ore, 1 wool, 1 grain): True [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
     *   User has more resources to buy card: True Done
     *   User has insufficient resources to buy card (in 1 or more categories): False [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
-    *   **User plays more than 1 development card per turn: False**
-    *   **User plays card they purchased in same turn: False**
-    *   User plays 1 or 0 development cards not purchased in the same turn: True
+    *   **User plays more than 1 development card per turn: False** 
+    *   **User plays card they purchased in same turn: False** Done
+    *   User plays 1 or 0 development cards not purchased in the same turn: True Done
     *   User plays obtained card:
         *   Knight (14 total) (boolean)
             *   Move the robber to a different hex
