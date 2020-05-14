@@ -150,7 +150,7 @@ Below can be found the list of game rules that the game will need to support to 
     *   User has exact resources to buy card (1 ore, 1 wool, 1 grain): True [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
     *   User has more resources to buy card: True Done
     *   User has insufficient resources to buy card (in 1 or more categories): False [e6146bd : CatanBoardTest.java](https://github.com/rhit-csse376/S2-C-Catan/commit/e6146bd)
-    *   **User plays more than 1 development card per turn: False** 
+    *   **User plays more than 1 development card per turn: False** Done
     *   **User plays card they purchased in same turn: False** Done
     *   User plays 1 or 0 development cards not purchased in the same turn: True Done
     *   User plays obtained card:
