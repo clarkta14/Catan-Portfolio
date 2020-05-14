@@ -678,6 +678,7 @@ public class CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
 		
 		assertTrue(cb.buyDevelopmentCard());
+		cb.endTurnAndRoll();
 		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
 		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));

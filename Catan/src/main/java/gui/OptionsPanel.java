@@ -464,10 +464,10 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
+				int rolled = catanBoard.endTurnAndRoll();
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
-				int rolled = catanBoard.endTurnAndRoll();
 				if(rolled == 7) {
 					boardGUI.setState(GameStates.discard_robber);
 					discardForRobber(0);
