@@ -16,9 +16,9 @@ public class LongestRoad {
 		}
 	}
 
-	public void addRoadForPlayer(int playerNum, ArrayList<Integer> tiles, ArrayList<Integer> corners) {
-		int vertex1 = Vertex.getVertex(tiles.get(0), corners.get(0));
-		int vertex2 = Vertex.getVertex(tiles.get(0), corners.get(1));
+	public void addRoadForPlayer(int playerNum, int tile, ArrayList<Integer> corners) {
+		int vertex1 = Vertex.getVertex(tile, corners.get(0));
+		int vertex2 = Vertex.getVertex(tile, corners.get(1));
 		boolean added = false;
 		ArrayList<LinkedList<Integer>> pathList = this.roads.get(playerNum);
 		for (int index = pathList.size() - 1; index > -1; index--) {
@@ -68,8 +68,6 @@ public class LongestRoad {
 			newPathList.add(newPath);
 			this.roads.put(playerNum, newPathList);
 		}
-		
-		System.out.println(this.roads.get(playerNum));
 	}
 
 	@SuppressWarnings("unchecked")
