@@ -38,14 +38,16 @@ public class PlayerInfo extends JPanel {
 			playerNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 			playerPanel.add(playerNameLabel);
 			
-			JLabel resourcesLabel = new JLabel(Messages.getString("PlayerInfo.1")); //$NON-NLS-1$
+			JLabel victoryPointsLabel = new JLabel(Messages.getString("PlayerInfo.1") + player.getNumberOfVictoryPoints()); //$NON-NLS-1$
+			victoryPointsLabel.setFont(new Font("Ariel", Font.BOLD + Font.ITALIC, 14));
+			playerPanel.add(victoryPointsLabel);
+			
+			JLabel resourcesLabel = new JLabel(Messages.getString("PlayerInfo.2")); //$NON-NLS-1$
 			resourcesLabel.setFont(new Font("Ariel", Font.BOLD, 14));
 			playerPanel.add(resourcesLabel);
 			displayPlayerResources(playerPanel, player);
 			
-			// TODO: when implemented, create label for victory points
-			
-			JLabel devCardsLabel = new JLabel(Messages.getString("PlayerInfo.2")); //$NON-NLS-1$
+			JLabel devCardsLabel = new JLabel(Messages.getString("PlayerInfo.3")); //$NON-NLS-1$
 			devCardsLabel.setFont(new Font("Ariel", Font.BOLD, 14));
 			devCardsLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 			playerPanel.add(devCardsLabel);
@@ -54,14 +56,13 @@ public class PlayerInfo extends JPanel {
 			
 			playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 25));
 			add(playerPanel);
-			
 		}
 	}
 
 	private void displayPlayerResources(JPanel playerPanel, Player player) {
 		for(TileType type : TileType.values()) {
 			if(type != TileType.desert) {
-				JLabel resourceLabel = new JLabel(type.name() + Messages.getString("PlayerInfo.3") + player.getResourceCount(type)); //$NON-NLS-1$
+				JLabel resourceLabel = new JLabel(type.getTileTypeText() + Messages.getString("PlayerInfo.4") + player.getResourceCount(type)); //$NON-NLS-1$
 				playerPanel.add(resourceLabel);
 			}
 		}
@@ -69,7 +70,7 @@ public class PlayerInfo extends JPanel {
 
 	private void displayPlayerDevelopmentCards(JPanel playerPanel, Player player) {
 		for(DevelopmentCardType type : DevelopmentCardType.values()) {
-			JLabel devCardLabel = new JLabel(type.name() + Messages.getString("PlayerInfo.3") + player.getDevelopmentCardCount(type)); //$NON-NLS-1$
+			JLabel devCardLabel = new JLabel(type.getDevCardTypeText() + Messages.getString("PlayerInfo.4") + player.getDevelopmentCardCount(type)); //$NON-NLS-1$
 			playerPanel.add(devCardLabel);
 		}
 	}
