@@ -753,6 +753,7 @@ public class CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.ore, 1);
 		pc.getCurrentPlayer().addResource(TileType.wool, 1);
 		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		cb.developmentCards.push(new KnightDevelopmentCard());
 		
 		assertTrue(cb.buyDevelopmentCard());
 		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.ore));
@@ -770,6 +771,20 @@ public class CatanBoardTest {
 			totalDevCards += devCardStack.size();
 		}
 		assertTrue(totalDevCards == 1);
+	}
+	
+	@Test
+	public void testBuyDevelopmentCard_VictoryPointCard() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		pc.getCurrentPlayer().addResource(TileType.ore, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		cb.developmentCards.push(new VictoryPointDevelopmentCard());
+		
+		assertTrue(cb.buyDevelopmentCard());
+		assertTrue(pc.getCurrentPlayer().getNumberOfVictoryPoints() == 1);
 	}
 	
 	@Test

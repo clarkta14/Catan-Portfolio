@@ -12,7 +12,7 @@ import gui.GameStates;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
-    private Stack<DevelopmentCard> developmentCards;
+    protected Stack<DevelopmentCard> developmentCards;
     public ArrayList<PortType> portTypes;
     public HashMap<TileType, PortType> resourceToPorts;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
@@ -323,7 +323,12 @@ public class CatanBoard {
 			currentPlayer.removeResource(TileType.ore, 1);
 			currentPlayer.removeResource(TileType.wool, 1);
 			currentPlayer.removeResource(TileType.wheat, 1);
-			this.developmentCardsBoughtThisTurn.add(developmentCards.pop());
+			DevelopmentCard boughtCard = developmentCards.pop();
+			if (boughtCard.getDevelopmentCardType() == DevelopmentCardType.victory_point) {
+				currentPlayer.addDevelopmentCard(boughtCard);
+			} else {
+				this.developmentCardsBoughtThisTurn.add(boughtCard);
+			}
 			return true;
 		}
 		return false;
