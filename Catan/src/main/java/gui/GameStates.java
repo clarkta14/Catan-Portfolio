@@ -11,5 +11,8 @@ public enum GameStates {
 	drop_city,
 	idle, 
 	play_card, 
-	drop_road_card
+	drop_road_card, 
+	discard_robber,
+	move_robber, 
+	steal
 }

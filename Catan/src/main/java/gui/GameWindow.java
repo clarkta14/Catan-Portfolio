@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import lib.GraphPaperLayout;
 import objects.CatanBoard;
@@ -36,7 +37,7 @@ public class GameWindow {
         
         content.add(options,new Rectangle(0,0,1,5));
         content.add(boardWindow,new Rectangle(1,0,4,4));
-        content.add(playerInfo,new Rectangle(1,4,4,2));
+        content.add(new JScrollPane(playerInfo),new Rectangle(1,4,4,2));
         
         frame.setResizable(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 

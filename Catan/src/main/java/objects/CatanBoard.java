@@ -12,12 +12,19 @@ import gui.GameStates;
 public class CatanBoard {
     private ArrayList<Tile> tiles;
     private PlayersController turnController;
-    private Stack<DevelopmentCard> developmentCards;
+    protected Stack<DevelopmentCard> developmentCards;
+    public ArrayList<PortType> portTypes;
+    public HashMap<TileType, PortType> resourceToPorts;
+    private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
+	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
+    private int robber;
+	private ArrayList<DevelopmentCard> developmentCardsBoughtThisTurn;
     
     @SuppressWarnings("serial")
 	public CatanBoard(PlayersController turnController){
     	this.turnController = turnController;
         this.tiles = new ArrayList<Tile>();
+        this.developmentCardsBoughtThisTurn = new ArrayList<DevelopmentCard>();
         this.developmentCards = new Stack<DevelopmentCard>() {{
         	for(int i = 0; i < 14; i++) {
         		push(new KnightDevelopmentCard());
@@ -31,11 +38,32 @@ public class CatanBoard {
 				push(new VictoryPointDevelopmentCard());
 			}
         }};
+        createAndShufflePortTypes();
         Collections.shuffle(this.developmentCards);
         shuffleTiles();
     }
     
-    private void shuffleTiles() {
+    private void createAndShufflePortTypes() {
+    	this.portTypes = new ArrayList<PortType>();
+    	this.resourceToPorts = new HashMap<TileType, PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypes.add(PortType.three);
+    	}
+    	portTypes.add(PortType.brick);
+    	portTypes.add(PortType.wool);
+    	portTypes.add(PortType.wood);
+    	portTypes.add(PortType.ore);
+    	portTypes.add(PortType.wheat);
+    	
+    	resourceToPorts.put(TileType.brick, PortType.brick);
+    	resourceToPorts.put(TileType.wool, PortType.wool);
+    	resourceToPorts.put(TileType.wood, PortType.wood);
+    	resourceToPorts.put(TileType.ore, PortType.ore);
+    	resourceToPorts.put(TileType.wheat, PortType.wheat);
+    	Collections.shuffle(portTypes);		
+	}
+
+	private void shuffleTiles() {
         // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
@@ -119,6 +147,7 @@ public class CatanBoard {
     	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
     	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
     	Collections.swap(this.tiles, tileIndexToSwapWith, 18);
+    	this.robber = tileIndexToSwapWith;
     }
     
 	public ArrayList<Tile> getTiles() {
@@ -127,7 +156,6 @@ public class CatanBoard {
 	
 	public void settlementLocationClick(ArrayList<Integer> tiles, ArrayList<Integer> corners, GameStates gameState) {
 		addSettlementToTiles(tiles, corners, gameState);	
-
 	}
 	
 	public boolean roadLocationClick(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
@@ -154,12 +182,25 @@ public class CatanBoard {
 		
 		for(int i = 0; i < selectedTiles.size(); i++) {
 			this.tiles.get(selectedTiles.get(i)).addSettlement(corners.get(i), newlyAddedSettlement);
+			checkForAndAddPort(selectedTiles.get(i), corners.get(i), newlyAddedSettlement);
 		}
 		if (gameState == GameStates.drop_settlement_setup_final) {
 			distributeSetupResources(selectedTiles, currentPlayer);
 		}
 		currentPlayer.alterVictoryPoints(VictoryPoints.settlement);
 		return true;
+	}
+
+	private void checkForAndAddPort(int tileNum, int cornerNum, Settlement settlement) {
+		for (int i = 0; i < portTiles.length; i++) {
+			for (int j = 0; j < portCorners[i].length; j++) {
+				if (portTiles[i] == tileNum && portCorners[i][j] == cornerNum) {
+					settlement.portType = portTypes.get(i);
+					this.turnController.getCurrentPlayer().addTrade(portTypes.get(i));
+				}
+			}
+		}
+		
 	}
 
 	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
@@ -204,6 +245,7 @@ public class CatanBoard {
 					return false;
 			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
+			this.turnController.addRoadForLongestRoad((int) tilesToCorners.keySet().toArray()[0], tilesToCorners.get(tilesToCorners.keySet().toArray()[0]));
 			return true;
 		} else {
 			return false;
@@ -220,15 +262,27 @@ public class CatanBoard {
 	}
 	
 	public int endTurnAndRoll() {
+		this.distributeDevelopmentCards();
 		Random random = new Random();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
-		distributeResources(rolled);
+		if(rolled != 7) {
+			distributeResources(rolled);
+		}
+		distributeDevelopmentCards();
 		return rolled;
+	}
+
+	private void distributeDevelopmentCards() {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		for (DevelopmentCard card : this.developmentCardsBoughtThisTurn) {
+			currentPlayer.addDevelopmentCard(card);
+		}
+		this.developmentCardsBoughtThisTurn.clear();
 	}
 
 	public void distributeResources(int number) {
 		for (Tile t : this.tiles) {
-			if(t.getNumber() == number) {
+			if(t.getNumber() == number && !t.isRobber()) {
 				HashMap<Integer, Settlement> settlementsOnTile = t.getSettlements();
 				for(Settlement settlement : settlementsOnTile.values()) {
 					if (settlement.isCity()) {
@@ -270,7 +324,12 @@ public class CatanBoard {
 			currentPlayer.removeResource(TileType.ore, 1);
 			currentPlayer.removeResource(TileType.wool, 1);
 			currentPlayer.removeResource(TileType.wheat, 1);
-			currentPlayer.addDevelopmentCard(developmentCards.pop());
+			DevelopmentCard boughtCard = developmentCards.pop();
+			if (boughtCard.getDevelopmentCardType() == DevelopmentCardType.victory_point) {
+				currentPlayer.addDevelopmentCard(boughtCard);
+			} else {
+				this.developmentCardsBoughtThisTurn.add(boughtCard);
+			}
 			return true;
 		}
 		return false;
@@ -278,7 +337,9 @@ public class CatanBoard {
 	
 	public boolean tradeWithBank(HashMap<TileType, Integer> payment, TileType forThisType) {
 		if(!payment.keySet().contains(forThisType) && this.turnController.getCurrentPlayer().canAffordTrade(payment)) {
-			if(payment.values().stream().mapToInt(a -> a).sum() != 4) {
+			Player currentPlayer = this.turnController.getCurrentPlayer();
+			boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three) && payment.values().stream().mapToInt(a -> a).sum() == 3;
+			if(payment.values().stream().mapToInt(a -> a).sum() != 4 && !canThreeTrade) {
 				return false;
 			}
 			for(TileType tt : payment.keySet()) {
@@ -341,6 +402,47 @@ public class CatanBoard {
 			return false;
 		}catch(IndexOutOfBoundsException oobe) {
 			return false;
+		}
+	}
+
+	public boolean portTrade(TileType payment, TileType wants) {
+		Player currentPlayer = this.turnController.getCurrentPlayer();
+		if (!currentPlayer.canPortTrade(this.resourceToPorts.get(payment)) || currentPlayer.getResourceCount(payment) < 2) {
+			return false;
+		}
+		currentPlayer.removeResource(payment, 2);
+		currentPlayer.addResource(wants, 1);
+		return true;
+	}
+	
+	public void moveRobber(Tile clicked) {
+		this.tiles.get(robber).setRobber(false);
+		this.robber = this.tiles.indexOf(clicked);
+		this.tiles.get(this.tiles.indexOf(clicked)).setRobber(true);
+	}
+	
+	public ArrayList<Player> getPlayersWithSettlementOnTile(Tile t){
+		ArrayList<Player> playersWithSettlements = new ArrayList<>();
+		for(Settlement s : t.getSettlements().values()) {
+			if(!playersWithSettlements.contains(s.getOwner())) {
+				playersWithSettlements.add(s.getOwner());
+			}
+		}
+		return playersWithSettlements;
+	}
+
+	public ArrayList<Player> getPlayersWithSettlementOnRobberTile() {
+		return getPlayersWithSettlementOnTile(this.tiles.get(robber));
+	}
+	
+	public void stealRandomResourceFromOpposingPlayer(Player currentPlayer, Player opposingPlayer) {
+		while(opposingPlayer.hasAnyResources()) {
+			try {
+				int randomInteger = new Random().nextInt(TileType.values().length);
+				TileType randomResource = TileType.values()[randomInteger];
+				currentPlayer.stealResourceFromOpposingPlayer(randomResource, opposingPlayer);
+				break;
+			} catch (IndexOutOfBoundsException e) { }
 		}
 	}
 }

@@ -22,6 +22,7 @@ import objects.DevelopmentCardType;
 import objects.MonopolyCard;
 import objects.Player;
 import objects.PlayersController;
+import objects.PortType;
 import objects.TileType;
 import objects.YearOfPlentyCard;
 
@@ -33,6 +34,7 @@ public class OptionsPanel extends JPanel {
 	private PlayersController playerController;
 	private BoardWindow boardGUI;
 	private CatanBoard catanBoard;
+	private boolean playedCard;
 	private TileType yearOfPlentyResource;
 	private ArrayList<OptionsPanelComponent> setupPanel;
 	private ArrayList<OptionsPanelComponent> actionPanel;
@@ -43,12 +45,16 @@ public class OptionsPanel extends JPanel {
 	private ArrayList<OptionsPanelComponent> tradeWithPlayerPanel;
 	private ArrayList<OptionsPanelComponent> tradeWithPlayerPaymentPanel;
 	private ArrayList<OptionsPanelComponent> acceptTradeWithPlayerPanel;
+	private ArrayList<OptionsPanelComponent> stealFromPlayerPanel;
+	private ArrayList<OptionsPanelComponent> moveRobberInfoPanel;
+	private ArrayList<OptionsPanelComponent> discardPanel;
 	private Timer timer;
 	private OptionsPanelComponent lastRolled;
 	private TileType selectedResource;
 	private int selectedPlayer;
 
 	public OptionsPanel(GameWindow gameWindow, CatanBoard catanBoard) {
+		this.playedCard = false;
 		this.gameWindow = gameWindow;
 		this.catanBoard = catanBoard;
 		this.playerController = this.gameWindow.getPlayersController();
@@ -61,6 +67,10 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithPlayerPanel = new ArrayList<>();
 		this.tradeWithPlayerPaymentPanel = new ArrayList<>();
 		this.acceptTradeWithPlayerPanel = new ArrayList<>();
+		this.stealFromPlayerPanel = new ArrayList<>();
+		this.moveRobberInfoPanel = new ArrayList<>();
+		JLabel moveRobberInstuctionLabel = new JLabel(Messages.getString("OptionsPanel.45")); //$NON-NLS-1$
+		this.moveRobberInfoPanel.add(new OptionsPanelComponent(moveRobberInstuctionLabel, new Rectangle(2,3,18,1)));
 		this.selectedResource = null;
 		this.yearOfPlentyResource = null;
 		this.setLayout(new GraphPaperLayout(new Dimension(14, 24)));
@@ -186,21 +196,38 @@ public class OptionsPanel extends JPanel {
 	
 	private void developmentCardPanel() {
 		ArrayList<OptionsPanelComponent> devCardButtons = new ArrayList<>();
-		JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-		playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4,4,6,2)));
+		int spacing = 0;
 		
-		JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-		monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4,6,6,2)));
-		
-		JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
-		roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
-		devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4,8,6,2)));
+		if (!playedCard) {
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) > 0) {
+				JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+				playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.monopoly_card) > 0) {
+				JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+				monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.road_building_card) > 0) {
+				JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
+				roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.knight) > 0) {
+				JButton knightCardButton = new JButton(new KnightCardButton());
+				knightCardButton.setText(Messages.getString("OptionsPanel.46")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(knightCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+		}
 		
 		JButton cancelButton = new JButton(new CancelAction());
 		cancelButton.setText(Messages.getString("OptionsPanel.5"));
-		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,12,6,2)));
+		devCardButtons.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,14,6,2)));
 		setOnOptionsPanel(devCardButtons);
 	}
 	
@@ -234,7 +261,6 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
-				System.out.println("test");
 				timer.stop();
 				developmentCardPanel();
 			}
@@ -247,12 +273,29 @@ public class OptionsPanel extends JPanel {
 			Player currentPlayer = playerController.getCurrentPlayer();
 			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.road_building_card) >= 1) {
 				currentPlayer.removeDevelopmentCard(DevelopmentCardType.road_building_card);
+				playedCard = true;
 				placeInfoPanel(Messages.getString("OptionsPanel.42")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_road_card);
 				createTimer(new RoadBuildingCardFinal());
 			}
 		}
 
+	}
+	
+	class KnightCardButton extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Player currentPlayer = playerController.getCurrentPlayer();
+			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.knight) >= 1) {
+				currentPlayer.removeDevelopmentCard(DevelopmentCardType.knight);
+				currentPlayer.knightsPlayed++;
+				playedCard = true;
+				playerController.determineLargestArmy(currentPlayer);
+				setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+				boardGUI.setState(GameStates.move_robber);
+				createTimer(new MoveToStealPhaseStateListener(-1));
+			}
+		}
 	}
 	
 	private void createTimer(ActionListener action) {
@@ -305,6 +348,7 @@ public class OptionsPanel extends JPanel {
 					} else if (yearOfPlentyResource != null) {
 						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
 						card.playCard(yearOfPlentyResource, resourceType);
+						playedCard = true;
 						boardGUI.setState(GameStates.idle);
 						setOnOptionsPanel(actionPanel);
 						gameWindow.refreshPlayerStats();
@@ -345,6 +389,7 @@ public class OptionsPanel extends JPanel {
 				if(boardGUI.getState().equals(GameStates.play_card)) {
 					MonopolyCard card = (MonopolyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.monopoly_card);
 					card.playCard(resourceType);
+					playedCard = true;
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 					gameWindow.refreshPlayerStats();
@@ -418,7 +463,6 @@ public class OptionsPanel extends JPanel {
 				} else {
 					gameWindow.refreshPlayerStats();
 					setOnOptionsPanel(actionPanel);
-					System.out.println("reset");
 				}
 			}	
 		}	
@@ -428,16 +472,131 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
+				playedCard = false;
+				int rolled = catanBoard.endTurnAndRoll();
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
-				int rolled = catanBoard.endTurnAndRoll();
-				setLastRolled(rolled);
-				gameWindow.refreshPlayerStats();
+				if(rolled == 7) {
+					boardGUI.setState(GameStates.discard_robber);
+					discardForRobber(0);
+				} else {
+					setLastRolled(rolled);
+					gameWindow.refreshPlayerStats();
+				}
 			}
 		}
 	}
 	
+	private void discardForRobber(int playerNum) {
+		gameWindow.refreshPlayerStats();
+		
+		if (playerNum >= playerController.getTotalNumOfPlayers()) {
+			setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
+			setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+			boardGUI.setState(GameStates.move_robber);
+			createTimer(new MoveToStealPhaseStateListener(7));
+			return;
+		}
+		
+		Player p = this.playerController.getPlayer(playerNum);
+		
+		if (p.discardForRobber(new HashMap<TileType, Integer>())) {
+			discardForRobber(playerNum+1);
+			return;
+		}
+		
+		setCurrentPlayer(p, playerNum);
+
+		setOnOptionsPanel(createDiscardPanel(playerNum));
+	}
+	
+	public ArrayList<OptionsPanelComponent> createDiscardPanel(int playerNum) {
+		Player p = this.playerController.getPlayer(playerNum);
+		
+		this.discardPanel = new ArrayList<>();
+		
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.brick), new Rectangle(2,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wool), new Rectangle(6,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.ore), new Rectangle(10,6,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wheat), new Rectangle(4,10,3,1)));
+		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wood), new Rectangle(8,10,3,1)));
+			
+		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
+			
+		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(woolLabel, new Rectangle(6,5,4,1)));
+			
+		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
+			
+		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
+			
+		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8, 9, 4, 1)));
+
+		JButton submitResources = new JButton(new DiscardConfirmListener(playerNum));
+		submitResources.setText(Messages.getString("OptionsPanel.29")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3, 15, 9, 2)));
+
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.47")); //$NON-NLS-1$
+		this.discardPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2, 3, 18, 1)));
+		
+		return this.discardPanel;
+	}
+	
+	class DiscardConfirmListener extends AbstractAction {
+		int playerNum;
+		
+		public DiscardConfirmListener (int playerNum) {
+			this.playerNum = playerNum;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.discard_robber)) {
+				Player p = playerController.getPlayer(this.playerNum);
+				HashMap<TileType, Integer> toDiscard = new HashMap<>();
+				toDiscard.put(TileType.brick, ((JComboBox<Integer>) discardPanel.get(0).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wool, ((JComboBox<Integer>) discardPanel.get(1).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.ore, ((JComboBox<Integer>) discardPanel.get(2).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wheat, ((JComboBox<Integer>) discardPanel.get(3).getSwingComponent()).getSelectedIndex());
+				toDiscard.put(TileType.wood, ((JComboBox<Integer>) discardPanel.get(4).getSwingComponent()).getSelectedIndex());
+				
+				if(p.discardForRobber(toDiscard)) {
+					discardForRobber(playerNum+1);
+				}
+			}
+		}
+	}
+	
+	class MoveToStealPhaseStateListener implements ActionListener {
+		private int numRolled = -1;
+		
+		public MoveToStealPhaseStateListener(int rolled) {
+			this.numRolled = rolled;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(boardGUI.getState().equals(GameStates.steal)) {
+				ArrayList<Player> playersWithSettlementsOnTile = catanBoard.getPlayersWithSettlementOnRobberTile();
+				if(playersWithSettlementsOnTile.size() < 1 || (playersWithSettlementsOnTile.size() == 1 && playersWithSettlementsOnTile.get(0) == playerController.getCurrentPlayer())) {
+					if(numRolled != -1) {
+						setLastRolled(numRolled);
+					}
+					gameWindow.refreshPlayerStats();
+					boardGUI.setState(GameStates.idle);
+					setOnOptionsPanel(actionPanel);
+				} else {
+					playersPanelForSteal(numRolled, playersWithSettlementsOnTile);
+				}
+			}	
+		}	
+	}
 
 	public void setCurrentPlayer(Player p, int num) {
 		JLabel label = (JLabel) currentPlayerNameBox.getSwingComponent();
@@ -496,8 +655,8 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithBankPaymentPanel = new ArrayList<>();
 		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.21")); //$NON-NLS-1$
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
-		JLabel instuctionLabel2 = new JLabel(Messages.getString("OptionsPanel.22")); //$NON-NLS-1$
-		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instuctionLabel2, new Rectangle(2,3,6,2)));
+		//Player currentPlayer = playerController.getCurrentPlayer();
+		//boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wool), new Rectangle(4,6,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wheat), new Rectangle(4,8,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wood), new Rectangle(4,10,6,2)));
@@ -514,8 +673,20 @@ public class OptionsPanel extends JPanel {
 			public void actionPerformed(ActionEvent a) {
 				if(boardGUI.getState().equals(GameStates.trade)) {
 					HashMap<TileType, Integer> payment = new HashMap<>();
-					payment.put(t, 4);
-					boolean success = catanBoard.tradeWithBank(payment, selectedResource);
+					Player currentPlayer = playerController.getCurrentPlayer();
+					boolean success = false;
+					boolean canTwoTrade = currentPlayer.canPortTrade(catanBoard.resourceToPorts.get(t));
+					if (canTwoTrade) {
+						success = catanBoard.portTrade(t, selectedResource);
+					} else {
+						boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
+						if (canThreeTrade) {
+							payment.put(t, 3);
+						} else {
+							payment.put(t, 4);
+						}
+						success = catanBoard.tradeWithBank(payment, selectedResource);
+					}
 					if(success) {
 						boardGUI.setState(GameStates.idle);
 						gameWindow.refreshPlayerStats();
@@ -731,6 +902,47 @@ public class OptionsPanel extends JPanel {
 		return comboBox;
 	}
 	
+	public void playersPanelForSteal(int numRolled, ArrayList<Player> playersWithSettlementsOnTile) {
+		this.stealFromPlayerPanel = new ArrayList<>();
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.44")); //$NON-NLS-1$
+		this.stealFromPlayerPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
+		int spacing = 0;
+		
+		for(int i = 0; i < this.playerController.getTotalNumOfPlayers(); i++) {
+			for(Player p : playersWithSettlementsOnTile) {
+				if(this.playerController.getPlayer(i) == p && p != this.playerController.getCurrentPlayer()) {
+					this.stealFromPlayerPanel.add(new OptionsPanelComponent(selectPlayerToStealFrom(i+1, numRolled), new Rectangle(4,6+(spacing*2),6,2)));
+					spacing++;
+				}
+			}
+		}
+		
+		setOnOptionsPanel(stealFromPlayerPanel);
+	}
+	
+	public JButton selectPlayerToStealFrom(int playerNum, int numRolled) {
+		JButton playerButton = new JButton(new AbstractAction() {
+			public void actionPerformed(ActionEvent a) {
+				if(boardGUI.getState().equals(GameStates.steal)) {
+					selectedPlayer = playerNum - 1;
+					catanBoard.stealRandomResourceFromOpposingPlayer(playerController.getCurrentPlayer(), playerController.getPlayer(selectedPlayer));
+					finishStealing(numRolled);
+				}
+			}
+		});
+		playerButton.setText(Messages.getString("OptionsPanel.13") + playerNum); //$NON-NLS-1$
+		return playerButton;
+	}
+	
+	protected void finishStealing(int numRolled) {
+		if(numRolled != -1) {
+			setLastRolled(numRolled);
+		}
+		gameWindow.refreshPlayerStats();
+		boardGUI.setState(GameStates.idle);
+		setOnOptionsPanel(actionPanel);
+	}
+
 	public void setupPanel() {
 		setOnOptionsPanel(setupPanel);
 	}
