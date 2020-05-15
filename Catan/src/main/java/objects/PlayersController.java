@@ -11,14 +11,19 @@ public class PlayersController {
 	private int currentPlayer;
 	private int totalNumOfPlayers;
 	private Player playerWithLargestArmy;
+	private Player playerWithLongestRoad;
+	private LongestRoad longestRoadHelper;
+	private int curLongestRoadLength = -1;
 
 	public PlayersController(int numOfPlayers) {
 		this.players = createPlayers(numOfPlayers);
+		this.longestRoadHelper = new LongestRoad(numOfPlayers);
 		this.initialSetup = true;
 		this.backwardsSetup = false;
 		this.currentPlayer = 0;
 		this.totalNumOfPlayers = numOfPlayers;
 		this.playerWithLargestArmy = null;
+		this.playerWithLongestRoad = null;
 	}
 
 	private ArrayList<Player> createPlayers(int num) {
@@ -107,5 +112,25 @@ public class PlayersController {
 
 	public int getNumKnightsOfLargestArmy() {
 		return (playerWithLargestArmy == null) ? 0 : playerWithLargestArmy.knightsPlayed;
+	}
+
+	public void addRoadForLongestRoad(int tile, ArrayList<Integer> corners) {
+		this.longestRoadHelper.addRoadForPlayer(this.currentPlayer, tile, corners);
+		int curPlayerLongestRoad = this.longestRoadHelper.getLongestRoadForPlayer(this.getCurrentPlayerNum());
+		if(curPlayerLongestRoad >= 5 && curPlayerLongestRoad > this.curLongestRoadLength) {
+			this.curLongestRoadLength = curPlayerLongestRoad;
+			addLongestRoadVP();
+		}
+	}
+	
+	private void addLongestRoadVP() {
+		if(this.playerWithLongestRoad != null) {
+			this.playerWithLongestRoad.alterVictoryPoints(VictoryPoints.longest_road_remove);
+			this.playerWithLongestRoad.removeDevelopmentCard(DevelopmentCardType.longest_road_card);
+		}
+		this.playerWithLongestRoad = this.getCurrentPlayer();
+		this.playerWithLongestRoad.addDevelopmentCard(new LongestRoadDevelopmentCard());
+		this.playerWithLongestRoad.alterVictoryPoints(VictoryPoints.longest_road_add);
+		
 	}
 }

@@ -34,6 +34,7 @@ public class OptionsPanel extends JPanel {
 	private PlayersController playerController;
 	private BoardWindow boardGUI;
 	private CatanBoard catanBoard;
+	private boolean playedCard;
 	private TileType yearOfPlentyResource;
 	private ArrayList<OptionsPanelComponent> setupPanel;
 	private ArrayList<OptionsPanelComponent> actionPanel;
@@ -53,6 +54,7 @@ public class OptionsPanel extends JPanel {
 	private int selectedPlayer;
 
 	public OptionsPanel(GameWindow gameWindow, CatanBoard catanBoard) {
+		this.playedCard = false;
 		this.gameWindow = gameWindow;
 		this.catanBoard = catanBoard;
 		this.playerController = this.gameWindow.getPlayersController();
@@ -196,29 +198,31 @@ public class OptionsPanel extends JPanel {
 		ArrayList<OptionsPanelComponent> devCardButtons = new ArrayList<>();
 		int spacing = 0;
 		
-		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) > 0) {
-			JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-			playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
-			devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4, 4 + spacing ,6,2)));
-			spacing+=2;
-		}
-		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.monopoly_card) > 0) {
-			JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-			monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
-			devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4, 4 + spacing ,6,2)));
-			spacing+=2;
-		}
-		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.road_building_card) > 0) {
-			JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
-			roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
-			devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4, 4 + spacing ,6,2)));
-			spacing+=2;
-		}
-		if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.knight) > 0) {
-			JButton knightCardButton = new JButton(new KnightCardButton());
-			knightCardButton.setText(Messages.getString("OptionsPanel.46")); //$NON-NLS-1$
-			devCardButtons.add(new OptionsPanelComponent(knightCardButton, new Rectangle(4, 4 + spacing ,6,2)));
-			spacing+=2;
+		if (!playedCard) {
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) > 0) {
+				JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
+				playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.monopoly_card) > 0) {
+				JButton monopolyCardButton = new JButton(new MonopolyCardButton());
+				monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.road_building_card) > 0) {
+				JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
+				roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
+			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.knight) > 0) {
+				JButton knightCardButton = new JButton(new KnightCardButton());
+				knightCardButton.setText(Messages.getString("OptionsPanel.46")); //$NON-NLS-1$
+				devCardButtons.add(new OptionsPanelComponent(knightCardButton, new Rectangle(4, 4 + spacing ,6,2)));
+				spacing+=2;
+			}
 		}
 		
 		JButton cancelButton = new JButton(new CancelAction());
@@ -269,6 +273,7 @@ public class OptionsPanel extends JPanel {
 			Player currentPlayer = playerController.getCurrentPlayer();
 			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.road_building_card) >= 1) {
 				currentPlayer.removeDevelopmentCard(DevelopmentCardType.road_building_card);
+				playedCard = true;
 				placeInfoPanel(Messages.getString("OptionsPanel.42")); //$NON-NLS-1$
 				boardGUI.setState(GameStates.drop_road_card);
 				createTimer(new RoadBuildingCardFinal());
@@ -284,6 +289,7 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.knight) >= 1) {
 				currentPlayer.removeDevelopmentCard(DevelopmentCardType.knight);
 				currentPlayer.knightsPlayed++;
+				playedCard = true;
 				playerController.determineLargestArmy(currentPlayer);
 				setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
 				boardGUI.setState(GameStates.move_robber);
@@ -342,6 +348,7 @@ public class OptionsPanel extends JPanel {
 					} else if (yearOfPlentyResource != null) {
 						YearOfPlentyCard card = (YearOfPlentyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.year_of_plenty_card);
 						card.playCard(yearOfPlentyResource, resourceType);
+						playedCard = true;
 						boardGUI.setState(GameStates.idle);
 						setOnOptionsPanel(actionPanel);
 						gameWindow.refreshPlayerStats();
@@ -382,6 +389,7 @@ public class OptionsPanel extends JPanel {
 				if(boardGUI.getState().equals(GameStates.play_card)) {
 					MonopolyCard card = (MonopolyCard) currentPlayer.removeDevelopmentCard(DevelopmentCardType.monopoly_card);
 					card.playCard(resourceType);
+					playedCard = true;
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 					gameWindow.refreshPlayerStats();
@@ -464,10 +472,11 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
+				playedCard = false;
+				int rolled = catanBoard.endTurnAndRoll();
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
-				int rolled = catanBoard.endTurnAndRoll();
 				if(rolled == 7) {
 					boardGUI.setState(GameStates.discard_robber);
 					discardForRobber(0);
