@@ -32,6 +32,38 @@ public class CatanBoardTest {
 		pc = new PlayersController(4);
 		cb = new CatanBoard(pc);
 		assertEquals(cb.getTiles().size(), 19);
+		
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			numbers.add(t.getNumber());
+		}
+		
+		numbers.remove(Integer.valueOf(2));
+		numbers.remove(Integer.valueOf(12));
+		for(int i = 3; i <= 11; i++) {
+			numbers.remove(Integer.valueOf(i));
+			numbers.remove(Integer.valueOf(i));
+		}
+		
+		assertEquals(0, numbers.size());
+		
+		ArrayList<TileType> types = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			types.add(t.getType());
+		}
+		
+		types.remove(TileType.desert);
+		for(int i = 0; i < 4; i++) {
+            types.remove(TileType.wool);
+            types.remove(TileType.wheat);
+            types.remove(TileType.wood);
+        }
+		for(int i = 0; i < 3; i++) {
+            types.remove(TileType.brick);
+            types.remove(TileType.ore);
+        }
+		
+		assertEquals(0, types.size());
 	}
 	
 	@Test
@@ -39,6 +71,38 @@ public class CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		assertEquals(cb.getTiles().size(), 19);
+		
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			numbers.add(t.getNumber());
+		}
+		
+		numbers.remove(Integer.valueOf(2));
+		numbers.remove(Integer.valueOf(12));
+		for(int i = 3; i <= 11; i++) {
+			numbers.remove(Integer.valueOf(i));
+			numbers.remove(Integer.valueOf(i));
+		}
+		
+		assertEquals(0, numbers.size());
+		
+		ArrayList<TileType> types = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			types.add(t.getType());
+		}
+		
+		types.remove(TileType.desert);
+		for(int i = 0; i < 4; i++) {
+            types.remove(TileType.wool);
+            types.remove(TileType.wheat);
+            types.remove(TileType.wood);
+        }
+		for(int i = 0; i < 3; i++) {
+            types.remove(TileType.brick);
+            types.remove(TileType.ore);
+        }
+		
+		assertEquals(0, types.size());
 	}
 	
 	@Test
