@@ -2,6 +2,7 @@ package objects;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.Test;
@@ -64,6 +65,49 @@ public class CatanBoardTest {
         }
 		
 		assertEquals(0, types.size());
+		
+		ArrayList<Point> positionsExpected = new ArrayList<>();
+		for(int x = 1; x < 6; x++){
+            int ylow = -1;
+            int yhigh = -1;
+            switch (x) {
+                case 1:
+                    ylow = 1;
+                    yhigh = 4;
+                    break;
+                case 2:
+                    ylow = 1;
+                    yhigh = 5;
+                    break;
+                case 3:
+                    ylow = 1;
+                    yhigh = 6;
+                    break;
+                case 4:
+                    ylow = 2;
+                    yhigh = 6;
+                    break;
+                case 5:
+                    ylow = 3;
+                    yhigh = 6;
+                    break;
+            }
+            
+            for(int y = ylow; y < yhigh; y++){
+                positionsExpected.add(new Point(x,y));
+            }
+		}
+		
+		ArrayList<Point> positionsActual = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			positionsActual.add(t.getLocation());
+		}
+		
+		for(Point p: positionsExpected) {
+			positionsActual.remove(p);
+		}
+		
+		assertEquals(0, positionsActual.size());
 	}
 	
 	@Test
@@ -103,6 +147,49 @@ public class CatanBoardTest {
         }
 		
 		assertEquals(0, types.size());
+		
+		ArrayList<Point> positionsExpected = new ArrayList<>();
+		for(int x = 1; x < 6; x++){
+            int ylow = -1;
+            int yhigh = -1;
+            switch (x) {
+                case 1:
+                    ylow = 1;
+                    yhigh = 4;
+                    break;
+                case 2:
+                    ylow = 1;
+                    yhigh = 5;
+                    break;
+                case 3:
+                    ylow = 1;
+                    yhigh = 6;
+                    break;
+                case 4:
+                    ylow = 2;
+                    yhigh = 6;
+                    break;
+                case 5:
+                    ylow = 3;
+                    yhigh = 6;
+                    break;
+            }
+            
+            for(int y = ylow; y < yhigh; y++){
+                positionsExpected.add(new Point(x,y));
+            }
+		}
+		
+		ArrayList<Point> positionsActual = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			positionsActual.add(t.getLocation());
+		}
+		
+		for(Point p: positionsExpected) {
+			positionsActual.remove(p);
+		}
+		
+		assertEquals(0, positionsActual.size());
 	}
 	
 	@Test
