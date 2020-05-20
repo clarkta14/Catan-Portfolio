@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import org.junit.Test;
 
@@ -108,6 +109,31 @@ public class CatanBoardTest {
 		}
 		
 		assertEquals(0, positionsActual.size());
+		
+		ArrayList<PortType> portTypesExpected = new ArrayList<PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypesExpected.add(PortType.three);
+    	}
+    	portTypesExpected.add(PortType.brick);
+    	portTypesExpected.add(PortType.wool);
+    	portTypesExpected.add(PortType.wood);
+    	portTypesExpected.add(PortType.ore);
+    	portTypesExpected.add(PortType.wheat);
+    	for(PortType p: portTypesExpected) {
+    		cb.portTypes.remove(p);
+    	}
+    	assertEquals(0, cb.portTypes.size());
+    	
+    	HashMap<TileType, PortType> resourceToPortsExpected = new HashMap<>();
+    	resourceToPortsExpected.put(TileType.brick, PortType.brick);
+    	resourceToPortsExpected.put(TileType.wool, PortType.wool);
+    	resourceToPortsExpected.put(TileType.wood, PortType.wood);
+    	resourceToPortsExpected.put(TileType.ore, PortType.ore);
+    	resourceToPortsExpected.put(TileType.wheat, PortType.wheat);
+    	for(TileType t: resourceToPortsExpected.keySet()) {
+    		cb.resourceToPorts.remove(t);
+    	}
+    	assertEquals(0, cb.resourceToPorts.size());
 	}
 	
 	@Test
@@ -190,6 +216,31 @@ public class CatanBoardTest {
 		}
 		
 		assertEquals(0, positionsActual.size());
+		
+		ArrayList<PortType> portTypesExpected = new ArrayList<PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypesExpected.add(PortType.three);
+    	}
+    	portTypesExpected.add(PortType.brick);
+    	portTypesExpected.add(PortType.wool);
+    	portTypesExpected.add(PortType.wood);
+    	portTypesExpected.add(PortType.ore);
+    	portTypesExpected.add(PortType.wheat);
+    	for(PortType p: portTypesExpected) {
+    		cb.portTypes.remove(p);
+    	}
+    	assertEquals(0, cb.portTypes.size());
+    	
+    	HashMap<TileType, PortType> resourceToPortsExpected = new HashMap<>();
+    	resourceToPortsExpected.put(TileType.brick, PortType.brick);
+    	resourceToPortsExpected.put(TileType.wool, PortType.wool);
+    	resourceToPortsExpected.put(TileType.wood, PortType.wood);
+    	resourceToPortsExpected.put(TileType.ore, PortType.ore);
+    	resourceToPortsExpected.put(TileType.wheat, PortType.wheat);
+    	for(TileType t: resourceToPortsExpected.keySet()) {
+    		cb.resourceToPorts.remove(t);
+    	}
+    	assertEquals(0, cb.resourceToPorts.size());
 	}
 	
 	@Test
