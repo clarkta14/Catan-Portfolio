@@ -422,18 +422,22 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		Tile robberTile = null;
 
 		ArrayList<Tile> tiles = cb.getTiles();
-		for (Tile tile : tiles) {
+		int robberTileNum = -1;
+		for (int i = 0; i < tiles.size(); i++) {
+			Tile tile = tiles.get(i);
 			if (tile.isRobber()) {
 				robberTile = tile;
+				robberTileNum = i;
 				break;
 			}
 		}
 		
 		Player currentPlayer = pc.getCurrentPlayer();
-		int robberTileNum = robberTile.getNumber();
 		tileNums.add(robberTileNum);
 		cornerNums.add(0);
-		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, robberTile.getSettlements().size());
 		ArrayList<Player> players = cb.getPlayersWithSettlementOnRobberTile();
 		assertEquals(1, players.size());
 		assertTrue(players.contains(currentPlayer));
