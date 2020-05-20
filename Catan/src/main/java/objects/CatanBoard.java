@@ -123,11 +123,8 @@ public class CatanBoard {
             }
         }
         
-        // Shuffle List
-        for(int i = 0; i < 3; i++){
-            Collections.shuffle(types);
-            Collections.shuffle(numbers);
-        }
+        Collections.shuffle(types);
+        Collections.shuffle(numbers);
         
         for(int i = 0; i < 18; i++){
             this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
