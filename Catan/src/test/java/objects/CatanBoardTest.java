@@ -173,6 +173,26 @@ public class CatanBoardTest {
 		}
 	}
 	
+	@Test
+	public void testMoveRobber() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		Tile robberTile = null;
+		Tile otherTile = null;
+		ArrayList<Tile> tiles = cb.getTiles();
+		for (Tile tile : tiles) {
+			if (tile.isRobber()) {
+				robberTile = tile;
+			} else {
+				otherTile = tile;
+			}
+		}
+		cb.moveRobber(otherTile);
+		assertTrue(otherTile.isRobber());
+		assertFalse(robberTile.isRobber());
+	}
+	
 	public ArrayList<Settlement> getSettlementsFromClickedTiles() {
 		ArrayList<Tile> tiles = cb.getTiles();
 		ArrayList<Settlement> settlements = new ArrayList<Settlement>();
