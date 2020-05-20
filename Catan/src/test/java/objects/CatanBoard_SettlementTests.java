@@ -385,5 +385,36 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		assertEquals(numOfWoolBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(numOfWheatBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
 	}
-
+	
+	@Test
+	public void getPlayersWithSettlementOnTile2SettlementsSameTile() {
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		clearClicks();
+		
+		tileNums.add(1);
+		tileNums.add(2);
+		tileNums.add(5);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		
+		Tile tile = cb.getTiles().get(1);
+		Player player = pc.getCurrentPlayer();
+		ArrayList<Player> players = cb.getPlayersWithSettlementOnTile(tile);
+		assertEquals(1, players.size());
+		assertTrue(players.contains(player));
+		
+		}
+		
 }
