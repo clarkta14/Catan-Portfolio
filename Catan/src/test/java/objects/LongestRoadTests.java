@@ -216,7 +216,7 @@ public class LongestRoadTests {
 		corners = new ArrayList<>(Arrays.asList(0, 5));
 		lr.addRoadForPlayer(0, 1, corners);
 		
-		assertEquals(6, lr.getLongestRoadForPlayer(0));
+		assertEquals(7, lr.getLongestRoadForPlayer(0));
 		
 		corners = new ArrayList<>(Arrays.asList(3, 4));
 		lr.addRoadForPlayer(1, 17, corners);
@@ -228,7 +228,7 @@ public class LongestRoadTests {
 		lr.addRoadForPlayer(1, 17, corners);
 		
 		corners = new ArrayList<>(Arrays.asList(4, 5));
-		lr.addRoadForPlayer(0, 16, corners);
+		lr.addRoadForPlayer(1, 16, corners);
 		
 		corners = new ArrayList<>(Arrays.asList(3, 4));
 		lr.addRoadForPlayer(1, 12, corners);
@@ -241,6 +241,6 @@ public class LongestRoadTests {
 		corners = new ArrayList<>(Arrays.asList(3, 4));
 		lr.addRoadForPlayer(0, 7, corners);
 		
-		assertEquals(7, lr.getLongestRoadForPlayer(1));
+		assertEquals(7, lr.getLongestRoadForPlayer(0));
 	}
 }
