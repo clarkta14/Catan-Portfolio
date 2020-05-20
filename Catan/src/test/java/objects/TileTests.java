@@ -408,5 +408,18 @@ public class TileTests {
 		tile.setHexagon(p);
 		assertEquals(tile.getHexagon(), p);
 	}
+	
+	@Test
+	public void testAddRoadDuplicate() {
+		Player player = new Player(Color.blue);
+		Road road = new Road(player);
+		
+		Tile tile = new Tile(null, 5, TileType.brick);
+		tile.addRoad(1, 2, road);
+		tile.addRoad(2, 1, road);
+		
+		assertEquals(2, tile.hexEdgeToRoad.size());
+		
+	}
 
 }

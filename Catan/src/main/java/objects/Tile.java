@@ -15,7 +15,7 @@ public class Tile {
 	private Boolean isRobber;
 	private Polygon hexagon;
 	private HashMap<Integer, Settlement> hexCornerToSettlement;
-	private HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
+	protected HashMap<ArrayList<Integer>, Road> hexEdgeToRoad;
 
 	public Tile(Point p, int number, TileType typ) {
 		this.isRobber = false;
