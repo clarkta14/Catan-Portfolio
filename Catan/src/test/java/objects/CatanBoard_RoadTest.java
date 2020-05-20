@@ -82,12 +82,10 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
 
-		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(p1tile, p1corner, player1);
 		
-		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertFalse(result);
@@ -98,12 +96,10 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
 
-		// Place Settlement
 		addPlayerClickNums(4, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(4, 0, 5);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);
@@ -137,12 +133,10 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
 
-		// Place Settlement
 		addPlayerClickNums(4, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(4, 0, 5);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);
@@ -170,18 +164,15 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		
 		assertEquals(3, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
-		//Player 2
 		pc.nextPlayer();
 		
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 6);
 
-		// Place Settlement
 		addPlayerClickNums(13, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(13, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(13, 0, 5);
 		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);

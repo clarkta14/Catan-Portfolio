@@ -59,7 +59,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, -1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -71,7 +71,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, 1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -82,7 +82,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, Integer.MAX_VALUE + 1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -130,7 +130,7 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, 1);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// pass
+			
 		}
 	}
 
@@ -142,7 +142,7 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, 2);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// pass
+			
 		}
 	}
 
@@ -153,14 +153,14 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, -1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 	
 	@Test
 	public void testRemoveDesertFromResource() {
 		Player player = new Player(Color.orange);
-		player.removeResource(TileType.desert, 1); //this should do nothing; return nothing. The fail throws an error
+		player.removeResource(TileType.desert, 1);
 	}
 
 	@Test
@@ -595,7 +595,7 @@ public class PlayerTests {
 			player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// testPasses
+			
 		}
 	}
 	

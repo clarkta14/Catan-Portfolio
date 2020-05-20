@@ -25,7 +25,6 @@ public class CatanBoard_ResourceTest extends CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		//Adding settlements for players at specified locations
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(5, 4, 1)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(4, 8, 3)), new ArrayList<>(Arrays.asList(1, 5, 3)), GameStates.drop_settlement_setup);
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(18, 17, 14)), new ArrayList<>(Arrays.asList(0, 4, 2)), GameStates.drop_settlement_setup);
@@ -43,7 +42,6 @@ public class CatanBoard_ResourceTest extends CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		//Get a non-desert tile
 		Tile tile = cb.getTiles().get(0);
 		int tileNum = 0;
 		while (tile.getType() == TileType.desert) {
@@ -68,7 +66,6 @@ public class CatanBoard_ResourceTest extends CatanBoardTest {
 			}
 		}
 		
-		//Adding settlements for players at specified locations
 		cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(robber)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
 		int notRobber = 5;
 		if(notRobber == robber) {

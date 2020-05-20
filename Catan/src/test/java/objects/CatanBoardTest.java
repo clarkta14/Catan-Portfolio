@@ -12,7 +12,6 @@ import gui.GameStates;
 
 public class CatanBoardTest {
 	
-	// Player numbers
 	int player1 = 0;
 	int player2 = 1;
 	int player3 = 2;
@@ -21,7 +20,6 @@ public class CatanBoardTest {
 	PlayersController pc;
 	CatanBoard cb;
 	
-	// Stores click locations for players in the tests
 	ArrayList<Integer> tileNums = new ArrayList<Integer>();
 	ArrayList<Integer> cornerNums = new ArrayList<Integer>();
 	
@@ -270,12 +268,10 @@ public class CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
 
-		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(p1tile, p1corner, player1);
 		
-		// Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(player1, p1roadTile, p1road1, p1road2);
@@ -289,16 +285,13 @@ public class CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 10; int p1road1 = 1; int p1road2 = 2;
 
-		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(p1tile, p1corner, player1);
 		
-		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		registerPlayerDragSetup();
 
-		// Check no roads
 		ArrayList<Tile> tiles = cb.getTiles();
 		Tile tile = tiles.get(p1roadTile);
 		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
@@ -317,14 +310,12 @@ public class CatanBoardTest {
 		int p2tile2 = 10; int p2corner2 = 5; int p2road2 = 4;
 		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
 		
-		// Everyone places first settlements and roads
 		makePlayerTurnInit(p1tile, p1corner, p1road, player1, 2);
 		
 		makePlayerTurnInit(p2tile, p2corner, p2road, player2, 0);
 
 		makePlayerTurnInit(p3tile, p3corner, p3road, player3, 1);
 		
-		// Second Round of settlements
 		makePlayerTurnInit(p3tile2, p3corner2, p3road2, player3, 0);
 
 		makePlayerTurnInit(p2tile2, p2corner2, p2road2, player2, 2);
@@ -346,7 +337,6 @@ public class CatanBoardTest {
 		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
 		int p4tile2 = 11; int p4corner2 = 2; int p4road2 = 3;
 		
-		// Everyone places first settlements and roads
 		makePlayerTurnInit(p1tile, p1corner, p1road, player1, 2);
 		
 		makePlayerTurnInit(p2tile, p2corner, p2road, player2, 0);
@@ -355,7 +345,6 @@ public class CatanBoardTest {
 		
 		makePlayerTurnInit(p4tile, p4corner, p4road, player4, 1);
 		
-		// Second Round of settlements
 		makePlayerTurnInit(p4tile2, p4corner2, p4road2, player4, 0);
 		
 		makePlayerTurnInit(p3tile2, p3corner2, p3road2, player3, 0);
@@ -370,7 +359,6 @@ public class CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		//TODO: figure out a better way to test.
 		for (int i = 0; i < 10000; i++) {
 			int result = cb.endTurnAndRoll();
 			if(result < 2 || result > 12) {

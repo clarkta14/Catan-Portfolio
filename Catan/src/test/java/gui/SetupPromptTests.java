@@ -13,7 +13,7 @@ public class SetupPromptTests {
 			setupWindow.getNumPlayers();
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 	
@@ -58,7 +58,7 @@ public class SetupPromptTests {
 			catanSetup.setNumPlayers(input);
 			fail("Did not throw IAE Exception");
 		} catch(IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 	

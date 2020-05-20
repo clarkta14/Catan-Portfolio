@@ -64,7 +64,6 @@ public class CatanBoard {
 	}
 
 	private void shuffleTiles() {
-        // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             types.add(TileType.wool);
@@ -76,7 +75,6 @@ public class CatanBoard {
             types.add(TileType.ore);
         }
         
-        // Tile Numbers
         ArrayList<Integer> numbers = new ArrayList<>();
         for(int i = 0; i < 2; i++){
             numbers.add(3);
@@ -91,7 +89,6 @@ public class CatanBoard {
         numbers.add(2);
         numbers.add(12);
         
-        // Coordinates
         ArrayList<Point> positions = new ArrayList<>();
         for(int x = 1; x < 6; x++){
             int ylow = -1;
@@ -130,7 +127,6 @@ public class CatanBoard {
             this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
         }
         
-        // Placing the desert tile with robber on the board
     	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
     	desertTile.setRobber(true);
     	this.tiles.add(desertTile);

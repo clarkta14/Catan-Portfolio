@@ -39,7 +39,7 @@ public class PlayersControllerTests {
 	@Test
 	public void testNextPlayerAfterSetup_4Players() {
 		PlayersController pc = new PlayersController(4);
-		// setup phase
+		
 		for(int i = 0; i < 8; i++) {
 			pc.nextPlayer();
 		}
@@ -72,7 +72,7 @@ public class PlayersControllerTests {
 	@Test
 	public void testNextPlayerAfterSetup_3Players() {
 		PlayersController pc = new PlayersController(3);
-		// setup phase
+		
 		for(int i = 0; i < 6; i++) {
 			pc.nextPlayer();
 		}

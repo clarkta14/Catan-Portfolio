@@ -47,7 +47,7 @@ public class BoardWindow extends JPanel {
 	public BoardWindow(CatanBoard catanBoard) {
 		this.catanBoard = catanBoard;
 		setBackground(new Color(164, 200, 218));
-		// Handle Resizing Window
+		
 		this.addComponentListener(new ComponentListener() {
 			public void componentResized(ComponentEvent e) {
 				boardHeight = getHeight();
@@ -301,17 +301,17 @@ public class BoardWindow extends JPanel {
 			}
 			PortType type = catanBoard.portTypes.get(index);
 			if (type == PortType.brick) {
-				ports.add(Messages.getString("BoardWindow.4")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.4"));
 			} else if (type == PortType.wheat) {
-				ports.add(Messages.getString("BoardWindow.0")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.0"));
 			} else if (type == PortType.ore) {
-				ports.add(Messages.getString("BoardWindow.1")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.1"));
 			} else if (type == PortType.three) {
-				ports.add(Messages.getString("BoardWindow.2")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.2"));
 			} else if (type == PortType.wool) {
-				ports.add(Messages.getString("BoardWindow.3")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.3"));
 			} else {
-				ports.add(Messages.getString("BoardWindow.5")); //$NON-NLS-1$
+				ports.add(Messages.getString("BoardWindow.5"));
 			}
 		}
 		return ports;
@@ -399,20 +399,14 @@ public class BoardWindow extends JPanel {
 		int bound_height = boundary.height;
 		int new_width = original_width;
 		int new_height = original_height;
-
-		// first check if we need to scale width
+		
 		if (original_width > bound_width) {
-			// scale width to fit
 			new_width = bound_width;
-			// scale height to maintain aspect ratio
 			new_height = (new_width * original_height) / original_width;
 		}
 
-		// then check if we need to scale even with the new height
 		if (new_height > bound_height) {
-			// scale height to fit instead
 			new_height = bound_height;
-			// scale width to maintain aspect ratio
 			new_width = (new_height * original_width) / original_height;
 		}
 
@@ -424,8 +418,6 @@ public class BoardWindow extends JPanel {
 		double y = p.getY();
 		ArrayList<Integer> tile = new ArrayList<>();
 		ArrayList<Integer> corner = new ArrayList<>();
-		// Column search to see if the point clicked belongs to a location that could
-		// possibly hold a settlement
 		if (checkIfWithinColumn(x, 0)) {
 			if (heightMargin + 7 * hexagonSide / 2 - this.settlementSize < y
 					&& y < heightMargin + 7 * hexagonSide / 2 + this.settlementSize) {
