@@ -94,6 +94,42 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 	}
 	
 	@Test
+	public void testPlaceRoadSetupNotValid() {
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
+
+		// Place Settlement
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		// Try to Place Road
+		addPlayerDragNums(p1roadTile, p1road1, p1road2);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertTrue(result);
+		
+		addPlayerDragNums(p1roadTile, 2, 3);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testPlaceRoadNotValid() {
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1;
+
+		// Place Settlement
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		// Try to Place Road
+		addPlayerDragNums(p1roadTile, 2, 3);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertFalse(result);
+	}
+	
+	@Test
 	public void testLongestRoadVictoryPoints_continuous5() {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
