@@ -134,6 +134,8 @@ public class CatanBoardTest {
     		cb.resourceToPorts.remove(t);
     	}
     	assertEquals(0, cb.resourceToPorts.size());
+    	
+    	assertNotEquals(-1, cb.robber);
 	}
 	
 	@Test
@@ -241,6 +243,8 @@ public class CatanBoardTest {
     		cb.resourceToPorts.remove(t);
     	}
     	assertEquals(0, cb.resourceToPorts.size());
+    	
+    	assertNotEquals(-1, cb.robber);
 	}
 	
 	@Test

@@ -17,7 +17,7 @@ public class CatanBoard {
     public HashMap<TileType, PortType> resourceToPorts;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
-    private int robber;
+    protected int robber = -1;
 	private ArrayList<DevelopmentCard> developmentCardsBoughtThisTurn;
     
     @SuppressWarnings("serial")
