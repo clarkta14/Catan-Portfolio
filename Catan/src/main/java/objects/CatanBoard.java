@@ -232,7 +232,9 @@ public class CatanBoard {
 				validPlacement = false;
 				break;
 			}
-			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
+			if (tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState)) {
+				validPlacement = true;
+			}
 		}
 		if (validPlacement) {
 			if (gameState == GameStates.drop_road && !buyRoad()) {
