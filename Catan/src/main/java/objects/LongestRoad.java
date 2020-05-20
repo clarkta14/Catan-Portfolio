@@ -133,7 +133,8 @@ public class LongestRoad {
 		LinkedList<Integer> topDown = new LinkedList<>();
 		boolean hitVertexForTop = false;
 		boolean hitVertexForBottom = false;
-		for (int i = 0; i < path.size(); i++) {
+		int i = 0;
+		while(!(hitVertexForBottom && hitVertexForTop)) {
 			if (path.get(i) != vertex1 && !hitVertexForBottom) {
 				bottomUp.add(path.get(i));
 			} else if (!hitVertexForBottom) {
@@ -146,9 +147,7 @@ public class LongestRoad {
 				topDown.add(path.get(path.size() - i - 1));
 				hitVertexForTop = true;
 			}
-			if (hitVertexForBottom && hitVertexForTop) {
-				break;
-			}
+			i++;
 		}
 		bottomUp.add(vertex2);
 		topDown.add(vertex2);
@@ -157,10 +156,9 @@ public class LongestRoad {
 			bottomUp.addFirst(path.get(path.size() - 2));
 			topDown.addFirst(path.get(1));
 		}
-		if (hitVertexForBottom) {
-			newPathList.add(bottomUp);
-			newPathList.add(topDown);
-		}
+		
+		newPathList.add(bottomUp);
+		newPathList.add(topDown);
 		this.roads.put(playerNum, newPathList);
 	}
 
