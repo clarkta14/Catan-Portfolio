@@ -56,6 +56,10 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		for (Settlement s: cb.getTiles().get(0).getSettlements().values()) {
+			assertEquals(PortType.none, s.portType);
+		}
 	}
 	
 	@Test
