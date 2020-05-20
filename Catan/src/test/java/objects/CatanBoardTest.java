@@ -136,6 +136,8 @@ public class CatanBoardTest {
     	assertEquals(0, cb.resourceToPorts.size());
     	
     	assertNotEquals(-1, cb.robber);
+    	
+    	assertNotEquals(TileType.desert, cb.getTiles().get(18).getType());
 	}
 	
 	@Test
@@ -245,6 +247,8 @@ public class CatanBoardTest {
     	assertEquals(0, cb.resourceToPorts.size());
     	
     	assertNotEquals(-1, cb.robber);
+    	
+    	assertNotEquals(TileType.desert, cb.getTiles().get(18).getType());
 	}
 	
 	@Test
