@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -398,6 +399,14 @@ public class TileTests {
 		boolean result = tile.checkRoadAtCornerForGivenPlayer(0, player1);
 		
 		assertFalse(result);
+	}
+	
+	@Test
+	public void testGetSetHexagon() {
+		Tile tile = new Tile(null, 5, TileType.brick);
+		Polygon p = new Polygon();
+		tile.setHexagon(p);
+		assertEquals(tile.getHexagon(), p);
 	}
 
 }
