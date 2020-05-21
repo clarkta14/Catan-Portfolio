@@ -24,9 +24,9 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.2-jre'
 
-    implementation files('./easymock-4.2.jar')
+    compile files('./easymock-4.2.jar')
 
-    implementation files('./objenesis-3.1')
+    compile files('./objenesis-3.1')
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
