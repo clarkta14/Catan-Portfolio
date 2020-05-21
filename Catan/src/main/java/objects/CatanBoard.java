@@ -93,28 +93,22 @@ public class CatanBoard {
         for(int x = 1; x < 6; x++){
             int ylow = -1;
             int yhigh = -1;
-            switch (x) {
-                case 1:
-                    ylow = 1;
-                    yhigh = 4;
-                    break;
-                case 2:
-                    ylow = 1;
-                    yhigh = 5;
-                    break;
-                case 3:
-                    ylow = 1;
-                    yhigh = 6;
-                    break;
-                case 4:
-                    ylow = 2;
-                    yhigh = 6;
-                    break;
-                case 5:
-                    ylow = 3;
-                    yhigh = 6;
-                    break;
-            }
+            if (x == 1) {
+            	ylow = 1;
+            	yhigh = 4;
+            } else if (x == 2) {
+            	ylow = 1;
+            	yhigh = 5;
+            } else if (x == 3) {
+            	ylow = 1;
+            	yhigh = 6;
+            } else if (x == 4) {
+            	ylow = 2;
+            	yhigh = 6;
+            } else {
+            	ylow = 3;
+            	yhigh = 6;
+            } 
             for(int y = ylow; y < yhigh; y++){
                 positions.add(new Point(x,y));
             }
@@ -235,7 +229,9 @@ public class CatanBoard {
 				validPlacement = false;
 				break;
 			}
-			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
+			if (tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState)) {
+				validPlacement = true;
+			}
 		}
 		if (validPlacement) {
 			if (gameState == GameStates.drop_road && !buyRoad()) {

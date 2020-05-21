@@ -23,7 +23,7 @@ public class LongestRoad {
 		ArrayList<LinkedList<Integer>> pathList = this.roads.get(playerNum);
 		for (int index = pathList.size() - 1; index > -1; index--) {
 			LinkedList<Integer> path = pathList.get(index);
-			
+
 			if (path.getFirst() == vertex1) {
 				merge(path, vertex1, vertex2, playerNum);
 				path.addFirst(vertex2);
@@ -43,16 +43,16 @@ public class LongestRoad {
 				added = true;
 			} else {
 				boolean inCircle = false;
-				if(path.getFirst() == path.getLast()) {
+				if (path.getFirst() == path.getLast()) {
 					inCircle = true;
 				}
 				for (int vertex : path) {
 					if (vertex == vertex1) {
-						branchCondition(path,vertex1,vertex2,playerNum,inCircle);
+						branchCondition(path, vertex1, vertex2, playerNum, inCircle);
 						added = true;
 						break;
 					} else if (vertex == vertex2) {
-						branchCondition(path,vertex2,vertex1,playerNum,inCircle);
+						branchCondition(path, vertex2, vertex1, playerNum, inCircle);
 						added = true;
 						break;
 					}
@@ -68,53 +68,60 @@ public class LongestRoad {
 			newPathList.add(newPath);
 			this.roads.put(playerNum, newPathList);
 		}
-		
-		System.out.println("Player " + playerNum + " -> " + this.roads.get(playerNum));
 	}
 
 	@SuppressWarnings("unchecked")
 	private void merge(LinkedList<Integer> path, int vertex1, int vertex2, int playerNum) {
 		ArrayList<LinkedList<Integer>> pathList = this.roads.get(playerNum);
-		for(int index = pathList.size() - 1; index > -1; index--) {
+		for (int index = pathList.size() - 1; index > -1; index--) {
 			LinkedList<Integer> otherPath = pathList.get(index);
-			if(otherPath.getFirst() == vertex2) {
+			if (otherPath.getFirst() == vertex2) {
 				LinkedList<Integer> newPath = (LinkedList<Integer>) path.clone();
-				for(int elementFromSecondPath : otherPath) {
+				for (int elementFromSecondPath : otherPath) {
 					newPath.addFirst(elementFromSecondPath);
 				}
-				ArrayList<LinkedList<Integer>> newPathList = this.roads.get(playerNum);
-				newPathList.add(newPath);
-				this.roads.put(playerNum, newPathList);
-				break;
-			}else if(otherPath.getLast() == vertex2) {
+
+				if (updatePlayerRoadPathsForMerge(playerNum, newPath)) {
+					break;
+				}
+			} else if (otherPath.getLast() == vertex2) {
 				LinkedList<Integer> newPath = (LinkedList<Integer>) path.clone();
 				boolean first = false;
-				if(path.getFirst() == vertex1) {
+				if (path.getFirst() == vertex1) {
 					first = true;
 				}
-				for(int i = otherPath.size() - 1; i > -1; i--) {
+				for (int i = otherPath.size() - 1; i > -1; i--) {
 					int elementFromSecondPath = otherPath.get(i);
-					if(first) {
+					if (first) {
 						newPath.addFirst(elementFromSecondPath);
-					}else {
+					} else {
 						newPath.addLast(elementFromSecondPath);
 					}
 				}
-				ArrayList<LinkedList<Integer>> newPathList = (ArrayList<LinkedList<Integer>>) this.roads.get(playerNum).clone();
-				if(!moreThanOneDuplicates(newPath)) {
-					newPathList.add(newPath);
-					this.roads.put(playerNum, newPathList);
+
+				if (updatePlayerRoadPathsForMerge(playerNum, newPath)) {
 					break;
 				}
 			}
 		}
 	}
 
+	private boolean updatePlayerRoadPathsForMerge(int playerNum, LinkedList<Integer> newPath) {
+		@SuppressWarnings("unchecked")
+		ArrayList<LinkedList<Integer>> newPathList = (ArrayList<LinkedList<Integer>>) this.roads.get(playerNum).clone();
+		if (!moreThanOneDuplicates(newPath)) {
+			newPathList.add(newPath);
+			this.roads.put(playerNum, newPathList);
+			return true;
+		}
+		return false;
+	}
+
 	private boolean moreThanOneDuplicates(LinkedList<Integer> newPath) {
 		int c = 0;
 		HashSet<Integer> seen = new HashSet<>();
-		for(int i : newPath) {
-			if(!seen.add(i)) {
+		for (int i : newPath) {
+			if (!seen.add(i)) {
 				c++;
 			}
 		}
@@ -126,34 +133,32 @@ public class LongestRoad {
 		LinkedList<Integer> topDown = new LinkedList<>();
 		boolean hitVertexForTop = false;
 		boolean hitVertexForBottom = false;
-		for (int i = 0; i < path.size(); i++) {
+		int i = 0;
+		while(!(hitVertexForBottom && hitVertexForTop)) {
 			if (path.get(i) != vertex1 && !hitVertexForBottom) {
 				bottomUp.add(path.get(i));
-			} else if(!hitVertexForBottom){
+			} else if (!hitVertexForBottom) {
 				bottomUp.add(path.get(i));
 				hitVertexForBottom = true;
 			}
 			if (path.get(path.size() - i - 1) != vertex1 && !hitVertexForTop) {
 				topDown.add(path.get(path.size() - i - 1));
-			} else if(!hitVertexForTop){
+			} else if (!hitVertexForTop) {
 				topDown.add(path.get(path.size() - i - 1));
 				hitVertexForTop = true;
 			}
-			if (hitVertexForBottom && hitVertexForTop) {
-				break;
-			}
+			i++;
 		}
 		bottomUp.add(vertex2);
 		topDown.add(vertex2);
 		ArrayList<LinkedList<Integer>> newPathList = this.roads.get(playerNum);
-		if(inCircle) {
-			bottomUp.addFirst(path.get(path.size()-2));
+		if (inCircle) {
+			bottomUp.addFirst(path.get(path.size() - 2));
 			topDown.addFirst(path.get(1));
 		}
-		if (hitVertexForBottom) {
-			newPathList.add(bottomUp);
-			newPathList.add(topDown);
-		}
+		
+		newPathList.add(bottomUp);
+		newPathList.add(topDown);
 		this.roads.put(playerNum, newPathList);
 	}
 

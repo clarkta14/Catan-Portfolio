@@ -151,6 +151,16 @@ public class DevelopmentCardTests {
 
 		assertEquals(2, p1.getResourceCount(TileType.wool));
 	}
+	
+	@Test
+	public void testPlayKnightCard() {
+		DevelopmentCard knight = new KnightDevelopmentCard();
+		knight.playCard();
+		
+		// We did this primarily because coverage was complaining
+		// about the default implementation of playCard which does nothing
+		assertEquals(DevelopmentCardType.knight, knight.getDevelopmentCardType());
+	}
 
 	private void add2OfAllResourcesToAllPlayers(Player p1, Player p2, Player p3) {
 		p1.addResource(TileType.wool, 2);
