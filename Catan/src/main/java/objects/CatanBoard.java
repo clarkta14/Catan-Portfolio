@@ -105,7 +105,7 @@ public class CatanBoard {
             } else if (x == 4) {
             	ylow = 2;
             	yhigh = 6;
-            } else if (x == 5) {
+            } else {
             	ylow = 3;
             	yhigh = 6;
             } 
