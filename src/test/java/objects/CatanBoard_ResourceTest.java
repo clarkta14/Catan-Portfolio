@@ -7,14 +7,14 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.easymock.EasyMock;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import gui.GameStates;
 
 public class CatanBoard_ResourceTest extends CatanBoardTest {
 
-	@BeforeEach
+	@Before
 	public void setupForResourceTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);

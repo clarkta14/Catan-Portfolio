@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CatanBoard_TradingTest extends CatanBoardTest {
 
-	@BeforeEach
-	private void tradingBasicSetup() {
+	@Before
+	public void tradingBasicSetup() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 	}

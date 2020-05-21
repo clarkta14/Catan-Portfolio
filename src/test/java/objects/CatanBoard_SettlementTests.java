@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import gui.GameStates;
 
 public class CatanBoard_SettlementTests extends CatanBoardTest {
 	
-	@BeforeEach
-	private void basicSetupForAddSettlementTests() {
+	@Before
+	public void basicSetupForAddSettlementTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		clearClicks();

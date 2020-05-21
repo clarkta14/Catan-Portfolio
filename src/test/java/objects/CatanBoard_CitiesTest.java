@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import gui.GameStates;
 
@@ -16,8 +16,8 @@ public class CatanBoard_CitiesTest extends CatanBoardTest {
 	
 	Player currentPlayer;
 	
-	@BeforeEach
-	private void basicSetupForAddCityTests() {
+	@Before
+	public void basicSetupForAddCityTests() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		clearClicks();
