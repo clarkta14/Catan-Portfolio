@@ -227,7 +227,7 @@ public class CatanBoard {
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
 		Road newRoad = new Road(this.turnController.getCurrentPlayer());
 		
-		Boolean validPlacement = false;
+		boolean validPlacement = false;
 		for (int tileNum : tilesToCorners.keySet()) {
 			Tile tileToCheck = this.tiles.get(tileNum);
 			ArrayList<Integer> edge = tilesToCorners.get(tileNum);
@@ -259,7 +259,7 @@ public class CatanBoard {
 	}
 	
 	public int endTurnAndRoll(Random random) {
-		this.distributeDevelopmentCards();
+		distributeDevelopmentCards();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
 		if(rolled != 7) {
 			distributeResources(rolled);
@@ -268,7 +268,7 @@ public class CatanBoard {
 		return rolled;
 	}
 
-	private void distributeDevelopmentCards() {
+	public void distributeDevelopmentCards() {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		for (DevelopmentCard card : this.developmentCardsBoughtThisTurn) {
 			currentPlayer.addDevelopmentCard(card);

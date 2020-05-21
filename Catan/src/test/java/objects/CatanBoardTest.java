@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.easymock.EasyMock;
+import org.easymock.EasyMockSupport;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -367,6 +368,7 @@ public class CatanBoardTest {
 		
 		Random random = EasyMock.strictMock(Random.class);
 		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeDevelopmentCards")
 				.addMockedMethod("distributeResources")
 				.withConstructor(pc)
 				.createMock();
@@ -375,8 +377,10 @@ public class CatanBoardTest {
 		EasyMock.expect(random.nextInt(6)).andReturn(2);
 		
 		EasyMock.replay(random);
-		
+
+		cb.distributeDevelopmentCards();
 		cb.distributeResources(6);
+		cb.distributeDevelopmentCards();
 		
 		EasyMock.replay(cb);
 		
@@ -390,10 +394,10 @@ public class CatanBoardTest {
 	@Test
 	public void testEndTurnAndRoll_RollASeven() {
 		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
 		
 		Random random = EasyMock.strictMock(Random.class);
 		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeDevelopmentCards")
 				.addMockedMethod("distributeResources")
 				.withConstructor(pc)
 				.createMock();
@@ -402,6 +406,9 @@ public class CatanBoardTest {
 		EasyMock.expect(random.nextInt(6)).andReturn(3);
 		
 		EasyMock.replay(random);
+		
+		cb.distributeDevelopmentCards();
+		cb.distributeDevelopmentCards();
 		
 		EasyMock.replay(cb);
 		
