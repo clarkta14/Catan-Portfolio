@@ -5,8 +5,8 @@ import java.util.ResourceBundle;
 
 public class Messages {
 
-	private static final String BUNDLE_NAME = "gui.messages";
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	private static final String BUNDLE_NAME = "gui.messages_en_US";
+	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
 	public static String getString(String key) {
 		try {
@@ -14,5 +14,9 @@ public class Messages {
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
+	}
+	
+	public static void setBundle(String bundle) {
+		RESOURCE_BUNDLE = ResourceBundle.getBundle(bundle);
 	}
 }
