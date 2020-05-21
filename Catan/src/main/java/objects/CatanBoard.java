@@ -60,7 +60,7 @@ public class CatanBoard {
     	resourceToPorts.put(TileType.wood, PortType.wood);
     	resourceToPorts.put(TileType.ore, PortType.ore);
     	resourceToPorts.put(TileType.wheat, PortType.wheat);
-    	Collections.shuffle(portTypes);		
+    	Collections.shuffle(portTypes);
 	}
 
 	private void shuffleTiles() {
@@ -135,7 +135,7 @@ public class CatanBoard {
     }
     
     public void swapTileForRobberPlacement() {
-    	int tileIndexToSwapWith = (int) (Math.random() * 17);    	
+    	int tileIndexToSwapWith = new Random().nextInt(17);    	
     	Point temp = this.tiles.get(18).getLocation();
     	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
     	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
