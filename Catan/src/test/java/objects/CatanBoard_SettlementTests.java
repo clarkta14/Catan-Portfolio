@@ -174,6 +174,27 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 	}
 	
 	@Test
+	public void testAddSettlementToTilesNotSetupBadPlacement_SufficientResources() {
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		pc.getCurrentPlayer().addResource(TileType.wood, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+	}
+	
+	@Test
 	public void testAddSettlementToTilesNotSetupValidPlacement() {
 		Road newRoad = new Road(pc.getCurrentPlayer());
 		
