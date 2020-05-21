@@ -239,14 +239,13 @@ public class CatanBoard {
 		}
 		if (validPlacement) {
 			if (gameState == GameStates.drop_road && !buyRoad()) {
-					return false;
+				return false;
 			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
 			this.turnController.addRoadForLongestRoad((int) tilesToCorners.keySet().toArray()[0], tilesToCorners.get(tilesToCorners.keySet().toArray()[0]));
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	private void addRoadToTiles(Road newRoad, HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {

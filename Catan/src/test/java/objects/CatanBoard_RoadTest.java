@@ -92,6 +92,25 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 	}
 	
 	@Test
+	public void testPlaceRoadNotValidPlacement() {
+		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
+		addResourcesForRoad(pc.getCurrentPlayer(), 2);
+		
+		addPlayerClickNums(4, 0);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
+		
+		addPlayerDragNums(4, 0, 5);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 5, 0);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertFalse(result);
+	}
+	
+	@Test
 	public void testLongestRoadVictoryPoints_continuous5() {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
