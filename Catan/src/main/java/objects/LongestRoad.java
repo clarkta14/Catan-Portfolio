@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class LongestRoad {
 
-	private HashMap<Integer, ArrayList<LinkedList<Integer>>> roads;
+	protected HashMap<Integer, ArrayList<LinkedList<Integer>>> roads;
 
 	public LongestRoad(int numOfPlayers) {
 		this.roads = new HashMap<>();

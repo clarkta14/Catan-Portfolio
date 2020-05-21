@@ -12,6 +12,8 @@ public class LongestRoadTests {
 	public void testLongestRoadForPlayerIs3() {
 		LongestRoad lr = new LongestRoad(3);
 		
+		assertEquals(3, lr.roads.size());
+		
 		ArrayList<Integer> corners = new ArrayList<>(Arrays.asList(2, 3));
 		lr.addRoadForPlayer(0, 0, corners);
 		
@@ -26,7 +28,9 @@ public class LongestRoadTests {
 	
 	@Test
 	public void testLongestRoadForPlayerIs5() {
-		LongestRoad lr = new LongestRoad(3);
+		LongestRoad lr = new LongestRoad(4);
+		
+		assertEquals(4, lr.roads.size());
 		
 		ArrayList<Integer> corners = new ArrayList<>(Arrays.asList(2, 3));
 		lr.addRoadForPlayer(0, 0, corners);

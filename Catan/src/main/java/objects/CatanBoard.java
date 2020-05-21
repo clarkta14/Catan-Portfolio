@@ -105,10 +105,11 @@ public class CatanBoard {
             } else if (x == 4) {
             	ylow = 2;
             	yhigh = 6;
-            } else {
+            } else if (x == 5) {
             	ylow = 3;
             	yhigh = 6;
             } 
+            
             for(int y = ylow; y < yhigh; y++){
                 positions.add(new Point(x,y));
             }
