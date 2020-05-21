@@ -2,6 +2,8 @@ package objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Random;
 import java.util.Stack;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,7 @@ public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
 
 		assertTrue(cb.buyDevelopmentCard());
-		cb.endTurnAndRoll();
+		cb.endTurnAndRoll(new Random());
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.ore));
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.wheat));
@@ -39,7 +41,7 @@ public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
 
 		assertTrue(!cb.buyDevelopmentCard());
-		cb.endTurnAndRoll();
+		cb.endTurnAndRoll(new Random());
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.ore));
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.wheat));
@@ -56,7 +58,7 @@ public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
 
 		assertTrue(!cb.buyDevelopmentCard());
-		cb.endTurnAndRoll();
+		cb.endTurnAndRoll(new Random());
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.ore));
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.wheat));
@@ -73,7 +75,7 @@ public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 		pc.getCurrentPlayer().addResource(TileType.wool, 1);
 
 		assertTrue(!cb.buyDevelopmentCard());
-		cb.endTurnAndRoll();
+		cb.endTurnAndRoll(new Random());
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.ore));
 		assertEquals(1, pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(0, pc.getCurrentPlayer().getResourceCount(TileType.wheat));
@@ -101,7 +103,7 @@ public class CatanBoard_DevelopmentCardTest extends CatanBoardTest {
 		}
 		assertTrue(totalDevCards == 0);
 
-		cb.endTurnAndRoll();
+		cb.endTurnAndRoll(new Random());
 		totalDevCards = 0;
 		for (Stack<DevelopmentCard> devCardStack : pc.getCurrentPlayer().developmentCards.values()) {
 			totalDevCards += devCardStack.size();

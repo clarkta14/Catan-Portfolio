@@ -2,15 +2,20 @@ package objects;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
+
+import org.easymock.EasyMock;
+import org.easymock.EasyMockSupport;
 import org.junit.Test;
 
 import gui.GameStates;
 
 public class CatanBoardTest {
 	
-	// Player numbers
 	int player1 = 0;
 	int player2 = 1;
 	int player3 = 2;
@@ -19,7 +24,6 @@ public class CatanBoardTest {
 	PlayersController pc;
 	CatanBoard cb;
 	
-	// Stores click locations for players in the tests
 	ArrayList<Integer> tileNums = new ArrayList<Integer>();
 	ArrayList<Integer> cornerNums = new ArrayList<Integer>();
 	
@@ -32,6 +36,110 @@ public class CatanBoardTest {
 		pc = new PlayersController(4);
 		cb = new CatanBoard(pc);
 		assertEquals(cb.getTiles().size(), 19);
+		
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			numbers.add(t.getNumber());
+		}
+		
+		numbers.remove(Integer.valueOf(2));
+		numbers.remove(Integer.valueOf(12));
+		for(int i = 3; i <= 11; i++) {
+			numbers.remove(Integer.valueOf(i));
+			numbers.remove(Integer.valueOf(i));
+		}
+		
+		assertEquals(0, numbers.size());
+		
+		ArrayList<TileType> types = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			types.add(t.getType());
+		}
+		
+		types.remove(TileType.desert);
+		for(int i = 0; i < 4; i++) {
+            types.remove(TileType.wool);
+            types.remove(TileType.wheat);
+            types.remove(TileType.wood);
+        }
+		for(int i = 0; i < 3; i++) {
+            types.remove(TileType.brick);
+            types.remove(TileType.ore);
+        }
+		
+		assertEquals(0, types.size());
+		
+		ArrayList<Point> positionsExpected = new ArrayList<>();
+		for(int x = 1; x < 6; x++){
+            int ylow = -1;
+            int yhigh = -1;
+            switch (x) {
+                case 1:
+                    ylow = 1;
+                    yhigh = 4;
+                    break;
+                case 2:
+                    ylow = 1;
+                    yhigh = 5;
+                    break;
+                case 3:
+                    ylow = 1;
+                    yhigh = 6;
+                    break;
+                case 4:
+                    ylow = 2;
+                    yhigh = 6;
+                    break;
+                case 5:
+                    ylow = 3;
+                    yhigh = 6;
+                    break;
+            }
+            
+            for(int y = ylow; y < yhigh; y++){
+                positionsExpected.add(new Point(x,y));
+            }
+		}
+		
+		ArrayList<Point> positionsActual = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			positionsActual.add(t.getLocation());
+		}
+		
+		for(Point p: positionsExpected) {
+			positionsActual.remove(p);
+		}
+		
+		assertEquals(0, positionsActual.size());
+		
+		ArrayList<PortType> portTypesExpected = new ArrayList<PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypesExpected.add(PortType.three);
+    	}
+    	portTypesExpected.add(PortType.brick);
+    	portTypesExpected.add(PortType.wool);
+    	portTypesExpected.add(PortType.wood);
+    	portTypesExpected.add(PortType.ore);
+    	portTypesExpected.add(PortType.wheat);
+    	for(PortType p: portTypesExpected) {
+    		cb.portTypes.remove(p);
+    	}
+    	assertEquals(0, cb.portTypes.size());
+    	
+    	HashMap<TileType, PortType> resourceToPortsExpected = new HashMap<>();
+    	resourceToPortsExpected.put(TileType.brick, PortType.brick);
+    	resourceToPortsExpected.put(TileType.wool, PortType.wool);
+    	resourceToPortsExpected.put(TileType.wood, PortType.wood);
+    	resourceToPortsExpected.put(TileType.ore, PortType.ore);
+    	resourceToPortsExpected.put(TileType.wheat, PortType.wheat);
+    	for(TileType t: resourceToPortsExpected.keySet()) {
+    		cb.resourceToPorts.remove(t);
+    	}
+    	assertEquals(0, cb.resourceToPorts.size());
+    	
+    	assertNotEquals(-1, cb.robber);
+    	
+    	assertNotEquals(TileType.desert, cb.getTiles().get(18).getType());
 	}
 	
 	@Test
@@ -39,6 +147,110 @@ public class CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		assertEquals(cb.getTiles().size(), 19);
+		
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			numbers.add(t.getNumber());
+		}
+		
+		numbers.remove(Integer.valueOf(2));
+		numbers.remove(Integer.valueOf(12));
+		for(int i = 3; i <= 11; i++) {
+			numbers.remove(Integer.valueOf(i));
+			numbers.remove(Integer.valueOf(i));
+		}
+		
+		assertEquals(0, numbers.size());
+		
+		ArrayList<TileType> types = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			types.add(t.getType());
+		}
+		
+		types.remove(TileType.desert);
+		for(int i = 0; i < 4; i++) {
+            types.remove(TileType.wool);
+            types.remove(TileType.wheat);
+            types.remove(TileType.wood);
+        }
+		for(int i = 0; i < 3; i++) {
+            types.remove(TileType.brick);
+            types.remove(TileType.ore);
+        }
+		
+		assertEquals(0, types.size());
+		
+		ArrayList<Point> positionsExpected = new ArrayList<>();
+		for(int x = 1; x < 6; x++){
+            int ylow = -1;
+            int yhigh = -1;
+            switch (x) {
+                case 1:
+                    ylow = 1;
+                    yhigh = 4;
+                    break;
+                case 2:
+                    ylow = 1;
+                    yhigh = 5;
+                    break;
+                case 3:
+                    ylow = 1;
+                    yhigh = 6;
+                    break;
+                case 4:
+                    ylow = 2;
+                    yhigh = 6;
+                    break;
+                case 5:
+                    ylow = 3;
+                    yhigh = 6;
+                    break;
+            }
+            
+            for(int y = ylow; y < yhigh; y++){
+                positionsExpected.add(new Point(x,y));
+            }
+		}
+		
+		ArrayList<Point> positionsActual = new ArrayList<>();
+		for (Tile t: cb.getTiles()) {
+			positionsActual.add(t.getLocation());
+		}
+		
+		for(Point p: positionsExpected) {
+			positionsActual.remove(p);
+		}
+		
+		assertEquals(0, positionsActual.size());
+		
+		ArrayList<PortType> portTypesExpected = new ArrayList<PortType>();
+    	for (int i = 0; i < 4; i++) {
+    		portTypesExpected.add(PortType.three);
+    	}
+    	portTypesExpected.add(PortType.brick);
+    	portTypesExpected.add(PortType.wool);
+    	portTypesExpected.add(PortType.wood);
+    	portTypesExpected.add(PortType.ore);
+    	portTypesExpected.add(PortType.wheat);
+    	for(PortType p: portTypesExpected) {
+    		cb.portTypes.remove(p);
+    	}
+    	assertEquals(0, cb.portTypes.size());
+    	
+    	HashMap<TileType, PortType> resourceToPortsExpected = new HashMap<>();
+    	resourceToPortsExpected.put(TileType.brick, PortType.brick);
+    	resourceToPortsExpected.put(TileType.wool, PortType.wool);
+    	resourceToPortsExpected.put(TileType.wood, PortType.wood);
+    	resourceToPortsExpected.put(TileType.ore, PortType.ore);
+    	resourceToPortsExpected.put(TileType.wheat, PortType.wheat);
+    	for(TileType t: resourceToPortsExpected.keySet()) {
+    		cb.resourceToPorts.remove(t);
+    	}
+    	assertEquals(0, cb.resourceToPorts.size());
+    	
+    	assertNotEquals(-1, cb.robber);
+    	
+    	assertNotEquals(TileType.desert, cb.getTiles().get(18).getType());
 	}
 	
 	@Test
@@ -64,12 +276,10 @@ public class CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
 
-		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(p1tile, p1corner, player1);
 		
-		// Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		registerPlayerDragSetup();
 		Road r = checkPlayerTileForRoad(player1, p1roadTile, p1road1, p1road2);
@@ -83,16 +293,13 @@ public class CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 10; int p1road1 = 1; int p1road2 = 2;
 
-		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(p1tile, p1corner, player1);
 		
-		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
 		registerPlayerDragSetup();
 
-		// Check no roads
 		ArrayList<Tile> tiles = cb.getTiles();
 		Tile tile = tiles.get(p1roadTile);
 		HashMap<ArrayList<Integer>, Road> roads = tile.getRoads();
@@ -111,14 +318,12 @@ public class CatanBoardTest {
 		int p2tile2 = 10; int p2corner2 = 5; int p2road2 = 4;
 		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
 		
-		// Everyone places first settlements and roads
 		makePlayerTurnInit(p1tile, p1corner, p1road, player1, 2);
 		
 		makePlayerTurnInit(p2tile, p2corner, p2road, player2, 0);
 
 		makePlayerTurnInit(p3tile, p3corner, p3road, player3, 1);
 		
-		// Second Round of settlements
 		makePlayerTurnInit(p3tile2, p3corner2, p3road2, player3, 0);
 
 		makePlayerTurnInit(p2tile2, p2corner2, p2road2, player2, 2);
@@ -140,7 +345,6 @@ public class CatanBoardTest {
 		int p3tile2 = 18; int p3corner2 = 3; int p3road2 = 2;
 		int p4tile2 = 11; int p4corner2 = 2; int p4road2 = 3;
 		
-		// Everyone places first settlements and roads
 		makePlayerTurnInit(p1tile, p1corner, p1road, player1, 2);
 		
 		makePlayerTurnInit(p2tile, p2corner, p2road, player2, 0);
@@ -149,7 +353,6 @@ public class CatanBoardTest {
 		
 		makePlayerTurnInit(p4tile, p4corner, p4road, player4, 1);
 		
-		// Second Round of settlements
 		makePlayerTurnInit(p4tile2, p4corner2, p4road2, player4, 0);
 		
 		makePlayerTurnInit(p3tile2, p3corner2, p3road2, player3, 0);
@@ -160,17 +363,80 @@ public class CatanBoardTest {
 	}
 	
 	@Test
-	public void testEndTurnAndRoll() {
+	public void testEndTurnAndRoll_NotASeven() {
+		pc = new PlayersController(3);
+		
+		Random random = EasyMock.strictMock(Random.class);
+		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeDevelopmentCards")
+				.addMockedMethod("distributeResources")
+				.withConstructor(pc)
+				.createMock();
+		
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		
+		EasyMock.replay(random);
+
+		cb.distributeDevelopmentCards();
+		cb.distributeResources(6);
+		cb.distributeDevelopmentCards();
+		
+		EasyMock.replay(cb);
+		
+		int result = cb.endTurnAndRoll(random);
+		
+		EasyMock.verify(cb, random);
+		
+		assertNotEquals(7, result);
+	}
+	
+	@Test
+	public void testEndTurnAndRoll_RollASeven() {
+		pc = new PlayersController(3);
+		
+		Random random = EasyMock.strictMock(Random.class);
+		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeDevelopmentCards")
+				.addMockedMethod("distributeResources")
+				.withConstructor(pc)
+				.createMock();
+		
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		EasyMock.expect(random.nextInt(6)).andReturn(3);
+		
+		EasyMock.replay(random);
+		
+		cb.distributeDevelopmentCards();
+		cb.distributeDevelopmentCards();
+		
+		EasyMock.replay(cb);
+		
+		int result = cb.endTurnAndRoll(random);
+		
+		EasyMock.verify(cb, random);
+		
+		assertEquals(7, result);
+	}
+	
+	@Test
+	public void testMoveRobber() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		//TODO: figure out a better way to test.
-		for (int i = 0; i < 10000; i++) {
-			int result = cb.endTurnAndRoll();
-			if(result < 2 || result > 12) {
-				fail("Rolled out of bounds: " + result);
+		Tile robberTile = null;
+		Tile otherTile = null;
+		ArrayList<Tile> tiles = cb.getTiles();
+		for (Tile tile : tiles) {
+			if (tile.isRobber()) {
+				robberTile = tile;
+			} else {
+				otherTile = tile;
 			}
 		}
+		cb.moveRobber(otherTile);
+		assertTrue(otherTile.isRobber());
+		assertFalse(robberTile.isRobber());
 	}
 	
 	public ArrayList<Settlement> getSettlementsFromClickedTiles() {

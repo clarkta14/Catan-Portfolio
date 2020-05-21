@@ -56,6 +56,10 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
 		assertTrue(result);
 		assertEquals(1, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		
+		for (Settlement s: cb.getTiles().get(0).getSettlements().values()) {
+			assertEquals(PortType.none, s.portType);
+		}
 	}
 	
 	@Test
@@ -170,6 +174,27 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 	}
 	
 	@Test
+	public void testAddSettlementToTilesNotSetupBadPlacement_SufficientResources() {
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		pc.getCurrentPlayer().addResource(TileType.brick, 1);
+		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
+		pc.getCurrentPlayer().addResource(TileType.wood, 1);
+		pc.getCurrentPlayer().addResource(TileType.wool, 1);
+		
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+	}
+	
+	@Test
 	public void testAddSettlementToTilesNotSetupValidPlacement() {
 		Road newRoad = new Road(pc.getCurrentPlayer());
 		
@@ -234,6 +259,28 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 	
 	@Test
 	public void testAddSettlementToTilesNotSetupWrongOwner() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+	}
+	
+	@Test
+	public void testAddSettlementToTiles_Tiles() {
 		basicSetupForAddSettlementTests();
 		Road newRoad = new Road(pc.getCurrentPlayer());
 		
@@ -385,5 +432,62 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		assertEquals(numOfWoolBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
 		assertEquals(numOfWheatBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
 	}
+	
+	@Test
+	public void getPlayersWithSettlementOnTile2SettlementsSameTile() {
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		clearClicks();
+		
+		tileNums.add(1);
+		tileNums.add(2);
+		tileNums.add(5);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		
+		Tile tile = cb.getTiles().get(1);
+		Player player = pc.getCurrentPlayer();
+		ArrayList<Player> players = cb.getPlayersWithSettlementOnTile(tile);
+		assertEquals(1, players.size());
+		assertTrue(players.contains(player));
+		
+	}
+	
+	@Test
+	public void testGetPlayersWithSettlementOnRobberTile() {
+		Tile robberTile = null;
 
+		ArrayList<Tile> tiles = cb.getTiles();
+		int robberTileNum = -1;
+		for (int i = 0; i < tiles.size(); i++) {
+			Tile tile = tiles.get(i);
+			if (tile.isRobber()) {
+				robberTile = tile;
+				robberTileNum = i;
+				break;
+			}
+		}
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		tileNums.add(robberTileNum);
+		cornerNums.add(0);
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement_setup);
+		assertTrue(result);
+		assertEquals(1, robberTile.getSettlements().size());
+		ArrayList<Player> players = cb.getPlayersWithSettlementOnRobberTile();
+		assertEquals(1, players.size());
+		assertTrue(players.contains(currentPlayer));
+	}
+		
 }

@@ -82,6 +82,39 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		int p1tile = 1; int p1corner = 1;
 		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
 
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		addPlayerDragNums(p1roadTile, p1road1, p1road2);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testPlaceRoadNotValidPlacement() {
+		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
+		addResourcesForRoad(pc.getCurrentPlayer(), 2);
+		
+		addPlayerClickNums(4, 0);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
+		
+		addPlayerDragNums(4, 0, 5);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertTrue(result);
+		clearDrags();
+		
+		addPlayerDragNums(4, 5, 0);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		assertFalse(result);
+	}
+
+	@Test
+	public void testPlaceRoadSetupNotValid() {
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1; int p1road1 = 1; int p1road2 = 2;
+
 		// Place Settlement
 		addPlayerClickNums(p1tile, p1corner);
 		registerPlayerClick();
@@ -89,7 +122,27 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		
 		// Try to Place Road
 		addPlayerDragNums(p1roadTile, p1road1, p1road2);
-		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertTrue(result);
+		
+		addPlayerDragNums(p1roadTile, 2, 3);
+		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testPlaceRoadNotValid() {
+		int p1tile = 1; int p1corner = 1;
+		int p1roadTile = 1;
+
+		// Place Settlement
+		addPlayerClickNums(p1tile, p1corner);
+		registerPlayerClick();
+		checkPlayerTileForSettlement(p1tile, p1corner, player1);
+		
+		// Try to Place Road
+		addPlayerDragNums(p1roadTile, 2, 3);
+		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road_setup);
 		assertFalse(result);
 	}
 	
@@ -98,12 +151,10 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
 
-		// Place Settlement
 		addPlayerClickNums(4, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(4, 0, 5);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);
@@ -137,12 +188,10 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 5);
 
-		// Place Settlement
 		addPlayerClickNums(4, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(4, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(4, 0, 5);
 		boolean result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);
@@ -170,18 +219,15 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		
 		assertEquals(3, pc.getCurrentPlayer().getNumberOfVictoryPoints());
 		
-		//Player 2
 		pc.nextPlayer();
 		
 		addResourcesForSettlements(pc.getCurrentPlayer(), 1);
 		addResourcesForRoad(pc.getCurrentPlayer(), 6);
 
-		// Place Settlement
 		addPlayerClickNums(13, 0);
 		registerPlayerClick();
 		checkPlayerTileForSettlement(13, 0, pc.getCurrentPlayerNum());
 		
-		// Try to Place Road
 		addPlayerDragNums(13, 0, 5);
 		result = cb.roadLocationClick(tileToCorners, tileToRoadOrientation, GameStates.drop_road);
 		assertTrue(result);
