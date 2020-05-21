@@ -27,6 +27,27 @@ public class LongestRoadTests {
 	}
 	
 	@Test
+	public void testLongestRoadForPlayerIsMutationLine28() {
+		LongestRoad lr = new LongestRoad(3);
+		
+		assertEquals(3, lr.roads.size());
+		
+		ArrayList<Integer> corners = new ArrayList<>(Arrays.asList(4, 3));
+		lr.addRoadForPlayer(0, 0, corners);
+		
+		corners = new ArrayList<>(Arrays.asList(5, 4));
+		lr.addRoadForPlayer(0, 4, corners);
+		
+		corners = new ArrayList<>(Arrays.asList(0, 5));
+		lr.addRoadForPlayer(0, 0, corners);
+		
+		corners = new ArrayList<>(Arrays.asList(5, 4));
+		lr.addRoadForPlayer(0, 0, corners);
+		
+		assertEquals(4, lr.getLongestRoadForPlayer(0));
+	}
+	
+	@Test
 	public void testLongestRoadForPlayerIs5() {
 		LongestRoad lr = new LongestRoad(4);
 		
