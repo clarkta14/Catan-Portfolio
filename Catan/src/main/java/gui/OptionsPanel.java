@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -69,12 +70,12 @@ public class OptionsPanel extends JPanel {
 		this.acceptTradeWithPlayerPanel = new ArrayList<>();
 		this.stealFromPlayerPanel = new ArrayList<>();
 		this.moveRobberInfoPanel = new ArrayList<>();
-		JLabel moveRobberInstuctionLabel = new JLabel(Messages.getString("OptionsPanel.45")); //$NON-NLS-1$
+		JLabel moveRobberInstuctionLabel = new JLabel(Messages.getString("OptionsPanel.45")); 
 		this.moveRobberInfoPanel.add(new OptionsPanelComponent(moveRobberInstuctionLabel, new Rectangle(2,3,18,1)));
 		this.selectedResource = null;
 		this.yearOfPlentyResource = null;
 		this.setLayout(new GraphPaperLayout(new Dimension(14, 24)));
-		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(1, 1, 12, 1)); //$NON-NLS-1$
+		this.currentPlayerNameBox = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(1, 1, 12, 1)); 
 		this.currentPlayerNameBox.getSwingComponent().setFont(font);
 		this.currentPlayerNameBox.getSwingComponent().setForeground(Color.CYAN);
 		setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
@@ -85,11 +86,11 @@ public class OptionsPanel extends JPanel {
 
 	public void setupPhase() {
 		if(boardGUI.getState().equals(GameStates.setup)) {
-			final JLabel start = new JLabel(Messages.getString("OptionsPanel.1")); //$NON-NLS-1$
+			final JLabel start = new JLabel(Messages.getString("OptionsPanel.1")); 
 			start.setFont(font);
 			setupPanel.add(new OptionsPanelComponent(start, new Rectangle(2,3,10,2)));
 			JButton begin = new JButton(new DropSettlementSetupListener());
-			begin.setText(Messages.getString("OptionsPanel.2")); //$NON-NLS-1$
+			begin.setText(Messages.getString("OptionsPanel.2")); 
 			setupPanel.add(new OptionsPanelComponent(begin, new Rectangle(4,6,6,2)));
 			setupPanel();
 		}
@@ -104,7 +105,7 @@ public class OptionsPanel extends JPanel {
 				} else {
 					boardGUI.setState(GameStates.drop_settlement_setup_final);
 				}
-				placeInfoPanel(Messages.getString("OptionsPanel.3")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.3")); 
 				timer = new Timer(50, new PlaceRoadSetupListener());
 				timer.start();
 			}
@@ -119,7 +120,7 @@ public class OptionsPanel extends JPanel {
 				timer.stop();
 				gameWindow.refreshPlayerStats();
 				boardGUI.setState(GameStates.drop_road_setup);
-				placeInfoPanel(Messages.getString("OptionsPanel.4")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.4")); 
 				timer = new Timer(50, new ResetStateListenerSetup());
 				timer.start();
 			}
@@ -140,7 +141,7 @@ public class OptionsPanel extends JPanel {
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 					addCancelButtonToInfoPanel();
-					int rolled = catanBoard.endTurnAndRoll();
+					int rolled = catanBoard.endTurnAndRoll(new Random());
 					setLastRolled(rolled);
 					gameWindow.refreshPlayerStats();
 				}
@@ -149,7 +150,7 @@ public class OptionsPanel extends JPanel {
 
 		private void addCancelButtonToInfoPanel() {
 			JButton cancelButton = new JButton(new CancelAction());
-			cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+			cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 			infoPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,6,6,2)));			
 		}	
 	}
@@ -157,38 +158,38 @@ public class OptionsPanel extends JPanel {
 	private void createActionPanel() {
 		actionPanel = new ArrayList<>();
 		JButton placeSettlementButton = new JButton(new PlaceSettlementListener());
-		placeSettlementButton.setText(Messages.getString("OptionsPanel.6")); //$NON-NLS-1$
+		placeSettlementButton.setText(Messages.getString("OptionsPanel.6")); 
 		actionPanel.add(new OptionsPanelComponent(placeSettlementButton, new Rectangle(4,4,6,2)));
 		
 		JButton placeCityButton = new JButton(new PlaceCityListener());
-		placeCityButton.setText(Messages.getString("OptionsPanel.7")); //$NON-NLS-1$
+		placeCityButton.setText(Messages.getString("OptionsPanel.7")); 
 		actionPanel.add(new OptionsPanelComponent(placeCityButton, new Rectangle(4,6,6,2)));
 		
 		JButton placeRoadButton = new JButton(new PlaceRoadListener());
-		placeRoadButton.setText(Messages.getString("OptionsPanel.8")); //$NON-NLS-1$
+		placeRoadButton.setText(Messages.getString("OptionsPanel.8")); 
 		actionPanel.add(new OptionsPanelComponent(placeRoadButton, new Rectangle(4,8,6,2)));
 		
 		JButton tradeWithBankButton = new JButton(new TradeWithBankButtonListener());
-		tradeWithBankButton.setText(Messages.getString("OptionsPanel.9")); //$NON-NLS-1$
+		tradeWithBankButton.setText(Messages.getString("OptionsPanel.9")); 
 		actionPanel.add(new OptionsPanelComponent(tradeWithBankButton, new Rectangle(4,10,6,2)));
 		
 		JButton tradeWithPlayerButton = new JButton(new TradeWithPlayerButtonListener());
-		tradeWithPlayerButton.setText(Messages.getString("OptionsPanel.10")); //$NON-NLS-1$
+		tradeWithPlayerButton.setText(Messages.getString("OptionsPanel.10")); 
 		actionPanel.add(new OptionsPanelComponent(tradeWithPlayerButton, new Rectangle(4,12,6,2)));
 		
 		JButton buyDevCardButton = new JButton(new BuyDevCardListener());
-		buyDevCardButton.setText(Messages.getString("OptionsPanel.11")); //$NON-NLS-1$
+		buyDevCardButton.setText(Messages.getString("OptionsPanel.11")); 
 		actionPanel.add(new OptionsPanelComponent(buyDevCardButton, new Rectangle(4,14,6,2)));
 		
 		JButton playDevCardButton = new JButton(new PlayDevCardListener());
-		playDevCardButton.setText(Messages.getString("OptionsPanel.40")); //$NON-NLS-1$
+		playDevCardButton.setText(Messages.getString("OptionsPanel.40")); 
 		actionPanel.add(new OptionsPanelComponent(playDevCardButton, new Rectangle(4,16,6,2)));
 
 		JButton endTurnButton = new JButton(new EndTurnListener());
-		endTurnButton.setText(Messages.getString("OptionsPanel.12")); //$NON-NLS-1$
+		endTurnButton.setText(Messages.getString("OptionsPanel.12")); 
 		actionPanel.add(new OptionsPanelComponent(endTurnButton, new Rectangle(4,20,6,2)));
 		
-		this.lastRolled = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(4, 22, 6, 2)); //$NON-NLS-1$
+		this.lastRolled = new OptionsPanelComponent(new JLabel(Messages.getString("OptionsPanel.0")), new Rectangle(4, 22, 6, 2)); 
 		this.lastRolled.getSwingComponent().setFont(font);
 		this.lastRolled.getSwingComponent().setForeground(Color.BLACK);
 		actionPanel.add(this.lastRolled);
@@ -201,25 +202,25 @@ public class OptionsPanel extends JPanel {
 		if (!playedCard) {
 			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.year_of_plenty_card) > 0) {
 				JButton playYearOfPlentyCard = new JButton(new YearOfPlentyCardButton());
-				playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); //$NON-NLS-1$
+				playYearOfPlentyCard.setText(Messages.getString("OptionsPanel.38")); 
 				devCardButtons.add(new OptionsPanelComponent(playYearOfPlentyCard, new Rectangle(4, 4 + spacing ,6,2)));
 				spacing+=2;
 			}
 			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.monopoly_card) > 0) {
 				JButton monopolyCardButton = new JButton(new MonopolyCardButton());
-				monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); //$NON-NLS-1$
+				monopolyCardButton.setText(Messages.getString("OptionsPanel.39")); 
 				devCardButtons.add(new OptionsPanelComponent(monopolyCardButton, new Rectangle(4, 4 + spacing ,6,2)));
 				spacing+=2;
 			}
 			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.road_building_card) > 0) {
 				JButton roadBuildingCardButton = new JButton(new RoadBuildingCardButton());
-				roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); //$NON-NLS-1$
+				roadBuildingCardButton.setText(Messages.getString("OptionsPanel.41")); 
 				devCardButtons.add(new OptionsPanelComponent(roadBuildingCardButton, new Rectangle(4, 4 + spacing ,6,2)));
 				spacing+=2;
 			}
 			if(this.playerController.getCurrentPlayer().getDevelopmentCardCount(DevelopmentCardType.knight) > 0) {
 				JButton knightCardButton = new JButton(new KnightCardButton());
-				knightCardButton.setText(Messages.getString("OptionsPanel.46")); //$NON-NLS-1$
+				knightCardButton.setText(Messages.getString("OptionsPanel.46")); 
 				devCardButtons.add(new OptionsPanelComponent(knightCardButton, new Rectangle(4, 4 + spacing ,6,2)));
 				spacing+=2;
 			}
@@ -234,7 +235,7 @@ public class OptionsPanel extends JPanel {
 	private ArrayList<OptionsPanelComponent> createVictoryPanel() {
 		ArrayList<OptionsPanelComponent> victoryPanel = new ArrayList<>();
 		int playerNum = this.playerController.getCurrentPlayerNum() + 1;
-		JLabel victoryMessage = new JLabel(Messages.getString("OptionsPanel.13") + playerNum + Messages.getString("OptionsPanel.14")); //$NON-NLS-1$
+		JLabel victoryMessage = new JLabel(Messages.getString("OptionsPanel.13") + playerNum + Messages.getString("OptionsPanel.14")); 
 		victoryMessage.setFont(font);
 		victoryPanel.add(new OptionsPanelComponent(victoryMessage, new Rectangle(2,3,10,2)));
 		return victoryPanel;
@@ -274,7 +275,7 @@ public class OptionsPanel extends JPanel {
 			if(boardGUI.getState().equals(GameStates.idle) && currentPlayer.getDevelopmentCardCount(DevelopmentCardType.road_building_card) >= 1) {
 				currentPlayer.removeDevelopmentCard(DevelopmentCardType.road_building_card);
 				playedCard = true;
-				placeInfoPanel(Messages.getString("OptionsPanel.42")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.42")); 
 				boardGUI.setState(GameStates.drop_road_card);
 				createTimer(new RoadBuildingCardFinal());
 			}
@@ -291,7 +292,7 @@ public class OptionsPanel extends JPanel {
 				currentPlayer.knightsPlayed++;
 				playedCard = true;
 				playerController.determineLargestArmy(currentPlayer);
-				setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+				setOnOptionsPanel(moveRobberInfoPanel); 
 				boardGUI.setState(GameStates.move_robber);
 				createTimer(new MoveToStealPhaseStateListener(-1));
 			}
@@ -309,7 +310,7 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
 				boardGUI.setState(GameStates.drop_road_card);
-				placeInfoPanel(Messages.getString("OptionsPanel.43")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.43")); 
 				createTimer(new ResetStateListener());
 			}
 		}
@@ -404,7 +405,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuySettlement()) {
-				placeInfoPanel(Messages.getString("OptionsPanel.15")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.15")); 
 				boardGUI.setState(GameStates.drop_settlement);
 				createTimer(new ResetStateListener());
 			}
@@ -415,7 +416,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyCity()) {
-				placeInfoPanel(Messages.getString("OptionsPanel.16")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.16")); 
 				boardGUI.setState(GameStates.drop_city);
 				createTimer(new ResetStateListener());
 			}
@@ -426,7 +427,7 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle) && playerController.getCurrentPlayer().canBuyRoad()) {
-				placeInfoPanel(Messages.getString("OptionsPanel.17")); //$NON-NLS-1$
+				placeInfoPanel(Messages.getString("OptionsPanel.17")); 
 				boardGUI.setState(GameStates.drop_road);
 				createTimer(new ResetStateListener());
 			}
@@ -473,7 +474,7 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
 				playedCard = false;
-				int rolled = catanBoard.endTurnAndRoll();
+				int rolled = catanBoard.endTurnAndRoll(new Random());
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				
@@ -493,7 +494,7 @@ public class OptionsPanel extends JPanel {
 		
 		if (playerNum >= playerController.getTotalNumOfPlayers()) {
 			setCurrentPlayer(this.playerController.getCurrentPlayer(), this.playerController.getCurrentPlayerNum());
-			setOnOptionsPanel(moveRobberInfoPanel); //$NON-NLS-1$
+			setOnOptionsPanel(moveRobberInfoPanel); 
 			boardGUI.setState(GameStates.move_robber);
 			createTimer(new MoveToStealPhaseStateListener(7));
 			return;
@@ -522,26 +523,26 @@ public class OptionsPanel extends JPanel {
 		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wheat), new Rectangle(4,10,3,1)));
 		this.discardPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(p, TileType.wood), new Rectangle(8,10,3,1)));
 			
-		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); //$NON-NLS-1$
+		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); 
 		this.discardPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
 			
-		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); //$NON-NLS-1$
+		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); 
 		this.discardPanel.add(new OptionsPanelComponent(woolLabel, new Rectangle(6,5,4,1)));
 			
-		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); //$NON-NLS-1$
+		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); 
 		this.discardPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
 			
-		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); //$NON-NLS-1$
+		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); 
 		this.discardPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
 			
-		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); //$NON-NLS-1$
+		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); 
 		this.discardPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8, 9, 4, 1)));
 
 		JButton submitResources = new JButton(new DiscardConfirmListener(playerNum));
-		submitResources.setText(Messages.getString("OptionsPanel.29")); //$NON-NLS-1$
+		submitResources.setText(Messages.getString("OptionsPanel.29")); 
 		this.discardPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3, 15, 9, 2)));
 
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.47")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.47")); 
 		this.discardPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2, 3, 18, 1)));
 		
 		return this.discardPanel;
@@ -600,14 +601,14 @@ public class OptionsPanel extends JPanel {
 
 	public void setCurrentPlayer(Player p, int num) {
 		JLabel label = (JLabel) currentPlayerNameBox.getSwingComponent();
-		label.setText(Messages.getString("OptionsPanel.18") + (num + 1)); //$NON-NLS-1$
+		label.setText(Messages.getString("OptionsPanel.18") + (num + 1)); 
 		label.setOpaque(true);
 		label.setBackground(p.getColor());
 	}
 	
 	public void setLastRolled(int lastRolledNum) {
 		JLabel label = (JLabel) this.lastRolled.getSwingComponent();
-		label.setText(Messages.getString("OptionsPanel.19") + lastRolledNum); //$NON-NLS-1$
+		label.setText(Messages.getString("OptionsPanel.19") + lastRolledNum); 
 		label.setOpaque(true);
 	}
 	
@@ -625,7 +626,7 @@ public class OptionsPanel extends JPanel {
 	
 	public void tradeWithBankPanel() {
 		this.tradeWithBankPanel = new ArrayList<>();
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.20")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.20")); 
 		this.tradeWithBankPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		this.tradeWithBankPanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.wool), new Rectangle(4,6,6,2)));
 		this.tradeWithBankPanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.wheat), new Rectangle(4,8,6,2)));
@@ -633,7 +634,7 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithBankPanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.ore), new Rectangle(4,12,6,2)));
 		this.tradeWithBankPanel.add(new OptionsPanelComponent(selectItemToTradeFor(TileType.brick), new Rectangle(4,14,6,2)));
 		JButton cancelButton = new JButton(new CancelAction());
-		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+		cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 		tradeWithBankPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,17,6,2)));
 		setOnOptionsPanel(tradeWithBankPanel);
 	}
@@ -653,17 +654,15 @@ public class OptionsPanel extends JPanel {
 	
 	public void tradeWithBankPaymentPanel() {
 		this.tradeWithBankPaymentPanel = new ArrayList<>();
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.21")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.21")); 
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
-		//Player currentPlayer = playerController.getCurrentPlayer();
-		//boolean canThreeTrade = currentPlayer.canPortTrade(PortType.three);
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wool), new Rectangle(4,6,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wheat), new Rectangle(4,8,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.wood), new Rectangle(4,10,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.ore), new Rectangle(4,12,6,2)));
 		this.tradeWithBankPaymentPanel.add(new OptionsPanelComponent(selectItemAsPayment(TileType.brick), new Rectangle(4,14,6,2)));
 		JButton cancelButton = new JButton(new CancelAction());
-		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+		cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 		tradeWithBankPaymentPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,17,6,2)));
 		setOnOptionsPanel(tradeWithBankPaymentPanel);
 	}
@@ -701,7 +700,7 @@ public class OptionsPanel extends JPanel {
 	
 	public void playersPanelForTrade() {
 		this.playersPanel = new ArrayList<>();
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.23")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.23")); 
 		this.playersPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		int spacing = 0;
 		
@@ -714,7 +713,7 @@ public class OptionsPanel extends JPanel {
 		}
 
 		JButton cancelButton = new JButton(new CancelAction());
-		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+		cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 		playersPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(4,16,6,2)));
 		setOnOptionsPanel(playersPanel);
 	}
@@ -728,7 +727,7 @@ public class OptionsPanel extends JPanel {
 				}
 			}
 		});
-		playerButton.setText(Messages.getString("OptionsPanel.13") + playerNum); //$NON-NLS-1$
+		playerButton.setText(Messages.getString("OptionsPanel.13") + playerNum); 
 		return playerButton;
 	}
 	
@@ -741,30 +740,30 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(this.playerController.getPlayer(selectedPlayer), TileType.wheat), new Rectangle(4,10,3,1)));
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(this.playerController.getPlayer(selectedPlayer), TileType.wood), new Rectangle(8,10,3,1)));
 		
-		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); //$NON-NLS-1$
+		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
 		
-		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); //$NON-NLS-1$
+		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(woolLabel, new Rectangle(6,5,4,1)));
 		
-		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); //$NON-NLS-1$
+		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
 
-		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); //$NON-NLS-1$
+		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
 
-		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); //$NON-NLS-1$
+		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8,9,4,1)));
 		
 		JButton submitResources = new JButton(new TradeWithPlayerForListener());
-		submitResources.setText(Messages.getString("OptionsPanel.29")); //$NON-NLS-1$
+		submitResources.setText(Messages.getString("OptionsPanel.29")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3,15,9,2)));
 		
 		JButton cancelButton = new JButton(new CancelAction());
-		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+		cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(3,18,9,2)));
 		
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.30")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.30")); 
 		this.tradeWithPlayerPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,3,18,1)));
 		
 		setOnOptionsPanel(tradeWithPlayerPanel);
@@ -788,30 +787,30 @@ public class OptionsPanel extends JPanel {
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(this.playerController.getCurrentPlayer(), TileType.wheat), new Rectangle(4,10,3,1)));
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(makeDropDownResourceSelector(this.playerController.getCurrentPlayer(), TileType.wood), new Rectangle(8,10,3,1)));
 		
-		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); //$NON-NLS-1$
+		JLabel brickLabel = new JLabel(Messages.getString("OptionsPanel.24")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(brickLabel, new Rectangle(2,5,4,1)));
 		
-		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); //$NON-NLS-1$
+		JLabel woolLabel = new JLabel(Messages.getString("OptionsPanel.25")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(woolLabel, new Rectangle(6,5,4,1)));
 		
-		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); //$NON-NLS-1$
+		JLabel oreLabel = new JLabel(Messages.getString("OptionsPanel.26")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(oreLabel, new Rectangle(10,5,4,1)));
 
-		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); //$NON-NLS-1$
+		JLabel wheatLabel = new JLabel(Messages.getString("OptionsPanel.27")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(wheatLabel, new Rectangle(4,9,4,1)));
 
-		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); //$NON-NLS-1$
+		JLabel woodLabel = new JLabel(Messages.getString("OptionsPanel.28")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(woodLabel, new Rectangle(8,9,4,1)));
 		
 		JButton submitResources = new JButton(new TradeWithPlayerListener());
-		submitResources.setText(Messages.getString("OptionsPanel.31")); //$NON-NLS-1$
+		submitResources.setText(Messages.getString("OptionsPanel.31")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(submitResources, new Rectangle(3,15,9,2)));
 		
 		JButton cancelButton = new JButton(new CancelAction());
-		cancelButton.setText(Messages.getString("OptionsPanel.5")); //$NON-NLS-1$
+		cancelButton.setText(Messages.getString("OptionsPanel.5")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(cancelButton, new Rectangle(3,18,9,2)));
 		
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.32")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.32")); 
 		this.tradeWithPlayerPaymentPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,3,15,1)));
 		
 		setOnOptionsPanel(tradeWithPlayerPaymentPanel);
@@ -844,24 +843,24 @@ public class OptionsPanel extends JPanel {
 	public void acceptTradeWithPlayerPanel(HashMap<TileType, Integer> cost, HashMap<TileType, Integer> payment) {
 		this.acceptTradeWithPlayerPanel = new ArrayList<>();
 		
-		JLabel playerLabel = new JLabel(Messages.getString("OptionsPanel.13") + (selectedPlayer + 1)); //$NON-NLS-1$
+		JLabel playerLabel = new JLabel(Messages.getString("OptionsPanel.13") + (selectedPlayer + 1)); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(playerLabel, new Rectangle(2,3,15,1)));
 		
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.33")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.33")); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,6,15,1)));
 		
-		JLabel paymentLabel = new JLabel(Messages.getString("OptionsPanel.34") + payment); //$NON-NLS-1$
+		JLabel paymentLabel = new JLabel(Messages.getString("OptionsPanel.34") + payment); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(paymentLabel, new Rectangle(2,8,15,1)));
 		
-		JLabel costLabel = new JLabel(Messages.getString("OptionsPanel.35") + cost); //$NON-NLS-1$
+		JLabel costLabel = new JLabel(Messages.getString("OptionsPanel.35") + cost); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(costLabel, new Rectangle(2,10,15,1)));
 		
 		JButton yesButton = new JButton(new TradeWithPlayerApprovedListener(cost, payment));
-		yesButton.setText(Messages.getString("OptionsPanel.36")); //$NON-NLS-1$
+		yesButton.setText(Messages.getString("OptionsPanel.36")); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(yesButton, new Rectangle(3,18,9,2)));
 		
 		JButton noButton = new JButton(new CancelAction());
-		noButton.setText(Messages.getString("OptionsPanel.37")); //$NON-NLS-1$
+		noButton.setText(Messages.getString("OptionsPanel.37")); 
 		this.acceptTradeWithPlayerPanel.add(new OptionsPanelComponent(noButton, new Rectangle(3,20,9,2)));
 		
 		setOnOptionsPanel(acceptTradeWithPlayerPanel);
@@ -904,7 +903,7 @@ public class OptionsPanel extends JPanel {
 	
 	public void playersPanelForSteal(int numRolled, ArrayList<Player> playersWithSettlementsOnTile) {
 		this.stealFromPlayerPanel = new ArrayList<>();
-		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.44")); //$NON-NLS-1$
+		JLabel instuctionLabel = new JLabel(Messages.getString("OptionsPanel.44")); 
 		this.stealFromPlayerPanel.add(new OptionsPanelComponent(instuctionLabel, new Rectangle(2,2,6,2)));
 		int spacing = 0;
 		
@@ -930,7 +929,7 @@ public class OptionsPanel extends JPanel {
 				}
 			}
 		});
-		playerButton.setText(Messages.getString("OptionsPanel.13") + playerNum); //$NON-NLS-1$
+		playerButton.setText(Messages.getString("OptionsPanel.13") + playerNum); 
 		return playerButton;
 	}
 	

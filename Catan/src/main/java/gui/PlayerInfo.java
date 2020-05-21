@@ -30,7 +30,7 @@ public class PlayerInfo extends JPanel {
 			playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.PAGE_AXIS));
 			
 			Player player = this.playerController.getPlayer(i);
-			JLabel playerNameLabel = new JLabel(Messages.getString("PlayerInfo.0") + (i+1)); //$NON-NLS-1$
+			JLabel playerNameLabel = new JLabel(Messages.getString("PlayerInfo.0") + (i+1));
 			playerNameLabel.setFont(new Font("Ariel", Font.BOLD, 24));
 			playerNameLabel.setOpaque(true);
 			playerNameLabel.setForeground(new Color(128,128,128));
@@ -38,16 +38,16 @@ public class PlayerInfo extends JPanel {
 			playerNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 			playerPanel.add(playerNameLabel);
 			
-			JLabel victoryPointsLabel = new JLabel(Messages.getString("PlayerInfo.1") + player.getNumberOfVictoryPoints()); //$NON-NLS-1$
+			JLabel victoryPointsLabel = new JLabel(Messages.getString("PlayerInfo.1") + player.getNumberOfVictoryPoints());
 			victoryPointsLabel.setFont(new Font("Ariel", Font.BOLD + Font.ITALIC, 14));
 			playerPanel.add(victoryPointsLabel);
 			
-			JLabel resourcesLabel = new JLabel(Messages.getString("PlayerInfo.2")); //$NON-NLS-1$
+			JLabel resourcesLabel = new JLabel(Messages.getString("PlayerInfo.2"));
 			resourcesLabel.setFont(new Font("Ariel", Font.BOLD, 14));
 			playerPanel.add(resourcesLabel);
 			displayPlayerResources(playerPanel, player);
 			
-			JLabel devCardsLabel = new JLabel(Messages.getString("PlayerInfo.3")); //$NON-NLS-1$
+			JLabel devCardsLabel = new JLabel(Messages.getString("PlayerInfo.3"));
 			devCardsLabel.setFont(new Font("Ariel", Font.BOLD, 14));
 			devCardsLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 			playerPanel.add(devCardsLabel);
@@ -62,7 +62,7 @@ public class PlayerInfo extends JPanel {
 	private void displayPlayerResources(JPanel playerPanel, Player player) {
 		for(TileType type : TileType.values()) {
 			if(type != TileType.desert) {
-				JLabel resourceLabel = new JLabel(type.getTileTypeText() + Messages.getString("PlayerInfo.4") + player.getResourceCount(type)); //$NON-NLS-1$
+				JLabel resourceLabel = new JLabel(type.getTileTypeText() + Messages.getString("PlayerInfo.4") + player.getResourceCount(type));
 				playerPanel.add(resourceLabel);
 			}
 		}
@@ -70,7 +70,7 @@ public class PlayerInfo extends JPanel {
 
 	private void displayPlayerDevelopmentCards(JPanel playerPanel, Player player) {
 		for(DevelopmentCardType type : DevelopmentCardType.values()) {
-			JLabel devCardLabel = new JLabel(type.getDevCardTypeText() + Messages.getString("PlayerInfo.4") + player.getDevelopmentCardCount(type)); //$NON-NLS-1$
+			JLabel devCardLabel = new JLabel(type.getDevCardTypeText() + Messages.getString("PlayerInfo.4") + player.getDevelopmentCardCount(type));
 			playerPanel.add(devCardLabel);
 		}
 	}

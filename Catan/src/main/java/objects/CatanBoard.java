@@ -17,7 +17,7 @@ public class CatanBoard {
     public HashMap<TileType, PortType> resourceToPorts;
     private int[] portTiles = new int[] {0, 1, 6, 11, 15, 17, 16, 12, 3};
 	private int[][] portCorners = new int[][] {{0,5}, {4,5}, {4,5}, {3,4}, {2,3}, {2,3}, {1,2}, {0,1}, {0,1}};
-    private int robber;
+    protected int robber = -1;
 	private ArrayList<DevelopmentCard> developmentCardsBoughtThisTurn;
     
     @SuppressWarnings("serial")
@@ -60,11 +60,10 @@ public class CatanBoard {
     	resourceToPorts.put(TileType.wood, PortType.wood);
     	resourceToPorts.put(TileType.ore, PortType.ore);
     	resourceToPorts.put(TileType.wheat, PortType.wheat);
-    	Collections.shuffle(portTypes);		
+    	Collections.shuffle(portTypes);
 	}
 
 	private void shuffleTiles() {
-        // Tile Types
         ArrayList<TileType> types = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
             types.add(TileType.wool);
@@ -76,7 +75,6 @@ public class CatanBoard {
             types.add(TileType.ore);
         }
         
-        // Tile Numbers
         ArrayList<Integer> numbers = new ArrayList<>();
         for(int i = 0; i < 2; i++){
             numbers.add(3);
@@ -91,49 +89,39 @@ public class CatanBoard {
         numbers.add(2);
         numbers.add(12);
         
-        // Coordinates
         ArrayList<Point> positions = new ArrayList<>();
         for(int x = 1; x < 6; x++){
             int ylow = -1;
             int yhigh = -1;
-            switch (x) {
-                case 1:
-                    ylow = 1;
-                    yhigh = 4;
-                    break;
-                case 2:
-                    ylow = 1;
-                    yhigh = 5;
-                    break;
-                case 3:
-                    ylow = 1;
-                    yhigh = 6;
-                    break;
-                case 4:
-                    ylow = 2;
-                    yhigh = 6;
-                    break;
-                case 5:
-                    ylow = 3;
-                    yhigh = 6;
-                    break;
-            }
+            if (x == 1) {
+            	ylow = 1;
+            	yhigh = 4;
+            } else if (x == 2) {
+            	ylow = 1;
+            	yhigh = 5;
+            } else if (x == 3) {
+            	ylow = 1;
+            	yhigh = 6;
+            } else if (x == 4) {
+            	ylow = 2;
+            	yhigh = 6;
+            } else if (x == 5) {
+            	ylow = 3;
+            	yhigh = 6;
+            } 
+            
             for(int y = ylow; y < yhigh; y++){
                 positions.add(new Point(x,y));
             }
         }
         
-        // Shuffle List
-        for(int i = 0; i < 3; i++){
-            Collections.shuffle(types);
-            Collections.shuffle(numbers);
-        }
+        Collections.shuffle(types);
+        Collections.shuffle(numbers);
         
         for(int i = 0; i < 18; i++){
             this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
         }
         
-        // Placing the desert tile with robber on the board
     	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
     	desertTile.setRobber(true);
     	this.tiles.add(desertTile);
@@ -142,7 +130,7 @@ public class CatanBoard {
     }
     
     public void swapTileForRobberPlacement() {
-    	int tileIndexToSwapWith = (int) (Math.random() * 17);    	
+    	int tileIndexToSwapWith = new Random().nextInt(17);    	
     	Point temp = this.tiles.get(18).getLocation();
     	this.tiles.get(18).setLocation(this.tiles.get(tileIndexToSwapWith).getLocation());
     	this.tiles.get(tileIndexToSwapWith).setLocation(temp);
@@ -204,12 +192,16 @@ public class CatanBoard {
 	}
 
 	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
-		boolean settlementLocationIsValid = false;
 		for(int i = 0; i < selectedTiles.size(); i++) {
-			settlementLocationIsValid = settlementLocationIsValid ||
-				this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), currentPlayer);
+			if(checkRoadAtCornerForGivenPlayerForGivenTile(currentPlayer, selectedTiles.get(i), corners.get(i))) {
+				return true;
+			}
 		}
-		return settlementLocationIsValid;
+		return false;
+	}
+
+	private boolean checkRoadAtCornerForGivenPlayerForGivenTile(Player currentPlayer, int selectedTile, int corner) {
+		return this.tiles.get(selectedTile).checkRoadAtCornerForGivenPlayer(corner, currentPlayer);
 	}
 
 	private boolean checkForValidSettlementPlacementDistanceRule(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, boolean settlementLocationIsValid) {
@@ -230,7 +222,7 @@ public class CatanBoard {
 	private boolean placeRoad(HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation, GameStates gameState) {
 		Road newRoad = new Road(this.turnController.getCurrentPlayer());
 		
-		Boolean validPlacement = false;
+		boolean validPlacement = false;
 		for (int tileNum : tilesToCorners.keySet()) {
 			Tile tileToCheck = this.tiles.get(tileNum);
 			ArrayList<Integer> edge = tilesToCorners.get(tileNum);
@@ -238,18 +230,19 @@ public class CatanBoard {
 				validPlacement = false;
 				break;
 			}
-			validPlacement = validPlacement || tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState);
+			if (tileToCheck.checkValidRoadPlacement(edge, newRoad, gameState)) {
+				validPlacement = true;
+			}
 		}
 		if (validPlacement) {
 			if (gameState == GameStates.drop_road && !buyRoad()) {
-					return false;
+				return false;
 			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
 			this.turnController.addRoadForLongestRoad((int) tilesToCorners.keySet().toArray()[0], tilesToCorners.get(tilesToCorners.keySet().toArray()[0]));
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	private void addRoadToTiles(Road newRoad, HashMap<Integer, ArrayList<Integer>> tilesToCorners, HashMap<Integer, Integer> tileToRoadOrientation) {
@@ -261,9 +254,8 @@ public class CatanBoard {
 		}
 	}
 	
-	public int endTurnAndRoll() {
-		this.distributeDevelopmentCards();
-		Random random = new Random();
+	public int endTurnAndRoll(Random random) {
+		distributeDevelopmentCards();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
 		if(rolled != 7) {
 			distributeResources(rolled);
@@ -272,7 +264,7 @@ public class CatanBoard {
 		return rolled;
 	}
 
-	private void distributeDevelopmentCards() {
+	public void distributeDevelopmentCards() {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		for (DevelopmentCard card : this.developmentCardsBoughtThisTurn) {
 			currentPlayer.addDevelopmentCard(card);

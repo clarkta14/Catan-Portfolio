@@ -83,6 +83,28 @@ public class CatanBoard_PortsTest {
 	}
 	
 	@Test
+	public void tradeWithBank3to1PortNotEnoughResources() {
+		pc = new PlayersController(3);
+		cb = new CatanBoard(pc);
+		
+		cb.portTypes.add(0, PortType.three);
+		ArrayList<Integer> selectedTiles = new ArrayList<Integer>();
+		selectedTiles.add(portTiles[0]);
+		ArrayList<Integer> corners = new ArrayList<Integer>();
+		corners.add(portCorners[0][0]);
+		cb.addSettlementToTiles(selectedTiles, corners, GameStates.drop_settlement_setup);
+		
+		Player currentPlayer = pc.getCurrentPlayer();
+		currentPlayer.addResource(TileType.brick, 2);
+		HashMap<TileType, Integer> payment = new HashMap<TileType, Integer>();
+		payment.put(TileType.brick, 2);
+		
+		assertFalse(cb.tradeWithBank(payment, TileType.ore));
+		assertEquals(0, currentPlayer.getResourceCount(TileType.ore));
+		assertEquals(2, currentPlayer.getResourceCount(TileType.brick));
+	}
+	
+	@Test
 	public void tradeWithBricksPort() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);

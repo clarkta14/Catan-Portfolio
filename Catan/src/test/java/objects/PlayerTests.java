@@ -3,6 +3,7 @@ package objects;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, -1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -70,7 +71,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, 1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -81,7 +82,7 @@ public class PlayerTests {
 			player.addResource(TileType.brick, Integer.MAX_VALUE + 1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 
@@ -129,7 +130,7 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, 1);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// pass
+			
 		}
 	}
 
@@ -141,7 +142,7 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, 2);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// pass
+			
 		}
 	}
 
@@ -152,14 +153,14 @@ public class PlayerTests {
 			player.removeResource(TileType.brick, -1);
 			fail();
 		} catch (IllegalArgumentException e) {
-			// pass
+			
 		}
 	}
 	
 	@Test
 	public void testRemoveDesertFromResource() {
 		Player player = new Player(Color.orange);
-		player.removeResource(TileType.desert, 1); //this should do nothing; return nothing. The fail throws an error
+		player.removeResource(TileType.desert, 1);
 	}
 
 	@Test
@@ -306,10 +307,11 @@ public class PlayerTests {
 		Player plyr = new Player(Color.orange);
 		plyr.addDevelopmentCard(new KnightDevelopmentCard());
 		plyr.addDevelopmentCard(new KnightDevelopmentCard());
-		plyr.removeDevelopmentCard(DevelopmentCardType.knight);
+		DevelopmentCard DC = plyr.removeDevelopmentCard(DevelopmentCardType.knight);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+		assertTrue(DC.getClass() == KnightDevelopmentCard.class);
 	}
 
 	@Test
@@ -317,10 +319,11 @@ public class PlayerTests {
 		Player plyr = new Player(Color.orange);
 		plyr.addDevelopmentCard(new ProgressDevelopmentCard());
 		plyr.addDevelopmentCard(new ProgressDevelopmentCard());
-		plyr.removeDevelopmentCard(DevelopmentCardType.progress);
+		DevelopmentCard DC = plyr.removeDevelopmentCard(DevelopmentCardType.progress);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 1);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+		assertTrue(DC.getClass() == ProgressDevelopmentCard.class);
 	}
 
 	@Test
@@ -328,10 +331,24 @@ public class PlayerTests {
 		Player plyr = new Player(Color.orange);
 		plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
 		plyr.addDevelopmentCard(new VictoryPointDevelopmentCard());
-		plyr.removeDevelopmentCard(DevelopmentCardType.victory_point);
+		DevelopmentCard DC = plyr.removeDevelopmentCard(DevelopmentCardType.victory_point);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
 		assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 1);
+		assertTrue(DC.getClass() == VictoryPointDevelopmentCard.class);
+	}
+	
+	@Test
+	public void testRemoveDevelopmentCard_VictoryPointDCNoCards() {
+		Player plyr = new Player(Color.orange);
+		try {
+			DevelopmentCard DC = plyr.removeDevelopmentCard(DevelopmentCardType.victory_point);
+			fail();
+		} catch (EmptyStackException e) {
+			assertTrue(plyr.developmentCards.get(DevelopmentCardType.knight).size() == 0);
+			assertTrue(plyr.developmentCards.get(DevelopmentCardType.progress).size() == 0);
+			assertTrue(plyr.developmentCards.get(DevelopmentCardType.victory_point).size() == 0);
+		}
 	}
 
 	@Test
@@ -578,7 +595,7 @@ public class PlayerTests {
 			player.stealResourceFromOpposingPlayer(TileType.brick, opposingPlayer);
 			fail();
 		} catch (IndexOutOfBoundsException e) {
-			// testPasses
+			
 		}
 	}
 	
