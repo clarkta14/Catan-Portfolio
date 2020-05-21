@@ -197,12 +197,16 @@ public class CatanBoard {
 	}
 
 	private boolean checkForValidSettlementPlacementConnectedToRoad(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, Player currentPlayer) {
-		boolean settlementLocationIsValid = false;
 		for(int i = 0; i < selectedTiles.size(); i++) {
-			settlementLocationIsValid = settlementLocationIsValid ||
-				this.tiles.get(selectedTiles.get(i)).checkRoadAtCornerForGivenPlayer(corners.get(i), currentPlayer);
+			if(checkRoadAtCornerForGivenPlayerForGivenTile(currentPlayer, selectedTiles.get(i), corners.get(i))) {
+				return true;
+			}
 		}
-		return settlementLocationIsValid;
+		return false;
+	}
+
+	private boolean checkRoadAtCornerForGivenPlayerForGivenTile(Player currentPlayer, int selectedTile, int corner) {
+		return this.tiles.get(selectedTile).checkRoadAtCornerForGivenPlayer(corner, currentPlayer);
 	}
 
 	private boolean checkForValidSettlementPlacementDistanceRule(ArrayList<Integer> selectedTiles, ArrayList<Integer> corners, boolean settlementLocationIsValid) {
@@ -254,9 +258,8 @@ public class CatanBoard {
 		}
 	}
 	
-	public int endTurnAndRoll() {
+	public int endTurnAndRoll(Random random) {
 		this.distributeDevelopmentCards();
-		Random random = new Random();
 		int rolled = random.nextInt(6) + random.nextInt(6) + 2;
 		if(rolled != 7) {
 			distributeResources(rolled);

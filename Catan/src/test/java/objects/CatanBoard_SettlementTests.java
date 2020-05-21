@@ -259,6 +259,28 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 	}
 	
 	@Test
+	public void testAddSettlementToTiles_Tiles() {
+		basicSetupForAddSettlementTests();
+		Road newRoad = new Road(pc.getCurrentPlayer());
+		
+		cb.getTiles().get(0).addRoad(2, 3, newRoad);
+		
+		tileNums.add(0);
+		tileNums.add(1);
+		tileNums.add(4);
+		
+		cornerNums.add(3);
+		cornerNums.add(1);
+		cornerNums.add(5);
+		
+		pc.nextPlayer();
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+		boolean result = cb.addSettlementToTiles(tileNums, cornerNums, GameStates.drop_settlement);
+		assertFalse(result);
+		assertEquals(0, pc.getCurrentPlayer().getNumberOfVictoryPoints());
+	}
+	
+	@Test
 	public void testGetPlayersWithSettlementOnTile_SinglePlayer() {
 		tileNums.add(0);
 		cornerNums.add(3);

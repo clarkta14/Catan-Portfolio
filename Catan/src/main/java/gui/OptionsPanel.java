@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -140,7 +141,7 @@ public class OptionsPanel extends JPanel {
 					boardGUI.setState(GameStates.idle);
 					setOnOptionsPanel(actionPanel);
 					addCancelButtonToInfoPanel();
-					int rolled = catanBoard.endTurnAndRoll();
+					int rolled = catanBoard.endTurnAndRoll(new Random());
 					setLastRolled(rolled);
 					gameWindow.refreshPlayerStats();
 				}
@@ -473,7 +474,7 @@ public class OptionsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
 				playedCard = false;
-				int rolled = catanBoard.endTurnAndRoll();
+				int rolled = catanBoard.endTurnAndRoll(new Random());
 				playerController.nextPlayer();
 				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
 				

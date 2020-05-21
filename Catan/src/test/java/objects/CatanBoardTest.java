@@ -6,6 +6,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
+
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import gui.GameStates;
@@ -359,16 +362,54 @@ public class CatanBoardTest {
 	}
 	
 	@Test
-	public void testEndTurnAndRoll() {
+	public void testEndTurnAndRoll_NotASeven() {
+		pc = new PlayersController(3);
+		
+		Random random = EasyMock.strictMock(Random.class);
+		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeResources")
+				.withConstructor(pc)
+				.createMock();
+		
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		
+		EasyMock.replay(random);
+		
+		cb.distributeResources(6);
+		
+		EasyMock.replay(cb);
+		
+		int result = cb.endTurnAndRoll(random);
+		
+		EasyMock.verify(cb, random);
+		
+		assertNotEquals(7, result);
+	}
+	
+	@Test
+	public void testEndTurnAndRoll_RollASeven() {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		
-		for (int i = 0; i < 10000; i++) {
-			int result = cb.endTurnAndRoll();
-			if(result < 2 || result > 12) {
-				fail("Rolled out of bounds: " + result);
-			}
-		}
+		Random random = EasyMock.strictMock(Random.class);
+		cb = EasyMock.partialMockBuilder(CatanBoard.class)
+				.addMockedMethod("distributeResources")
+				.withConstructor(pc)
+				.createMock();
+		
+		EasyMock.expect(random.nextInt(6)).andReturn(2);
+		EasyMock.expect(random.nextInt(6)).andReturn(3);
+		
+		EasyMock.replay(random);
+		
+		EasyMock.replay(cb);
+		
+		int result = cb.endTurnAndRoll(random);
+		
+		EasyMock.verify(cb, random);
+		
+		assertEquals(7, result);
 	}
 	
 	public ArrayList<Settlement> getSettlementsFromClickedTiles() {
