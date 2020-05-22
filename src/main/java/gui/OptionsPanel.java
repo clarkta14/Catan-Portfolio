@@ -473,17 +473,22 @@ public class OptionsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(boardGUI.getState().equals(GameStates.idle)) {
-				playedCard = false;
-				int rolled = catanBoard.endTurnAndRoll(new Random());
-				playerController.nextPlayer();
-				setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
-				
-				if(rolled == 7) {
-					boardGUI.setState(GameStates.discard_robber);
-					discardForRobber(0);
-				} else {
-					setLastRolled(rolled);
-					gameWindow.refreshPlayerStats();
+				Player currentPlayer = playerController.getCurrentPlayer();
+				if(currentPlayer.isVictor()) {
+					setOnOptionsPanel(createVictoryPanel());
+					} else {
+					playedCard = false;
+					int rolled = catanBoard.endTurnAndRoll(new Random());
+					playerController.nextPlayer();
+					setCurrentPlayer(playerController.getCurrentPlayer(), playerController.getCurrentPlayerNum());
+					
+					if(rolled == 7) {
+						boardGUI.setState(GameStates.discard_robber);
+						discardForRobber(0);
+					} else {
+						setLastRolled(rolled);
+						gameWindow.refreshPlayerStats();
+					}
 				}
 			}
 		}
