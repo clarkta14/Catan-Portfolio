@@ -144,6 +144,38 @@ public class Player {
 	public boolean isVictor() {
 		return this.victoryPoints >= 10;
 	}
+	
+	public boolean buyRoad() {
+		if(this.canBuyRoad()) {
+			this.removeResource(TileType.brick, 1);
+			this.removeResource(TileType.wood, 1);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean buySettlement() {
+		if(this.canBuySettlement()) {
+			this.removeResource(TileType.brick, 1);
+			this.removeResource(TileType.wood, 1);
+			this.removeResource(TileType.wool, 1);
+			this.removeResource(TileType.wheat, 1);
+			this.numSettlements++;
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean buyCity() {
+		if (this.canBuyCity()) {
+			this.removeResource(TileType.ore, 3);
+			this.removeResource(TileType.wheat, 2);
+			this.numSettlements--;
+			this.numCities++;
+			return true;
+		}
+		return false;
+	}
 
 	public boolean canBuyCity() {
 		if (numCities >= 5 || numSettlements == 0) {
@@ -196,5 +228,11 @@ public class Player {
 		}
 		
 		return false;
+	}
+
+	public void removeResourcesForDevCard() {
+		this.removeResource(TileType.ore, 1);
+		this.removeResource(TileType.wool, 1);
+		this.removeResource(TileType.wheat, 1);
 	}
 }
