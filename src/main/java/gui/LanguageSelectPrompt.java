@@ -39,11 +39,11 @@ public class LanguageSelectPrompt {
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton englishButton = new JButton(Messages.getString("Main.0"));
-		englishButton.addActionListener(e -> selectLanguageAction("gui/messages_en_US"));
+		englishButton.addActionListener(e -> selectLanguageAction("messages_en_US"));
 		englishButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton spanishButton = new JButton(Messages.getString("Main.1"));
-		spanishButton.addActionListener(e -> selectLanguageAction("gui/messages_ES"));
+		spanishButton.addActionListener(e -> selectLanguageAction("messages_es_AR"));
 		spanishButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		panel.add(label);

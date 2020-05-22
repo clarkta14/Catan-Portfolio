@@ -5,7 +5,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Messages {
-	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("gui/messages", new Locale("en", "US"));
+	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages", new Locale("en", "US"));
 
 	public static String getString(String key) {
 		try {

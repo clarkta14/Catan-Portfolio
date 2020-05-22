@@ -2,10 +2,6 @@ package objects;
 
 import gui.Messages;
 
-/**
-*
-* @author Indresh
-*/
 public enum TileType {
    wool(Messages.getString("TileType.wool")),
    wood(Messages.getString("TileType.wood")),

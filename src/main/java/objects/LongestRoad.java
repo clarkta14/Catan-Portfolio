@@ -8,8 +8,10 @@ import java.util.LinkedList;
 public class LongestRoad {
 
 	protected HashMap<Integer, ArrayList<LinkedList<Integer>>> roads;
+	private Vertex fetchVertex;
 
 	public LongestRoad(int numOfPlayers) {
+		this.fetchVertex = new Vertex();
 		this.roads = new HashMap<>();
 		for (int i = 0; i < numOfPlayers; i++) {
 			this.roads.put(i, new ArrayList<>());
@@ -17,8 +19,8 @@ public class LongestRoad {
 	}
 
 	public void addRoadForPlayer(int playerNum, int tile, ArrayList<Integer> corners) {
-		int vertex1 = Vertex.getVertex(tile, corners.get(0));
-		int vertex2 = Vertex.getVertex(tile, corners.get(1));
+		int vertex1 = this.fetchVertex.getVertex(tile, corners.get(0));
+		int vertex2 = this.fetchVertex.getVertex(tile, corners.get(1));
 		boolean added = false;
 		ArrayList<LinkedList<Integer>> pathList = this.roads.get(playerNum);
 		for (int index = pathList.size() - 1; index > -1; index--) {
