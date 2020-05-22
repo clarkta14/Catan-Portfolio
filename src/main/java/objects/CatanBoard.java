@@ -64,32 +64,26 @@ public class CatanBoard {
 	}
 
 	private void shuffleTiles() {
-        ArrayList<TileType> types = new ArrayList<>();
-        for(int i = 0; i < 4; i++) {
-            types.add(TileType.wool);
-            types.add(TileType.wheat);
-            types.add(TileType.wood);
-        }
-        for(int i = 0; i < 3; i++) {
-            types.add(TileType.brick);
-            types.add(TileType.ore);
+        ArrayList<TileType> types = createTileTypes();
+        ArrayList<Integer> numbers = createTileNumbers();
+        ArrayList<Point> positions = createTilePositions();
+        
+        Collections.shuffle(types);
+        Collections.shuffle(numbers);
+        
+        for(int i = 0; i < 18; i++){
+            this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
         }
         
-        ArrayList<Integer> numbers = new ArrayList<>();
-        for(int i = 0; i < 2; i++){
-            numbers.add(3);
-            numbers.add(4);
-            numbers.add(5);
-            numbers.add(6);
-            numbers.add(8);
-            numbers.add(9);
-            numbers.add(10);
-            numbers.add(11);
-        }
-        numbers.add(2);
-        numbers.add(12);
-        
-        ArrayList<Point> positions = new ArrayList<>();
+    	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
+    	desertTile.setRobber(true);
+    	this.tiles.add(desertTile);
+    	
+    	swapTileForRobberPlacement();
+    }
+
+	private ArrayList<Point> createTilePositions() {
+		ArrayList<Point> positions = new ArrayList<>();
         for(int x = 1; x < 6; x++){
             int ylow = -1;
             int yhigh = -1;
@@ -114,20 +108,39 @@ public class CatanBoard {
                 positions.add(new Point(x,y));
             }
         }
-        
-        Collections.shuffle(types);
-        Collections.shuffle(numbers);
-        
-        for(int i = 0; i < 18; i++){
-            this.tiles.add(new Tile(positions.get(i), numbers.get(i), types.get(i)));
+		return positions;
+	}
+
+	private ArrayList<Integer> createTileNumbers() {
+		ArrayList<Integer> numbers = new ArrayList<>();
+        for(int i = 0; i < 2; i++){
+            numbers.add(3);
+            numbers.add(4);
+            numbers.add(5);
+            numbers.add(6);
+            numbers.add(8);
+            numbers.add(9);
+            numbers.add(10);
+            numbers.add(11);
         }
-        
-    	Tile desertTile = new Tile(positions.get(18), 7, TileType.desert);
-    	desertTile.setRobber(true);
-    	this.tiles.add(desertTile);
-    	
-    	swapTileForRobberPlacement();
-    }
+        numbers.add(2);
+        numbers.add(12);
+		return numbers;
+	}
+
+	private ArrayList<TileType> createTileTypes() {
+		ArrayList<TileType> types = new ArrayList<>();
+        for(int i = 0; i < 4; i++) {
+            types.add(TileType.wool);
+            types.add(TileType.wheat);
+            types.add(TileType.wood);
+        }
+        for(int i = 0; i < 3; i++) {
+            types.add(TileType.brick);
+            types.add(TileType.ore);
+        }
+		return types;
+	}
     
     public void swapTileForRobberPlacement() {
     	int tileIndexToSwapWith = new Random().nextInt(17);    	
@@ -163,7 +176,7 @@ public class CatanBoard {
 			if(!settlementLocationIsValid) {
 				return false;
 			} 
-			if (!buySettlement()) {
+			if (!currentPlayer.buySettlement()) {
 				return false;
 			}
 		}
@@ -235,7 +248,7 @@ public class CatanBoard {
 			}
 		}
 		if (validPlacement) {
-			if (gameState == GameStates.drop_road && !buyRoad()) {
+			if (gameState == GameStates.drop_road && !this.turnController.getCurrentPlayer().buyRoad()) {
 				return false;
 			}
 			addRoadToTiles(newRoad, tilesToCorners, tileToRoadOrientation);
@@ -287,35 +300,10 @@ public class CatanBoard {
 		}
 	}
 
-	boolean buyRoad() {
-		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if(currentPlayer.canBuyRoad()) {
-			currentPlayer.removeResource(TileType.brick, 1);
-			currentPlayer.removeResource(TileType.wood, 1);
-			return true;
-		}
-		return false;
-	}
-
-	boolean buySettlement() {
-		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if(currentPlayer.canBuySettlement()) {
-			currentPlayer.removeResource(TileType.brick, 1);
-			currentPlayer.removeResource(TileType.wood, 1);
-			currentPlayer.removeResource(TileType.wool, 1);
-			currentPlayer.removeResource(TileType.wheat, 1);
-			currentPlayer.numSettlements++;
-			return true;
-		}
-		return false;
-	}
-
 	public boolean buyDevelopmentCard() {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		if(currentPlayer.canBuyDevelopmentCard()) {
-			currentPlayer.removeResource(TileType.ore, 1);
-			currentPlayer.removeResource(TileType.wool, 1);
-			currentPlayer.removeResource(TileType.wheat, 1);
+			currentPlayer.removeResourcesForDevCard();
 			DevelopmentCard boughtCard = developmentCards.pop();
 			if (boughtCard.getDevelopmentCardType() == DevelopmentCardType.victory_point) {
 				currentPlayer.addDevelopmentCard(boughtCard);
@@ -343,18 +331,6 @@ public class CatanBoard {
 		return false;
 	}
 
-	public boolean buyCity() {
-		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if (currentPlayer.canBuyCity()) {
-			currentPlayer.removeResource(TileType.ore, 3);
-			currentPlayer.removeResource(TileType.wheat, 2);
-			currentPlayer.numSettlements--;
-			currentPlayer.numCities++;
-			return true;
-		}
-		return false;
-	}
-
 	public boolean addCityToTiles(ArrayList<Integer> tileNums, ArrayList<Integer> corners) {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		ArrayList<Settlement> settlementsToConvert = new ArrayList<Settlement>();
@@ -367,7 +343,7 @@ public class CatanBoard {
 				canPlace = false;
 			}
 		}
-		if (canPlace && buyCity()) {
+		if (canPlace && currentPlayer.buyCity()) {
 			currentPlayer.alterVictoryPoints(VictoryPoints.city);
 			for (Settlement s : settlementsToConvert) {
 				s.upgradeToCity();

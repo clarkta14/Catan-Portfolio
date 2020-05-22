@@ -19,61 +19,6 @@ public class CatanBoard_RoadTest extends CatanBoardTest {
 		tileToCorners.clear();
 		tileToRoadOrientation.clear();
 	}
-
-	@Test
-	public void testBuyRoad_WithEnoughResources() {
-		pc.getCurrentPlayer().addResource(TileType.brick, 1);
-		pc.getCurrentPlayer().addResource(TileType.wood, 1);
-		
-		assertTrue(cb.buyRoad());
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-	}
-	
-	@Test
-	public void testBuyRoad_WithoutEnoughResources() {
-		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
-		HashSet<Integer> bannedtiles = new HashSet<>();
-		for(Tile t : cb.getTiles()) {
-			if(t.getType() == TileType.brick || t.getType() == TileType.wood) {
-				bannedtiles.add(t.getNumber());
-			}
-		}
-		for(int i = 1; i <= 12; i++) {
-			if(!bannedtiles.contains(i)) {
-				tilesToAddSettlementsTo.add(i);
-			}
-		}
-		for(int tileNum : tilesToAddSettlementsTo) {
-			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
-		}
-		for(int tileNum : tilesToAddSettlementsTo) {
-			cb.distributeResources(tileNum);
-		}
-		
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.brick) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wood) == 0);
-		
-		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.brick);
-		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wood);
-		
-		assertTrue(!cb.buyRoad());
-		assertEquals(numOfBricksBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(numOfWoodBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-	}
-	
-	@Test
-	public void testBuyRoad_WithNoResources() {
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.brick) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wood) == 0);
-		
-		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.brick);
-		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wood);
-		
-		assertTrue(!cb.buyRoad());
-		assertEquals(numOfBricksBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(numOfWoodBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-	}
 	
 	@Test
 	public void testPlaceRoadNotEnoughResources() {
