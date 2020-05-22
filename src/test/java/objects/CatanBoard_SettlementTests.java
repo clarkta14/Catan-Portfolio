@@ -425,7 +425,7 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wool);
 		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wheat);
 		
-		assertTrue(!cb.buyRoad());
+		assertTrue(!pc.getCurrentPlayer().buyRoad());
 		assertEquals(numOfBricksBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
 		assertEquals(numOfWoodBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
 		assertEquals(numOfWoolBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wool));

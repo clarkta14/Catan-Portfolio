@@ -144,6 +144,15 @@ public class Player {
 	public boolean isVictor() {
 		return this.victoryPoints >= 10;
 	}
+	
+	public boolean buyRoad() {
+		if(this.canBuyRoad()) {
+			this.removeResource(TileType.brick, 1);
+			this.removeResource(TileType.wood, 1);
+			return true;
+		}
+		return false;
+	}
 
 	public boolean canBuyCity() {
 		if (numCities >= 5 || numSettlements == 0) {

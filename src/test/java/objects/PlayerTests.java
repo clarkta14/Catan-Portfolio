@@ -868,6 +868,48 @@ public class PlayerTests {
 		resourcesToDiscard.put(TileType.desert, 4);
 		assertFalse(player.discardForRobber(resourcesToDiscard));
 	}
+	
+	@Test
+	public void testBuyRoad_WithEnoughResources() {
+		Player player = new Player(Color.orange);
+		
+		player.addResource(TileType.brick, 1);
+		player.addResource(TileType.wood, 1);
+		
+		assertTrue(player.buyRoad());
+		assertEquals(0, player.getResourceCount(TileType.brick));
+		assertEquals(0, player.getResourceCount(TileType.wood));
+	}
+	
+	@Test
+	public void testBuyRoad_WithoutEnoughResources() {
+		Player player = new Player(Color.orange);
+		
+		assertTrue(player.getResourceCount(TileType.brick) == 0);
+		assertTrue(player.getResourceCount(TileType.wood) == 0);
+		
+		int numOfBricksBeforeBuy = player.getResourceCount(TileType.brick);
+		int numOfWoodBeforeBuy = player.getResourceCount(TileType.wood);
+		
+		assertTrue(!player.buyRoad());
+		assertEquals(numOfBricksBeforeBuy, player.getResourceCount(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, player.getResourceCount(TileType.wood));
+	}
+	
+	@Test
+	public void testBuyRoad_WithNoResources() {
+		Player player = new Player(Color.orange);
+		
+		assertTrue(player.getResourceCount(TileType.brick) == 0);
+		assertTrue(player.getResourceCount(TileType.wood) == 0);
+		
+		int numOfBricksBeforeBuy = player.getResourceCount(TileType.brick);
+		int numOfWoodBeforeBuy = player.getResourceCount(TileType.wood);
+		
+		assertTrue(!player.buyRoad());
+		assertEquals(numOfBricksBeforeBuy, player.getResourceCount(TileType.brick));
+		assertEquals(numOfWoodBeforeBuy, player.getResourceCount(TileType.wood));
+	}
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
