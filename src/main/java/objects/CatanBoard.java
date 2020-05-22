@@ -176,7 +176,7 @@ public class CatanBoard {
 			if(!settlementLocationIsValid) {
 				return false;
 			} 
-			if (!buySettlement()) {
+			if (!currentPlayer.buySettlement()) {
 				return false;
 			}
 		}
@@ -298,19 +298,6 @@ public class CatanBoard {
 				}
 			}
 		}
-	}
-
-	boolean buySettlement() {
-		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if(currentPlayer.canBuySettlement()) {
-			currentPlayer.removeResource(TileType.brick, 1);
-			currentPlayer.removeResource(TileType.wood, 1);
-			currentPlayer.removeResource(TileType.wool, 1);
-			currentPlayer.removeResource(TileType.wheat, 1);
-			currentPlayer.numSettlements++;
-			return true;
-		}
-		return false;
 	}
 
 	public boolean buyDevelopmentCard() {

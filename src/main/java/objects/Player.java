@@ -153,6 +153,18 @@ public class Player {
 		}
 		return false;
 	}
+	
+	public boolean buySettlement() {
+		if(this.canBuySettlement()) {
+			this.removeResource(TileType.brick, 1);
+			this.removeResource(TileType.wood, 1);
+			this.removeResource(TileType.wool, 1);
+			this.removeResource(TileType.wheat, 1);
+			this.numSettlements++;
+			return true;
+		}
+		return false;
+	}
 
 	public boolean canBuyCity() {
 		if (numCities >= 5 || numSettlements == 0) {
