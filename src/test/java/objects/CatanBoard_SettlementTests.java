@@ -3,6 +3,8 @@ package objects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,27 +20,6 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		pc = new PlayersController(3);
 		cb = new CatanBoard(pc);
 		clearClicks();
-	}
-	
-	@Test
-	public void testBuySettlementMaxNumberSettlements() {
-		Player player = pc.getCurrentPlayer();
-		addResourcesForSettlements(player, 4);
-		
-		assertEquals(player.numSettlements, 2);
-		cb.buySettlement();
-		assertEquals(player.numSettlements, 3);
-		cb.buySettlement();
-		assertEquals(player.numSettlements, 4);
-		cb.buySettlement();
-		assertEquals(player.numSettlements, 5);
-		cb.buySettlement();
-		assertEquals(player.numSettlements, 5);
-		
-		assertEquals(1, player.getResourceCount(TileType.brick));
-		assertEquals(1, player.getResourceCount(TileType.wheat));
-		assertEquals(1, player.getResourceCount(TileType.wool));
-		assertEquals(1, player.getResourceCount(TileType.wood));
 	}
 	
 	@Test
@@ -352,84 +333,6 @@ public class CatanBoard_SettlementTests extends CatanBoardTest {
 		
 		ArrayList<Player> playersWithSettlementsOnTile = cb.getPlayersWithSettlementOnTile(cb.getTiles().get(1));
 		assertEquals(0, playersWithSettlementsOnTile.size());
-	}
-	
-	@Test
-	public void testBuySettlement_WithEnoughResources() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		pc.getCurrentPlayer().addResource(TileType.brick, 1);
-		pc.getCurrentPlayer().addResource(TileType.wood, 1);
-		pc.getCurrentPlayer().addResource(TileType.wool, 1);
-		pc.getCurrentPlayer().addResource(TileType.wheat, 1);
-		
-		assertTrue(cb.buySettlement());
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
-		assertEquals(0,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
-	}
-	
-	@Test
-	public void testBuySettlement_WithoutEnoughResources() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		ArrayList<Integer> tilesToAddSettlementsTo = new ArrayList<>();
-		HashSet<Integer> bannedtiles = new HashSet<>();
-		for(Tile t : cb.getTiles()) {
-			if(t.getType() == TileType.brick || t.getType() == TileType.wood || t.getType() == TileType.wool || t.getType() == TileType.wheat) {
-				bannedtiles.add(t.getNumber());
-			}
-		}
-		for(int i = 1; i <= 12; i++) {
-			if(!bannedtiles.contains(i)) {
-				tilesToAddSettlementsTo.add(i);
-			}
-		}
-		for(int tileNum : tilesToAddSettlementsTo) {
-			cb.addSettlementToTiles(new ArrayList<>(Arrays.asList(tileNum)), new ArrayList<>(Arrays.asList(0)), GameStates.drop_settlement_setup);
-		}
-		for(int tileNum : tilesToAddSettlementsTo) {
-			cb.distributeResources(tileNum);
-		}
-		
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.brick) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wood) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wool) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wheat) == 0);
-		
-		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.brick);
-		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wood);
-		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wool);
-		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wheat);
-		
-		assertTrue(!cb.buySettlement());
-		assertEquals(numOfBricksBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(numOfWoodBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-		assertEquals(numOfWoolBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
-		assertEquals(numOfWheatBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
-	}
-	
-	@Test
-	public void testBuySettlement_WithNoResources() {
-		pc = new PlayersController(3);
-		cb = new CatanBoard(pc);
-		
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.brick) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wood) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wool) == 0);
-		assertTrue(pc.getCurrentPlayer().getResourceCount(TileType.wheat) == 0);
-		
-		int numOfBricksBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.brick);
-		int numOfWoodBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wood);
-		int numOfWoolBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wool);
-		int numOfWheatBeforeBuy = pc.getCurrentPlayer().getResourceCount(TileType.wheat);
-		
-		assertTrue(!cb.buyRoad());
-		assertEquals(numOfBricksBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.brick));
-		assertEquals(numOfWoodBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wood));
-		assertEquals(numOfWoolBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wool));
-		assertEquals(numOfWheatBeforeBuy,  pc.getCurrentPlayer().getResourceCount(TileType.wheat));
 	}
 	
 	@Test

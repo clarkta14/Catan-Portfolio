@@ -30,43 +30,6 @@ public class CatanBoard_CitiesTest extends CatanBoardTest {
 		cornerNums.add(1);
 		cornerNums.add(5);
 	}
-	
-	@Test
-	public void testBuyCityMaxNumberSettlements() {
-		currentPlayer.numSettlements = 4;
-		addResourcesForCities(currentPlayer, 4);
-		
-		assertEquals(currentPlayer.numSettlements, 4);
-		assertEquals(currentPlayer.numCities, 0);
-		assertTrue(cb.buyCity());
-		assertEquals(currentPlayer.numSettlements, 3);
-		assertEquals(currentPlayer.numCities, 1);
-		assertEquals(8, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(12, currentPlayer.getResourceCount(TileType.ore));
-		assertTrue(cb.buyCity());
-		assertEquals(currentPlayer.numSettlements, 2);
-		assertEquals(currentPlayer.numCities, 2);
-		assertEquals(6, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(9, currentPlayer.getResourceCount(TileType.ore));
-		assertTrue(cb.buyCity());
-		assertEquals(currentPlayer.numSettlements, 1);
-		assertEquals(currentPlayer.numCities, 3);
-		assertEquals(4, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(6, currentPlayer.getResourceCount(TileType.ore));
-		assertTrue(cb.buyCity());
-		assertEquals(currentPlayer.numSettlements, 0);
-		assertEquals(currentPlayer.numCities, 4);
-		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
-		assertFalse(cb.buyCity());
-		assertEquals(currentPlayer.numSettlements, 0);
-		assertEquals(currentPlayer.numCities, 4);
-		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
-		
-		assertEquals(2, currentPlayer.getResourceCount(TileType.wheat));
-		assertEquals(3, currentPlayer.getResourceCount(TileType.ore));
-	}
 
 	@Test
 	public void testAddCityToTilesValid() {
