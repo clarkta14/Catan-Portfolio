@@ -303,9 +303,7 @@ public class CatanBoard {
 	public boolean buyDevelopmentCard() {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		if(currentPlayer.canBuyDevelopmentCard()) {
-			currentPlayer.removeResource(TileType.ore, 1);
-			currentPlayer.removeResource(TileType.wool, 1);
-			currentPlayer.removeResource(TileType.wheat, 1);
+			currentPlayer.removeResourcesForDevCard();
 			DevelopmentCard boughtCard = developmentCards.pop();
 			if (boughtCard.getDevelopmentCardType() == DevelopmentCardType.victory_point) {
 				currentPlayer.addDevelopmentCard(boughtCard);
@@ -333,18 +331,6 @@ public class CatanBoard {
 		return false;
 	}
 
-	public boolean buyCity() {
-		Player currentPlayer = this.turnController.getCurrentPlayer();
-		if (currentPlayer.canBuyCity()) {
-			currentPlayer.removeResource(TileType.ore, 3);
-			currentPlayer.removeResource(TileType.wheat, 2);
-			currentPlayer.numSettlements--;
-			currentPlayer.numCities++;
-			return true;
-		}
-		return false;
-	}
-
 	public boolean addCityToTiles(ArrayList<Integer> tileNums, ArrayList<Integer> corners) {
 		Player currentPlayer = this.turnController.getCurrentPlayer();
 		ArrayList<Settlement> settlementsToConvert = new ArrayList<Settlement>();
@@ -357,7 +343,7 @@ public class CatanBoard {
 				canPlace = false;
 			}
 		}
-		if (canPlace && buyCity()) {
+		if (canPlace && currentPlayer.buyCity()) {
 			currentPlayer.alterVictoryPoints(VictoryPoints.city);
 			for (Settlement s : settlementsToConvert) {
 				s.upgradeToCity();

@@ -992,6 +992,45 @@ public class PlayerTests {
 		assertEquals(numOfWoolBeforeBuy,  player.getResourceCount(TileType.wool));
 		assertEquals(numOfWheatBeforeBuy,  player.getResourceCount(TileType.wheat));
 	}
+	
+	@Test
+	public void testBuyCityMaxNumberSettlements() {
+		Player player = new Player(Color.orange);
+		player.numSettlements = 4;
+		player.addResource(TileType.wheat, 10);
+		player.addResource(TileType.ore, 15);
+		
+		assertEquals(player.numSettlements, 4);
+		assertEquals(player.numCities, 0);
+		assertTrue(player.buyCity());
+		assertEquals(player.numSettlements, 3);
+		assertEquals(player.numCities, 1);
+		assertEquals(8, player.getResourceCount(TileType.wheat));
+		assertEquals(12, player.getResourceCount(TileType.ore));
+		assertTrue(player.buyCity());
+		assertEquals(player.numSettlements, 2);
+		assertEquals(player.numCities, 2);
+		assertEquals(6, player.getResourceCount(TileType.wheat));
+		assertEquals(9, player.getResourceCount(TileType.ore));
+		assertTrue(player.buyCity());
+		assertEquals(player.numSettlements, 1);
+		assertEquals(player.numCities, 3);
+		assertEquals(4, player.getResourceCount(TileType.wheat));
+		assertEquals(6, player.getResourceCount(TileType.ore));
+		assertTrue(player.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		assertFalse(player.buyCity());
+		assertEquals(player.numSettlements, 0);
+		assertEquals(player.numCities, 4);
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+		
+		assertEquals(2, player.getResourceCount(TileType.wheat));
+		assertEquals(3, player.getResourceCount(TileType.ore));
+	}
 
 	private HashMap<TileType, Integer> resourcesToDiscard(int brick, int ore, int wheat, int wood, int wool) {
 		HashMap<TileType, Integer> resourcesToDiscard = new HashMap<>();
