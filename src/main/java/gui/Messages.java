@@ -4,7 +4,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Messages {
-	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages_en_US");
+	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("messages");
 
 	public static String getString(String key) {
 		try {
