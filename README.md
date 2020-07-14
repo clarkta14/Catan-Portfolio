@@ -1,5 +1,5 @@
 
-(This project was created by four main contributors. My contributions are under "clarkta14")
+(This project was developed by four main contributors. My contributions are under "clarkta14")
 
 **Settlers of Catan**
 
